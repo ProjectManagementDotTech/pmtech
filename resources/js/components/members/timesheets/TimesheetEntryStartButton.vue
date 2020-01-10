@@ -1,11 +1,7 @@
 <template>
     <div>
-        <div v-if="isNew && isManual">
-            New and Manual
-        </div>
-        <div v-else-if="isNew && !isManual">
+        <div v-if="isNew">
             <div v-if="!started">
-                {{ timesheetEntry.description.length }}
                 <button :disabled="timesheetEntry.description.length == 0"
                         @click.stop="onClickStart">
                     <i class="fas fa-play-circle text-green-500 text-2xl" />
@@ -17,9 +13,6 @@
                     <i class="fas fa-stop-circle text-red-500 text-2xl" />
                 </button>
             </div>
-        </div>
-        <div v-else-if="!isNew && isManual">
-            !New and Manual
         </div>
         <div v-else>
             {{ timesheetEntry.duration }}
@@ -66,7 +59,6 @@
             return {
                 elapsedTimeInSeconds: 0,
                 intervalHandle: undefined,
-                isManual: false
             }
         },
         methods: {

@@ -20,10 +20,12 @@
                    @blur="onBlur">
         </div>
         <div class="w-6/12 md:w-3/12 xl:w-2/12">
-            <timesheet-entry-start-button class="float-right p-1"
-                                          :is-new="timesheetEntry === null"
-                                          :timesheet-entry="editorTimesheetEntry"
-                                          @start="onStart" @stop="onStop" />
+            <keep-alive>
+                <component v-bind:is="visibleComponent" class="float-right p-1"
+                           :is-new="timesheetEntry === null"
+                           :timesheet-entry="editorTimesheetEntry"
+                           @save="onSave" @start="onStart" @stop="onStop" />
+            </keep-alive>
         </div>
     </div>
 </template>
@@ -31,6 +33,8 @@
 <script>
     import ExistingTaskInputControl from "../tasks/ExistingTaskInputControl";
     import FilteringDropdownControl from "../general/FilteringDropdownControl";
+    import TimesheetEntryManualSaveButton from
+            "./TimesheetEntryManualSaveButton";
     import TimesheetEntryStartButton from "./TimesheetEntryStartButton";
     import Vue from "vue";
 
@@ -41,6 +45,7 @@
         components: {
             ExistingTaskInputControl,
             FilteringDropdownControl,
+            TimesheetEntryManualSaveButton,
             TimesheetEntryStartButton
         },
         computed: {
@@ -182,6 +187,9 @@
                 Vue.set(this.editorTimesheetEntry, 'project', newProject);
                 Vue.set(this.editorTimesheetEntry, 'project_id', newProject.id);
             },
+            onSave() {
+                alert("Saving manual entry not yet implemented...");
+            },
             onStart(payload) {
                 let data = {};
 
@@ -268,6 +276,11 @@
                 default: null,
                 required: false,
                 type: Object
+            },
+            visibleComponent: {
+                default: "timesheet-entrry-start-button",
+                required: false,
+                type: String
             }
         }
     }

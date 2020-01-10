@@ -1,7 +1,17 @@
 <template>
     <div>
-        <h2 class="pl-2 mb-1 mt-3 text-gray-900 font-semibold">Create a new timesheet entry:</h2>
-        <timesheet-entry-editor class="px-2" @update-timesheet="fetchHistoricTimesheetEntries" />
+        <div class="flex justify-between">
+            <h2 class="pl-2 mt-3 text-gray-900">Create a new timesheet entry:</h2>
+            <div class="pr-2 mt-3 text-sm">
+                <button class="text-sm focus:outline-none hover:font-semibold"
+                        @click="visibleComponent = components[visibleComponent].buttonText">
+                    {{ components[visibleComponent].buttonText }}
+                </button>
+            </div>
+        </div>
+        <timesheet-entry-editor class="px-2"
+                                :visible-component="components[visibleComponent].component"
+                                @update-timesheet="fetchHistoricTimesheetEntries" />
         <h2 class="pl-2 mb-1 mt-1 pt-3 text-gray-900 border-t border-gray-400 font-semibold">Historical timesheet entries:</h2>
         <template v-if="timesheetEntriesByDay && timesheetEntriesByDay.length > 0">
             <timesheet-index-by-day v-for="(timesheetEntriesDay, index) in timesheetEntriesByDay"
@@ -23,7 +33,18 @@
         },
         data() {
             return {
-                timesheetEntriesByDay: []
+                components: {
+                    Manual: {
+                        buttonText: "Timer",
+                        component: "timesheet-entry-manual-save-button"
+                    },
+                    Timer: {
+                        buttonText: "Manual",
+                        component: 'timesheet-entry-start-button'
+                    }
+                },
+                timesheetEntriesByDay: [],
+                visibleComponent: "Timer"
             }
         },
         methods: {

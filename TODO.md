@@ -13,8 +13,7 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
-1. `TimesheetEntryEditor` needs to change between `TimesheetEntryStartButton`
-and (new) `TimesheetManualEntry` components
+1. Use `DateTimePicker` in `TimesheetManualSaveButton`
 1. Implement Date/Time picker
 1. **BR000006** - Any project_user can create a timesheet entry against any task
 in the project
@@ -202,6 +201,8 @@ request to update the API
 1. `FilteringDropdownControl` should highlight (`bg-indigo-400`) the selected
 entry and scroll it into view, whilst keeping the down and up keys working
 1. Disable `TimesheetEntryStartButton` when the description is empty
+1. `TimesheetEntryEditor` needs to change between `TimesheetEntryStartButton`
+and (new) `TimesheetManualSaveButton` components
 
 #Details
 ##BR000001
