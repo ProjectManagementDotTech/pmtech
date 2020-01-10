@@ -1,6 +1,6 @@
 <template>
     <div class="border-b border-gray-200">
-        <div class="items-center flex flex-wrap p-1 w-full">
+        <div class="items-center flex flex-wrap p-2 w-full">
             <div class="w-6/12 md:w-9/12">
                 <h4>{{ date }}</h4>
             </div>

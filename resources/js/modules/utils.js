@@ -18,6 +18,13 @@ export default function(Vue) {
                     key: process.env.MIX_PUSHER_APP_KEY
                 })
             }
+        },
+        uuid() {
+            if(window.uuidv4 === undefined) {
+                window.uuidv4 = require("uuid/v4");
+            }
+
+            return window.uuidv4();
         }
     };
 

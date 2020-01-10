@@ -6,6 +6,7 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 events for any element that has a popup (see https://tailwindcss.com/course/making-the-dropdown-interactive/
 at about 04:40). See also `TimesheetDropdownNavItem`.
 1. Implement a generic error handler
+1. When logging out, the authenticated Vuex state needs to change
 ##Timesheets
 1. Generate timesheet report per workspace. Drill down per user, project or task
 1. Export timesheet report
@@ -13,8 +14,9 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
 1. Implement Date/Time picker
-1. `FilteringDropdownControl` should highlight (`bg-indigo-400`) the selected
-entry
+1. `TimesheetEntryEditor` needs to change between `TimesheetEntryStartButton`
+and (new) `TimesheetManualEntry` components
+1. Disable `TimesheetEntryStartButton` when the description is empty
 1. **BR000006** - Any project_user can create a timesheet entry against any task
 in the project
 1. **BR000007** - Any user_workspace can create a timesheet entry against any
@@ -193,6 +195,8 @@ with a delay of 2 seconds.
 request to update the API
 1. Style navigation horizontall on the top , but make it responsive
 1. Add dropdown menu "Timesheets" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
+1. `FilteringDropdownControl` should highlight (`bg-indigo-400`) the selected
+entry and scroll it into view, whilst keeping the down and up keys working
 
 #Details
 ##BR000001

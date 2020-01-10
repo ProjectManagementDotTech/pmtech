@@ -1,5 +1,5 @@
 <template>
-    <div class="relative">
+    <div class="relative filtering-dropdown-control" :id="uuid">
         <div class="bg-gray-100 border border-gray-200 flex items-center p-1 rounded"
              @click.stop="toggleDropdownVisibility">
             <div class="inline-block truncate"
@@ -32,9 +32,10 @@
                 <ul :class="{ 'h-24': filteredEntries.length > 3, 'overflow-y-scroll': filteredEntries.length > 3 }">
                     <li class="bg-white even:bg-gray-100 hover:bg-gold-100 block p-1 w-full"
                         v-for="entry in filteredEntries"
-                        :id="entry[entryIdAttribute]"
+                        :id="uuid + '-' + entry[entryIdAttribute]"
                         :key="entry[entryIdAttribute]"
                         :value="entry[entryIdAttribute]"
+                        :class="(value !== undefined && value !== null) ? (entry[entryIdAttribute] == value[entryIdAttribute] ? 'dropdown-item-selected' : '') : ''"
                         @click="onUpdateSelection(entry)">
                         {{ entry[entryTitleAttribute] }}
                     </li>
@@ -45,6 +46,8 @@
 </template>
 
 <script>
+    import domHelpers from "../../../mixins/Dom/helpers";
+
     export default {
         beforeDestroy() {
             this.$eventBus.$off('blur', this.hideDropdown);
@@ -70,6 +73,7 @@
         },
         created() {
             this.$eventBus.$on('blur', this.hideDropdown);
+            this.uuid = this.$utils.uuid();
         },
         data() {
             return {
@@ -78,7 +82,9 @@
                 filter: "",
                 highlightedElementId: "",
                 highlightedElementIdx: -1,
-                selection: null
+                selection: null,
+                topLevelElement: null,
+                uuid: ""
             }
         },
         methods: {
@@ -92,18 +98,6 @@
                         .remove("border-indigo-400");
                     this.dropdownButtonElement.classList.add("border-gray-200");
                 }
-                // let selectionString = JSON.stringify(this.selection);
-                // let valueString = JSON.stringify(this.value);
-                // console.log("selectionString == valueString : '" +
-                //     selectionString + "' == '" + valueString + "' : " +
-                //     (selectionString == valueString).toString());
-                // if(
-                //     selectionString !== "null" &&
-                //     selectionString !== valueString
-                // ) {
-                //     console.log("  emitting 'input', then 'blur' in the next tick...");
-                // }
-                // this.$emit("input", this.value);
                 this.$nextTick(() => {
                     this.$emit("blur");
                 });
@@ -132,20 +126,20 @@
                     this.highlightedElementIdx = 0;
                 }
                 if(startIdx !== -1) {
-                    this.highlightedElementId =
+                    this.highlightedElementId = this.uuid + "-" +
                         this.filteredEntries[this.highlightedElementIdx]
                             [this.entryIdAttribute];
-                    var el = document.getElementById(this.highlightedElementId);
+                    let el = document.getElementById(this.highlightedElementId);
                     el.classList.remove("dropdown-item-active");
                     this.highlightedElementIdx++;
                 }
                 if(this.highlightedElementIdx >= this.filteredEntries.length) {
                     this.highlightedElementIdx = 0;
                 }
-                this.highlightedElementId =
+                this.highlightedElementId = this.uuid + "-" +
                     this.filteredEntries[this.highlightedElementIdx]
                         [this.entryIdAttribute];
-                var el = document.getElementById(this.highlightedElementId);
+                let el = document.getElementById(this.highlightedElementId);
                 el.classList.add("dropdown-item-active");
                 el.scrollIntoView(false);
             },
@@ -156,26 +150,24 @@
                 }
             },
             onKeyUp() {
-                this.highlightedElementId =
+                this.highlightedElementId = this.uuid + "-" +
                     this.filteredEntries[this.highlightedElementIdx]
                         [this.entryIdAttribute];
-                var el = document.getElementById(this.highlightedElementId);
+                let el = document.getElementById(this.highlightedElementId);
                 el.classList.remove("dropdown-item-active");
                 this.highlightedElementIdx--;
                 if(this.highlightedElementIdx < 0) {
                     this.highlightedElementIdx =
                         this.filteredEntries.length - 1;
                 }
-                this.highlightedElementId =
+                this.highlightedElementId = this.uuid + "-" +
                     this.filteredEntries[this.highlightedElementIdx]
                         [this.entryIdAttribute];
-                var el = document.getElementById(this.highlightedElementId);
+                el = document.getElementById(this.highlightedElementId);
                 el.classList.add("dropdown-item-active");
                 el.scrollIntoView(false);
             },
             onUpdateSelection(selectedEntry) {
-                console.log("FilteringDropdownControl::onUpdateSelection");
-                console.log("  Emitting 'input' with data: '" + JSON.stringify(selectedEntry) + "'");
                 this.$emit("input", selectedEntry);
                 this.dropdownVisible = false;
                 this.filter = "";
@@ -205,7 +197,30 @@
                             this.dropdownButtonElement
                                 .classList
                                 .add("border-indigo-400");
-                            this.onKeyDown();
+                            let elements = this.getChildElementsByClassName(
+                                this.topLevelElement, "dropdown-item-selected");
+                            if(elements.length == 1) {
+                                this.highlightedElementIdx = -1;
+                                let idToFind = "";
+                                for(let i = 0; i < this.filteredEntries.length; i++) {
+                                    idToFind = this.uuid + "-" +
+                                        this.filteredEntries[i][this.entryIdAttribute];
+                                    if(idToFind == elements[0].id) {
+                                        this.highlightedElementIdx = i;
+                                        break;
+                                    }
+                                }
+                                if(this.highlightedElementIdx > -1) {
+                                    this.highlightedElementId = idToFind;
+                                    let el = document.getElementById(idToFind);
+                                    el.classList.add("dropdown-item-active");
+                                    this.$nextTick(() => {
+                                        el.scrollIntoView(false);
+                                    });
+                                }
+                            } else {
+                                this.onKeyDown();
+                            }
                         } else {
                             this.dropdownButtonElement
                                 .classList
@@ -216,7 +231,8 @@
                             this.highlightedElementId = "";
                             this.highlightedElementIdx = -1;
                             this.filteredEntries.forEach(entry => {
-                                let eId = entry[this.entryIdAttribute];
+                                let eId = this.uuid + "-" +
+                                    entry[this.entryIdAttribute];
                                 let el = document.getElementById(eId);
                                 el.classList.remove("dropdown-item-active");
                             });
@@ -224,6 +240,10 @@
                     });
                 }
             }
+        },
+        mixins: [ domHelpers ],
+        mounted() {
+            this.topLevelElement = document.getElementById(this.uuid);
         },
         name: "FilteringDropdownControl",
         props: {
@@ -266,6 +286,15 @@
 <style scoped>
     .dropdown-item-active {
         @apply bg-gold-100;
+    }
+    .dropdown-item-selected {
+        @apply bg-indigo-400 text-white;
+    }
+    .dropdown-item-selected.dropdown-item-active {
+        @apply bg-indigo-600;
+    }
+    .dropdown-item-selected:hover {
+        @apply bg-indigo-600;
     }
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s ease;

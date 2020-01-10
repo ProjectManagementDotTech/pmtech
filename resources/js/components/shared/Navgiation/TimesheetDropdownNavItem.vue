@@ -6,8 +6,8 @@
         </button>
         <button v-if="isOpen" class="fixed inset-0 h-full w-full bg-black opacity-25 z-30 cursor-default" tabindex="-1" @click="isOpen = false"></button>
         <div v-if="isOpen" class="absolute right-0 bg-white rounded-lg py-2 w-48 shadow-xl z-40">
-            <router-link class="block px-4 py-2 hover:bg-gold-200 focus:bg-gold-200 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet'" @click.native="isOpen = false">Overview</router-link>
-            <router-link class="block px-4 py-2 hover:bg-gold-200 focus:bg-gold-200 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet/report'" @click.native="isOpen = false">Report</router-link>
+            <router-link class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet'" @click.native="isOpen = false">Overview</router-link>
+            <router-link class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet/report'" @click.native="isOpen = false">Report</router-link>
         </div>
     </div>
 </template>

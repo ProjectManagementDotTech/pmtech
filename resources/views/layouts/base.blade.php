@@ -11,7 +11,7 @@
         <script src="https://kit.fontawesome.com/c7a25fd50c.js" crossorigin="anonymous"></script>
         <!-- Google Fonts -->
     </head>
-    <body>
+    <body class="text-gray-800">
         @yield('body')
     </body>
 </html>

@@ -1,9 +1,11 @@
 <template>
     <div>
-        <timesheet-entry-editor @update-timesheet="fetchHistoricTimesheetEntries" />
+        <h2 class="pl-2 mb-1 mt-3 text-gray-900 font-semibold">Create a new timesheet entry:</h2>
+        <timesheet-entry-editor class="px-2" @update-timesheet="fetchHistoricTimesheetEntries" />
+        <h2 class="pl-2 mb-1 mt-1 pt-3 text-gray-900 border-t border-gray-400 font-semibold">Historical timesheet entries:</h2>
         <template v-if="timesheetEntriesByDay && timesheetEntriesByDay.length > 0">
             <timesheet-index-by-day v-for="(timesheetEntriesDay, index) in timesheetEntriesByDay"
-                                    :key="index" :timesheet-entries="timesheetEntriesDay" />
+                                    class="px-2" :key="index" :timesheet-entries="timesheetEntriesDay" />
         </template>
     </div>
 </template>
