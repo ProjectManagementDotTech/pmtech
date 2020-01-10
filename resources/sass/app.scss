@@ -3,3 +3,7 @@
 @tailwind components;
 
 @tailwind utilities;
+
+button[disabled="disabled"] {
+    @apply cursor-not-allowed opacity-50;
+}

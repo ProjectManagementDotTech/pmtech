@@ -5,7 +5,9 @@
         </div>
         <div v-else-if="isNew && !isManual">
             <div v-if="!started">
-                <button @click.stop="onClickStart">
+                {{ timesheetEntry.description.length }}
+                <button :disabled="timesheetEntry.description.length == 0"
+                        @click.stop="onClickStart">
                     <i class="fas fa-play-circle text-green-500 text-2xl" />
                 </button>
             </div>

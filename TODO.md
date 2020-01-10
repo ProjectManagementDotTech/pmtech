@@ -13,10 +13,9 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
-1. Implement Date/Time picker
 1. `TimesheetEntryEditor` needs to change between `TimesheetEntryStartButton`
 and (new) `TimesheetManualEntry` components
-1. Disable `TimesheetEntryStartButton` when the description is empty
+1. Implement Date/Time picker
 1. **BR000006** - Any project_user can create a timesheet entry against any task
 in the project
 1. **BR000007** - Any user_workspace can create a timesheet entry against any
@@ -46,13 +45,18 @@ verification email again (also create a cache entry).
 1. When an email address registers again, and it was verified before, the
 request should send an *Unauthorized.* response.
 1. Allow user to request another activiation link
+##Clients
+1. Add Client model / migration / controller
+1. **BR000015** - Client name must unique inside a workspace
+1. Projects can be associated with a client
+1. Timesheet report can be drilled down by Client
 
 #To do (v2020.3)
 
 #To do (v2021.1)
 
 #To do (unassigned to release)
-  
+1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Disallow unauthorized actions in the WorkspaceRepository
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
@@ -197,6 +201,7 @@ request to update the API
 1. Add dropdown menu "Timesheets" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. `FilteringDropdownControl` should highlight (`bg-indigo-400`) the selected
 entry and scroll it into view, whilst keeping the down and up keys working
+1. Disable `TimesheetEntryStartButton` when the description is empty
 
 #Details
 ##BR000001
