@@ -24,7 +24,7 @@
                             Timesheet
                         </div>
                         <div class="mt-2 pl-2">
-                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet'" @click.native="isOpen = false">Overview</router-link>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet'" @click.native="isOpen = false">Entry</router-link>
                             <router-link class="hover:text-white mt-2 px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet/report'" @click.native="isOpen = false">Report</router-link>
                         </div>
                     </div>

@@ -1,3 +1,10 @@
+#Standards
+##Colors
+* Active border: border-indigo-400 text-white
+* Active selection: bg-indigo-400 text-white 
+* Hover background: bg-gold-100
+* Text: text-gray-800
+
 #To do (v2020.1)
 ##General
 1. Style input boxes according to
@@ -14,7 +21,8 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
 1. Use `DateTimePicker` in `TimesheetManualSaveButton`
-1. Implement Date/Time picker
+1. Use `DateTimePicker` in the `TimesheetEntryEditor` for setting a new
+`started_at` time
 1. **BR000006** - Any project_user can create a timesheet entry against any task
 in the project
 1. **BR000007** - Any user_workspace can create a timesheet entry against any
@@ -49,13 +57,26 @@ request should send an *Unauthorized.* response.
 1. **BR000015** - Client name must unique inside a workspace
 1. Projects can be associated with a client
 1. Timesheet report can be drilled down by Client
+##DateTimePicker
+1. Support Clicking Year to show a list of 10 decades (based on the current
+Year). Each decade can be clicked to pick a specific year in that decade
+1. Support Clicking Month to show a list of months that can be picked
+1. Support Clicking Hour to show a list of all hours that can be picked
+1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
+minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
+1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
+`props` and a new, merged, `config` in `data` which is passed on to
+subcomponents)
+##FilteringDropdownControl
+1. Rename `FilteringDropdownControl` to `ComboControl`
+1. Support native hover events to recalculate `highlightedEntryIdx` and
+`highlightedEntryId` based on those hover events
 
 #To do (v2020.3)
 
 #To do (v2021.1)
 
 #To do (unassigned to release)
-1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Disallow unauthorized actions in the WorkspaceRepository
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
@@ -203,6 +224,7 @@ entry and scroll it into view, whilst keeping the down and up keys working
 1. Disable `TimesheetEntryStartButton` when the description is empty
 1. `TimesheetEntryEditor` needs to change between `TimesheetEntryStartButton`
 and (new) `TimesheetManualSaveButton` components
+1. Implement Date/Time picker
 
 #Details
 ##BR000001

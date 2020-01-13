@@ -1,9 +1,6 @@
 <template>
     <div class="flex items-center">
-        <div class="">
-            Start date/time<br />
-            {{ timesheetEntry.started_at }}
-        </div>
+        <date-time-picker v-bind:value="timesheetEntry.started_at" />
         <div class="">
             End date/time<br />
             {{ timesheetEntry.ended_at }}
@@ -17,7 +14,12 @@
 </template>
 
 <script>
+    import DateTimePicker from "../general/DateTimePicker";
+
     export default {
+        components: {
+            DateTimePicker
+        },
         name: "TimesheetEntryManualSaveButton",
         props: {
             timesheetEntry: {

@@ -1,30 +1,25 @@
 <template>
     <div class="bg-indigo-300">
         <h1>Test</h1>
-        <test-component1 v-model="someObject" />
-        <p>The value in Test: {{ displaySomeObject }}</p>
+        <div><date-time-picker v-model="started_at" /></div>
+        <div>{{ started_at }}</div>
     </div>
 </template>
 
 <script>
-    import TestComponent1 from "../../components/members/TestComponent1";
+    import DateTimePicker
+        from "../../components/members/general/DateTimePicker";
 
     export default {
         components: {
-            TestComponent1
+            DateTimePicker
         },
-        computed: {
-            displaySomeObject() {
-                return JSON.stringify(this.someObject);
-            }
+        created() {
+            this.started_at = this.$moment().utc().local();
         },
         data() {
             return {
-                someObject: {
-                    someNestedObect: {
-                        someAttribute: ""
-                    }
-                }
+                started_at: undefined
             }
         },
         name: "Test"
