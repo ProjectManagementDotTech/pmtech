@@ -1,25 +1,27 @@
 <template>
     <div class="relative">
-        <p>calendarDate: {{ calendarDate }}</p>
-        <p>content: {{ content }}</p>
-        <p>goldenCopy: {{ goldenCopy }}</p>
-        <p>value: {{ value }}</p>
         <input class="relative block border border-gray-200 focus:outline-none focus:border-indigo-400 p-1 rounded w-full"
-               type="text" v-model="content" :class="{ 'z-40': isOpen }"
-               @focus="onFocus" @input="onInput" />
-        <button v-if="isOpen" class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default w-" tabindex="-1" @click="isOpen = false"></button>
-        <div v-if="isOpen" class="pmtech-date-time-picker-backdrop">
-            <div class="pmtech-date-time-picker-arrow"></div>
+               type="text" :value="content" :class="{ 'z-40': isOpen }"
+               :id="uuid" @focus="onFocus" @input="onInput" />
+        <button v-if="isOpen"
+                class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default w-"
+                tabindex="-1" @click="isOpen = false"></button>
+        <div v-if="isOpen" class="pmtech-date-time-picker-backdrop"
+             :class="absolutePlacementClass" >
+            <div class="pmtech-date-time-picker-arrow" :class="absolutePlacementClass"></div>
             <component v-bind:is="components[pickerComponent]"
                        v-bind:value="calendarDate" :config="config"
                        @input="onInput" />
             <div class="mt-2 pb-2 flex items-center justify-around w-full">
                 <button class="focus:outline-none"
                         @click="toggleMainPickerComponent">
-                    <i v-if="config.pickTime && pickerComponent == 'Date'" class="fas fa-clock"></i>
-                    <i v-else-if="config.pickDate && pickerComponent == 'Timer'" class="fas fa-calendar-alt"></i>
+                    <i v-if="config.pickTime && pickerComponent == 'Date'"
+                       class="fas fa-clock"></i>
+                    <i v-else-if="config.pickDate && pickerComponent == 'Timer'"
+                       class="fas fa-calendar-alt"></i>
                 </button>
-                <button class="focus:outline-none" @click="onClickResetCalendarDate">
+                <button class="focus:outline-none"
+                        @click="onClickResetCalendarDate">
                     <i class="fas fa-calendar-day"></i>
                 </button>
             </div>
@@ -39,8 +41,31 @@
             DatePicker,
             TimePicker
         },
+        computed: {
+            absolutePlacementClass() {
+                let el = document.getElementById(this.uuid);
+                if(el) {
+                    var box = el.getBoundingClientRect();
+                    var body = document.body;
+                    var docEl = document.documentElement;
+                    var scrollLeft = window.pageXOffset || docEl.scrollLeft ||
+                        body.scrollLeft;
+                    var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+                    var left = Math.round(box.left + scrollLeft - clientLeft);
+                    var width = 16 * parseFloat(
+                        getComputedStyle(document.documentElement).fontSize);
+                    var right = left + width;
+                    if(right > document.body.clientWidth) {
+                        return "right";
+                    } else {
+                        return "left";
+                    }
+                }
+            }
+        },
         created() {
             document.addEventListener("keydown", this.onKeyDown);
+            this.uuid = this.$utils.uuid();
         },
         data() {
             return {
@@ -51,8 +76,9 @@
                 },
                 content: this.value,
                 goldenCopy: this.value,
-                isOpen: true,
-                pickerComponent: "Date"
+                isOpen: false,
+                pickerComponent: "Date",
+                uuid: ""
             };
         },
         methods: {
@@ -66,9 +92,26 @@
                 this.isOpen = true;
             },
             onInput(newValue) {
-                console.log("DateTimePicker::onInput")
-                console.log("  newValue: " + newValue.format(this.config.format));
-                this.$emit("input", newValue);
+                if(newValue.target !== undefined) {
+                    this.calendarDate = this.$moment(newValue.target.value,
+                        this.config.format);
+                    if(this.calendarDate.isValid()) {
+                        this.content = this.calendarDate.format(
+                            this.config.format);
+                        this.$emit("input", this.calendarDate);
+                    } else {
+                        this.calendarDate = this.$moment(this.content,
+                            this.config.format);
+                        this.content = newValue.target.value;
+                        /*
+                         * Nothing is to be emitted here, as the input is, in
+                         * fact, invalid!
+                         * -- glj
+                         */
+                    }
+                } else {
+                    this.$emit("input", newValue);
+                }
             },
             onKeyDown(e) {
                 if(e.key === "Esc" || e.key === "Escape") {
@@ -87,6 +130,7 @@
             if(this.content === null || this.content === undefined) {
                 this.calendarDate = this.$moment().utc().local();
                 this.content = this.calendarDate.format(this.config.format);
+                this.onInput(this.calendarDate);
             } else {
                 this.calendarDate = this.$moment(this.content,
                     "YYYY-MM-DD HH:mm:ss");
@@ -111,8 +155,14 @@
             value: {
                 deep: true,
                 handler(newVal) {
-                    this.calendarDate = this.$moment(newVal, this.config.format);
-                    this.content = this.calendarDate.format(this.config.format);
+                    if(newVal) {
+                        this.calendarDate = this.$moment(newVal, this.config.format);
+                        this.content = this.calendarDate.format(this.config.format);
+                    } else {
+                        this.calendarDate = this.$moment().utc().local();
+                        this.content = this.calendarDate.format(this.config.format);
+                        this.onInput(this.calendarDate);
+                    }
                 }
             }
         }
@@ -125,7 +175,12 @@
         width: 1.35em;
         height: 1em;
         top: -0.9em;
+    }
+    .pmtech-date-time-picker-arrow.left {
         left: 2em;
+    }
+    .pmtech-date-time-picker-arrow.right {
+        right: 2em;
     }
     .pmtech-date-time-picker-arrow:after {
         left: .5em;
@@ -144,7 +199,13 @@
         transform: rotate(-45deg);
     }
     .pmtech-date-time-picker-backdrop {
-        @apply absolute w-64 left-0 bg-white border-2 border-gray-400 rounded-lg shadow-xl z-40;
+        @apply absolute w-64 bg-white border-2 border-gray-400 rounded-lg shadow-xl z-40;
         margin-top: 0.75em;
+    }
+    .pmtech-date-time-picker-backdrop.left {
+        @apply left-0;
+    }
+    .pmtech-date-time-picker-backdrop.right {
+        @apply right-0;
     }
 </style>

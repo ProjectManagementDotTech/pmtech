@@ -14,21 +14,27 @@ events for any element that has a popup (see https://tailwindcss.com/course/maki
 at about 04:40). See also `TimesheetDropdownNavItem`.
 1. Implement a generic error handler
 1. When logging out, the authenticated Vuex state needs to change
+##Front-end
+1. Style and implement front-end
 ##Timesheets
 1. Generate timesheet report per workspace. Drill down per user, project or task
 1. Export timesheet report
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
-1. Use `DateTimePicker` in `TimesheetManualSaveButton`
-1. Use `DateTimePicker` in the `TimesheetEntryEditor` for setting a new
-`started_at` time
 1. **BR000006** - Any project_user can create a timesheet entry against any task
 in the project
 1. **BR000007** - Any user_workspace can create a timesheet entry against any
 project in the workspace
 1. **BR000008** - TimesheetEntries can be created against a project as such or a
 task
+1. **BR000016** - `TimesheetEntry`.`started_at` must be before
+`TimesheetEntry`.`ended_at`
+1. **BR000017** - Two timesheet entries for the same user (regardless of
+workspace / project / task) may not overlap.
+1. **BR000018** - When POSTing a new timesheet entry, any still running
+timesheet entries must be stopped by setting their `ended_at` attribute to one
+second before the new entry's `started_at` attribute.
 ##Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
@@ -154,7 +160,15 @@ the role "Programme Manager" or "Portfolio Manager"
 1. **BR000012** - Lock timesheet entries after submitting so that they cannot be
 edited by the user, but only approved / rejected by the respective Manager users
 
+#To do (Good first issue)
+1. Fix `UT000002_UserApiTests` rather wasteful method of retrieving the email
+address
+
 #In Progress
+1. Use `DateTimePicker` in the `TimesheetEntryStartButton` to display historical
+`started_at` time
+1. Use `DateTimePicker` in the `TimesheetEntryEditor` for setting a new
+`started_at` time
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -225,6 +239,7 @@ entry and scroll it into view, whilst keeping the down and up keys working
 1. `TimesheetEntryEditor` needs to change between `TimesheetEntryStartButton`
 and (new) `TimesheetManualSaveButton` components
 1. Implement Date/Time picker
+1. Use `DateTimePicker` in `TimesheetManualSaveButton`
 
 #Details
 ##BR000001

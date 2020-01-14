@@ -12,19 +12,21 @@
                                          :value="editorTimesheetEntry"
                                          @blur="onBlur" />
         </div>
-        <div class="w-6/12 md:w-3/12 xl:w-4/12">
+        <div class="w-6/12 md:w-3/12">
             <input class="block border border-gray-200 focus:outline-none focus:border-indigo-400 p-1 rounded w-full"
                    type="text" v-model="editorTimesheetEntry.description"
                    :id="'description_' + currentTimesheetEntryEditorId"
                    :name="'description_' + currentTimesheetEntryEditorId"
                    @blur="onBlur">
         </div>
-        <div class="w-6/12 md:w-3/12 xl:w-2/12">
+        <div class="w-6/12 md:w-3/12">
             <keep-alive>
-                <component v-bind:is="visibleComponent" class="float-right p-1"
+                <component v-bind:is="visibleComponent" class="float-right pr-1"
                            :is-new="timesheetEntry === null"
                            :timesheet-entry="editorTimesheetEntry"
-                           @save="onSave" @start="onStart" @stop="onStop" />
+                           @input-ended-at="onInputEndedAt"
+                           @input-started-at="onInputStartedAt" @save="onSave"
+                           @start="onStart" @stop="onStop" />
             </keep-alive>
         </div>
     </div>
@@ -155,6 +157,22 @@
                     }
                 }
                 delete result.task;
+                if(result.id == null) {
+                    delete result.id;
+                }
+
+                if(anEntry.ended_at == null) {
+                    delete result.ended_at;
+                } else {
+                    result.ended_at = anEntry.ended_at.
+                        format("YYYY-MM-DD HH:mm:ss");
+                }
+                if(anEntry.started_at == null) {
+                    delete result.started_at;
+                } else {
+                    result.started_at = anEntry.started_at.
+                    format("YYYY-MM-DD HH:mm:ss");
+                }
 
                 return result;
             },
@@ -183,12 +201,44 @@
                     }
                 }
             },
+            onInputEndedAt(newEndedAt) {
+                Vue.set(this.editorTimesheetEntry, "ended_at", newEndedAt);
+            },
             onInputNewProject(newProject) {
-                Vue.set(this.editorTimesheetEntry, 'project', newProject);
-                Vue.set(this.editorTimesheetEntry, 'project_id', newProject.id);
+                Vue.set(this.editorTimesheetEntry, "project", newProject);
+                Vue.set(this.editorTimesheetEntry, "project_id", newProject.id);
+            },
+            onInputStartedAt(newStartedAt) {
+                Vue.set(this.editorTimesheetEntry, "started_at", newStartedAt);
             },
             onSave() {
-                alert("Saving manual entry not yet implemented...");
+                let data = this.normalizeTimesheetEntry(
+                    this.editorTimesheetEntry);
+                let promise = null;
+                if(data.id !== null && data.id !== undefined) {
+                    promise = this.$axios.put("/timesheet_entries/" + data.id,
+                        data);
+                } else {
+                    promise = this.$axios.post("/timesheet_entries", data);
+                }
+                promise
+                    .then(response => {
+                        if(this.timesheetEntry !== null) {
+                            this.editorTimesheetEntry = JSON.parse(
+                                JSON.stringify(this.timesheetEntry)
+                            );
+                        } else {
+                            this.editorTimesheetEntry = JSON.parse(
+                                JSON.stringify(this.emptyTimesheetEntry)
+                            );
+                        }
+                        this.$emit("update-timesheet");
+                    })
+                    .catch(error => {
+                        console.dir(error);
+                        alert("TimesheetEntryEditor::onSave - We need to " +
+                            "implement a generic error handler");
+                    });
             },
             onStart(payload) {
                 let data = {};
@@ -210,7 +260,7 @@
                      *    b. If unsuccessful, I don't know
                      * 2. If unsuccessful, I don't know
                      */
-                    data = this.normalizeEditorTimesheetEntry();
+                    data = this.normalizeTimesheetEntry(payload);
                 }
                 this.$axios.post("/timesheet_entries", data)
                     .then(response => {
@@ -278,7 +328,7 @@
                 type: Object
             },
             visibleComponent: {
-                default: "timesheet-entrry-start-button",
+                default: "timesheet-entry-start-button",
                 required: false,
                 type: String
             }
