@@ -5,7 +5,7 @@
                :id="uuid" @focus="onFocus" @input="onInput" />
         <button v-if="isOpen"
                 class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default w-"
-                tabindex="-1" @click="isOpen = false"></button>
+                tabindex="-1" @click="onClickBackdrop"></button>
         <div v-if="isOpen" class="pmtech-date-time-picker-backdrop"
              :class="absolutePlacementClass" >
             <div class="pmtech-date-time-picker-arrow" :class="absolutePlacementClass"></div>
@@ -82,10 +82,15 @@
             };
         },
         methods: {
+            onClickBackdrop() {
+                this.isOpen = false;
+                this.$emit("blur");
+            },
             onClickResetCalendarDate() {
                 this.calendarDate = this.$moment(this.goldenCopy,
                     this.config.format);
                 this.content = this.calendarDate.format(this.config.format);
+                this.$emit("input", this.calendarDate);
             },
             onFocus() {
                 this.goldenCopy = this.value;

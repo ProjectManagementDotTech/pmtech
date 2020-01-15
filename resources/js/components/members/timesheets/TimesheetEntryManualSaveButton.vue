@@ -1,13 +1,16 @@
 <template>
     <div class="flex items-center">
-        <div>
-            <date-time-picker v-bind:value="timesheetEntry.started_at" @input="onInputStartedAt" />
+        <div class="w-5/12">
+            <date-time-picker v-bind:value="timesheetEntry.started_at"
+                              @input="onInputStartedAt" />
         </div>
-        <div>
-            <date-time-picker v-bind:value="timesheetEntry.ended_at" @input="onInputEndedAt" />
+        <div class="w-5/12">
+            <date-time-picker v-bind:value="timesheetEntry.ended_at"
+                              @input="onInputEndedAt" />
         </div>
-        <div class="">
-            <button :disabled="manualSaveButtonDisabled" @click="$emit('save')">
+        <div class="w-2/12">
+            <button class="float-right" :disabled="manualSaveButtonDisabled"
+                    @click="$emit('save')">
                 <i class="fas fa-save text-green-500 text-2xl"></i>
             </button>
         </div>

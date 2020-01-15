@@ -14,6 +14,9 @@
                 </button>
             </div>
         </div>
+        <button v-if="dropdownVisible"
+                class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default w-"
+                tabindex="-1" @click="hideDropdown"></button>
         <transition name="fade">
             <div v-show="dropdownVisible"
                  class="absolute block border border-gray-200 right-0 shadow-lg w-full z-10">
@@ -49,9 +52,6 @@
     import domHelpers from "../../../mixins/Dom/helpers";
 
     export default {
-        beforeDestroy() {
-            this.$eventBus.$off('blur', this.hideDropdown);
-        },
         computed: {
             filteredEntries() {
                 if(this.filter == "") {
@@ -72,7 +72,6 @@
             }
         },
         created() {
-            this.$eventBus.$on('blur', this.hideDropdown);
             this.uuid = this.$utils.uuid();
         },
         data() {
@@ -98,9 +97,6 @@
                         .remove("border-indigo-400");
                     this.dropdownButtonElement.classList.add("border-gray-200");
                 }
-                this.$nextTick(() => {
-                    this.$emit("blur");
-                });
             },
             onInput() {
                 this.entries.forEach(entry => {

@@ -21,10 +21,10 @@
         </div>
         <div class="w-6/12 md:w-3/12">
             <keep-alive>
-                <component v-bind:is="visibleComponent" class="float-right pr-1"
+                <component v-bind:is="visibleComponent" class="pr-1"
                            :is-new="timesheetEntry === null"
                            :timesheet-entry="editorTimesheetEntry"
-                           @input-ended-at="onInputEndedAt"
+                           @blur="onBlur" @input-ended-at="onInputEndedAt"
                            @input-started-at="onInputStartedAt" @save="onSave"
                            @start="onStart" @stop="onStop" />
             </keep-alive>
@@ -82,6 +82,18 @@
                                 "need to implement a generic error " +
                                 "handler");
                         });
+                }
+                if(this.editorTimesheetEntry.ended_at !== null) {
+                    this.editorTimesheetEntry.ended_at = this.$moment.utc(
+                        this.editorTimesheetEntry.ended_at,
+                        "YYYY-MM-DD HH:mm:ss"
+                    ).local();
+                }
+                if(this.editorTimesheetEntry.started_at !== null) {
+                    this.editorTimesheetEntry.started_at = this.$moment.utc(
+                        this.editorTimesheetEntry.started_at,
+                        "YYYY-MM-DD HH:mm:ss"
+                    ).local();
                 }
             } else {
                 this.editorTimesheetEntry = JSON.parse(
@@ -164,14 +176,18 @@
                 if(anEntry.ended_at == null) {
                     delete result.ended_at;
                 } else {
-                    result.ended_at = anEntry.ended_at.
-                        format("YYYY-MM-DD HH:mm:ss");
+                    if(typeof anEntry.ended_at == "object") {
+                        result.ended_at = anEntry.ended_at
+                            .format("YYYY-MM-DD HH:mm:ss");
+                    }
                 }
                 if(anEntry.started_at == null) {
                     delete result.started_at;
                 } else {
-                    result.started_at = anEntry.started_at.
-                    format("YYYY-MM-DD HH:mm:ss");
+                    if(typeof anEntry.started_at == "object") {
+                        result.started_at = anEntry.started_at
+                            .format("YYYY-MM-DD HH:mm:ss");
+                    }
                 }
 
                 return result;
@@ -260,7 +276,8 @@
                      *    b. If unsuccessful, I don't know
                      * 2. If unsuccessful, I don't know
                      */
-                    data = this.normalizeTimesheetEntry(payload);
+                    data = this.normalizeTimesheetEntry(
+                        this.editorTimesheetEntry);
                 }
                 this.$axios.post("/timesheet_entries", data)
                     .then(response => {
@@ -296,7 +313,8 @@
                     });
             },
             onStop() {
-                let data = this.normalizeEditorTimesheetEntry();
+                let data = this.normalizeTimesheetEntry(
+                    this.editorTimesheetEntry);
                 this.$axios.put("/timesheet_entries/" + data.id, data)
                     .then(response => {
                         if(this.timesheetEntry == null) {

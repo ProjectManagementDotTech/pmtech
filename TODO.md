@@ -165,10 +165,6 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. Use `DateTimePicker` in the `TimesheetEntryStartButton` to display historical
-`started_at` time
-1. Use `DateTimePicker` in the `TimesheetEntryEditor` for setting a new
-`started_at` time
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -240,6 +236,12 @@ entry and scroll it into view, whilst keeping the down and up keys working
 and (new) `TimesheetManualSaveButton` components
 1. Implement Date/Time picker
 1. Use `DateTimePicker` in `TimesheetManualSaveButton`
+1. Use `DateTimePicker` in the `TimesheetEntryStartButton` to display historical
+`started_at` time
+1. Use `DateTimePicker` in the `TimesheetEntryEditor` for setting a new
+`started_at` time
+1. Style the running timesheet entry a bit better and include a `DateTimePicker`
+to reset the start time.
 
 #Details
 ##BR000001

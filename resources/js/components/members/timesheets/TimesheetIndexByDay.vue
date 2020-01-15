@@ -18,7 +18,8 @@
             <timesheet-entry-editor v-if="expanded"
                                     class="bg-white even:bg-gray-100 hover:bg-gold-100 p-1"
                                     v-for="entry in timesheetEntries.entries"
-                                    :key="entry.id" :timesheet-entry="entry" />
+                                    :key="entry.id" :timesheet-entry="entry"
+                                    @update-timesheet="$emit('update-timesheet')" />
         </transition-group>
     </div>
 </template>
