@@ -69,10 +69,6 @@ class TimesheetEntryRepository
     static public function create(array $data): ?TimesheetEntry
     {
         Log::info(__METHOD__);
-        ob_start();
-        var_dump($data);
-        Log::debug('  $data: ' . ob_get_contents());
-        ob_end_clean();
 
         /*
          * Cannot create timesheet entries without user ID or description (even
@@ -104,12 +100,22 @@ class TimesheetEntryRepository
          * Set project_id and / or workspace_id from the provided input
          */
         if(isset($data['task_id']) && !isset($data['project_id'])) {
-            $task = TaskRepository::get($data['task_id']);
+            $task = TaskRepository::find($data['task_id']);
             $data['project_id'] = $task->project_id;
         }
         if(isset($data['project_id']) && !isset($data['workspace_id'])) {
-            $project = ProjectRepository::get($data['project_id']);
+            $project = ProjectRepository::find($data['project_id']);
             $data['workspace_id'] = $project->workspace_id;
+        }
+
+        /* BR000008 */
+        if(!isset($data['workspace_id'])) {
+            $user = UserRepository::find($data['user_id']);
+            if(!$user->ownedWorkspaces()->count()) {
+                /* BR000020 */
+                return NULL;
+            }
+            $data['workspace_id'] = $user->ownedWorkspaces[0]->id;
         }
 
         /*

@@ -3,6 +3,8 @@
 namespace Tests\Cases\Unit;
 
 use App\Events\WorkspaceUpdated;
+use App\Repositories\ProjectRepository;
+use App\Repositories\UserRepository;
 use App\Workspace;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -17,11 +19,13 @@ class UT0008_ProjectApiTests extends TestCase
 
         Event::fake();
 
+        $user = UserRepository::byEmail('user0001@test.com');
+        $this->assertNotNull($user);
         $workspace = Workspace::where('name', 'Test0001')->first();
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
             '/projects', [
-                'name' => 'PR000001 - Sample Project'
+                'name' => 'UT0008-0001'
         ], [
             'Authorization' => $token['type'] . ' ' . $token['token']
         ]);
@@ -30,6 +34,12 @@ class UT0008_ProjectApiTests extends TestCase
             function ($event) use ($workspace) {
                 return $event->workspaceId == $workspace->id;
         });
+        $project = ProjectRepository::byName('UT0008-0001', $workspace);
+        $this->assertNotNull($project);
+        $this->assertDatabaseHas('project_user', [
+            'project_id' => $project->id,
+            'user_id' => $user->id
+        ]);
     }
 
     /** @test */
@@ -52,8 +62,8 @@ class UT0008_ProjectApiTests extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
-                'name' => 'PR000001 - Sample Project'
+                'name' => 'UT0008-0001'
             ])
-            ->assertJsonCount(2);
+            ->assertJsonCount(1);
     }
 }

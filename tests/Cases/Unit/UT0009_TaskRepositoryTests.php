@@ -103,7 +103,7 @@ class UT0009_TaskRepositoryTests extends TestCase
 
         $temp = Task::where('name', 'UT0009-0002')->first();
 
-        $task = TaskRepository::get($temp->id);
+        $task = TaskRepository::find($temp->id);
 
         $this->assertNotNull($task);
         $this->assertEquals($temp->id, $task->id);
@@ -146,7 +146,7 @@ class UT0009_TaskRepositoryTests extends TestCase
             'id' => $task->id
         ]);
 
-        $task = TaskRepository::get($task->id);
+        $task = TaskRepository::find($task->id);
         $this->assertEquals(NULL, $task->deleted_at);
         $this->assertEquals('UT0009-0002', $task->name);
     }

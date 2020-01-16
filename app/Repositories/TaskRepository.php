@@ -79,6 +79,21 @@ class TaskRepository
     //region Static Public Status Report
 
     /**
+     * Get the task identified by the given $name in the given $project.
+     *
+     * @param string $name
+     * @param Project $project
+     * @return Task|null
+     */
+    static public function byName(string $name, Project $project): ?Task
+    {
+        return Task::query()
+            ->where('project_id', $project->id)
+            ->where('name', $name)
+            ->first();
+    }
+
+    /**
      * Create a new task based on the given data.
      *
      * @param array $data
@@ -104,7 +119,7 @@ class TaskRepository
      * @param string $id
      * @return Task|null
      */
-    static public function get(string $id): ?Task
+    static public function find(string $id): ?Task
     {
         return Task::find($id);
     }

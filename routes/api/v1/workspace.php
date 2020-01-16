@@ -1,7 +1,6 @@
 <?php
 
-Route::middleware('verified')->group(function () {
+Route::middleware(['verified', 'auth:airlock'])->group(function () {
     Route::get('workspaces', 'v1\WorkspaceController@index')
-        ->name('workspaces.index')
-        ->middleware('auth');
+        ->name('workspaces.index');
 });

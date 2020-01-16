@@ -40,7 +40,7 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = UserRepository::byEmail('user0005@test.com');
+        $user = UserRepository::byEmail('user0004@test.com');
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'description' => 'UT0011-0001',

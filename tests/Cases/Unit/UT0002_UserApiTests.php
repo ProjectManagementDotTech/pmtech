@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Cases\Unit;
 
 use App\Mail\AccountActivation;
 use App\User;
@@ -156,7 +156,7 @@ class UT0002_UserApiTests extends TestCase
         Log::info(__METHOD__);
 
         $response = $this->post('/api/v1/register', [
-            'name' => 'Unit Test User 0004',
+            'name' => 'Unit Test User 0005',
             'email' => 'user0005@test.com',
             'password' => 'Welcome123',
             'password_confirmation' => 'Welcome123'

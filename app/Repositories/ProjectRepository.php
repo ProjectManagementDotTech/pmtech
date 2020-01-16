@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Events\WorkspaceUpdated;
 use App\Project;
 use App\Traits\General\GeneratesRandomColor;
+use App\Workspace;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Ramsey\Uuid\Uuid;
@@ -81,6 +82,21 @@ class ProjectRepository
     }
 
     /**
+     * Get the project identified by the given $name in the given $workspace.
+     *
+     * @param string $name
+     * @param Workspace $workspace
+     * @return Project|null
+     */
+    static public function byName(string $name, Workspace $workspace): ?Project
+    {
+        return Project::query()
+            ->where('workspace_id', $workspace->id)
+            ->where('name', $name)
+            ->first();
+    }
+
+    /**
      * Create a new project based on the given data.
      *
      * @param array $data
@@ -106,7 +122,7 @@ class ProjectRepository
      * @param string $id
      * @return Project|null
      */
-    static public function get(string $id): ?Project
+    static public function find(string $id): ?Project
     {
         return Project::find($id);
     }

@@ -1,6 +1,6 @@
 <?php
 
-Route::middleware(['verified', 'auth'])->group(function () {
+Route::middleware(['verified', 'auth:airlock'])->group(function () {
     Route::get('/timesheet_entries', 'v1\TimesheetEntryController@index')
         ->name('timesheet_entries.index');
     Route::get('/timesheet_entries/running',

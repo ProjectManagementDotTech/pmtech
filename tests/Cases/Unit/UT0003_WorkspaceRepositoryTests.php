@@ -51,8 +51,7 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $temp = Workspace::where('name', 'UT0003-0002')->first();
-
-        $workspace = WorkspaceRepository::get($temp->id);
+        $workspace = WorkspaceRepository::find($temp->id);
 
         $this->assertNotNull($workspace);
         $this->assertEquals($temp->id, $workspace->id);

@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Tests\Shared\TestCase;
 
-class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest extends TestCase
+class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest
+    extends TestCase
 {
     /** @test */
     public function regenerateAccountActivationEmail()
@@ -35,9 +36,11 @@ class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest ext
         $secondCacheValue = Cache::store('database')->get('br000002@test.com');
         $user = UserRepository::byEmail('br000002@test.com');
         $this->assertNotEquals($secondCacheValue, $firstCacheValue);
-        Mail::assertSent(AccountActivation::class, function ($mail) use ($user) {
-            return $mail->user()->id == $user->id;
-        });
+        Mail::assertSent(AccountActivation::class,
+            function ($mail) use ($user) {
+                return $mail->user()->id == $user->id;
+            }
+        );
     }
 
     /** @test */

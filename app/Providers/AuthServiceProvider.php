@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Route::post('/api/v1/login', [
+            'middleware' => ['throttle', 'web'],
+            'uses' => LoginController::class . '@issueToken'
+        ]);
     }
 }

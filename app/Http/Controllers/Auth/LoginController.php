@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
@@ -42,41 +43,23 @@ class LoginController extends Controller
     }
 
     /**
-     * @inheritDoc
-     */
-    public function login(Request $request)
-    {
-        Log::info(__METHOD__);
-        $user = User::where('email', $request->email)->first();
-        if($user && $user->email_verified_at !== NULL) {
-            $credentials = request(['email', 'password']);
-            if(!$token = auth()->attempt($credentials)) {
-                Log::debug('sendFailedLoginResponse');
-                return $this->sendFailedLoginResponse($request);
-            } else {
-                Log::debug('sendTokenResponse');
-                return $this->sendTokenResponse($token);
-            }
-        } else {
-            Log::debug('Your email address is not verified.');
-            return response([
-                'message' => 'Your email address is not verified.'
-            ], 403);
-        }
-    }
-
-    /**
-     * Craft a response based on the given token.
+     * Issue a login token
      *
-     * @param string $token
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param Request $request
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function sendTokenResponse(string $token)
+    public function issueToken(Request $request)
     {
-        return response([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ], 200);
+        $this->login($request);
+        if(Auth::user()->hasVerifiedEmail()) {
+            $apiToken = Auth::user()->createToken('PMTechSPA');
+            return [
+                'access_token' => $apiToken->plainTextToken,
+                'token_type' => 'Bearer'
+            ];
+        } else {
+            return abort(403, 'Your email address is not verified.');
+        }
     }
 }

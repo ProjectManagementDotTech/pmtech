@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Airlock\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail, JWTSubject
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes;
 
     //region Public Access
 
@@ -81,22 +81,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     //endregion
 
     //region Public Status Report
-
-    /**
-     * @inheritDoc
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
 
     /**
      * @inheritDoc

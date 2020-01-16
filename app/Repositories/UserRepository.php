@@ -38,6 +38,17 @@ class UserRepository
     }
 
     /**
+     * Get the user identified by $id.
+     *
+     * @param string $id
+     * @return User|null
+     */
+    static public function find(string $id): ?User
+    {
+        return User::find($id);
+    }
+
+    /**
      * Return all users who are verified.
      *
      * @return array

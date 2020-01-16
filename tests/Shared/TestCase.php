@@ -34,9 +34,13 @@ class TestCase extends BaseTestCase
 	 */
 	public function login(string $email, string $password): array
 	{
+	    $cookieResponse = $this->get('/airlock/csrf-cookie');
+        $cookieResponse->assertCookie('XSRF-TOKEN');
+
 		$response = $this->post('/api/v1/login', [
 			'email' => $email,
 			'password' => $password,
+            '_token' => $cookieResponse->headers->getCookies()[0]->getValue()
 		]);
 		if($response->getStatusCode() !== 200) {
             dd([$response->getContent(), $response->getStatusCode(), $email]);

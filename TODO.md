@@ -1,5 +1,6 @@
 #Standards
 ##Colors
+* Inactive border: border-gray-200
 * Active border: border-indigo-400 text-white
 * Active selection: bg-indigo-400 text-white 
 * Hover background: bg-gold-100
@@ -9,9 +10,6 @@
 ##General
 1. Style input boxes according to
 https://codesandbox.io/s/vue-template-lldw2?from-embed
-1. Instead using a global onBlur event, use backdrops to capture "outside" click
-events for any element that has a popup (see https://tailwindcss.com/course/making-the-dropdown-interactive/
-at about 04:40). See also `TimesheetDropdownNavItem`.
 1. Implement a generic error handler
 1. When logging out, the authenticated Vuex state needs to change
 ##Front-end
@@ -19,15 +17,6 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 ##Timesheets
 1. Generate timesheet report per workspace. Drill down per user, project or task
 1. Export timesheet report
-1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
-the user has a timesheet entry started **and** is not visiting the timesheet
-editor.
-1. **BR000006** - Any project_user can create a timesheet entry against any task
-in the project
-1. **BR000007** - Any user_workspace can create a timesheet entry against any
-project in the workspace
-1. **BR000008** - TimesheetEntries can be created against a project as such or a
-task
 1. **BR000016** - `TimesheetEntry`.`started_at` must be before
 `TimesheetEntry`.`ended_at`
 1. **BR000017** - Two timesheet entries for the same user (regardless of
@@ -35,6 +24,8 @@ workspace / project / task) may not overlap.
 1. **BR000018** - When POSTing a new timesheet entry, any still running
 timesheet entries must be stopped by setting their `ended_at` attribute to one
 second before the new entry's `started_at` attribute.
+1. **BR000019** - Timesheet entries can only be created through the API when a
+user is logged in.
 ##Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
@@ -83,6 +74,9 @@ subcomponents)
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
+the user has a timesheet entry started **and** is not visiting the timesheet
+editor.
 1. Disallow unauthorized actions in the WorkspaceRepository
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
@@ -145,8 +139,6 @@ Allen for interacting with the exchangeratesapi.io API.".
 1. Allow task index to be ordered by name, progress, etc.
 1. Allow project index to be ordered by name, progress, etc.
 1. Implement logic in Login SPA Component to go to the back URL
-1. When a user creates a new project, that user should be associated with that
-project in project_user
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot
@@ -170,7 +162,15 @@ address
 1. **BR000001** - Setup a "Default" workspace when a user registers
 1. **BR000002** - Allow AccountActivation email to be regenerated upon user
 request
+1. **BR000006** - Any project_user can create a timesheet entry against any task
+in the project or against the project it self
+1. **BR000007** - Any workspace_user can create a timesheet entry against that
+workspace. 
+1. **BR000008** - TimesheetEntries can be created against a project as such or a
+task or simply in the workspace
 1. **BR000009** - Users can edit only their own timesheet entries
+1. **BR000020** - A user must have at least 1 owned Workspace at all times,
+unless the user is deleting its account.
 1. Create workspaces table - id (uuid), owner_user_id, name
 1. Create Workspace model
 1. Create relationship between User and Workspace models
@@ -242,6 +242,12 @@ and (new) `TimesheetManualSaveButton` components
 `started_at` time
 1. Style the running timesheet entry a bit better and include a `DateTimePicker`
 to reset the start time.
+1. Instead using a global onBlur event, use backdrops to capture "outside" click
+events for any element that has a popup (see https://tailwindcss.com/course/making-the-dropdown-interactive/
+at about 04:40). See also `TimesheetDropdownNavItem`.
+1. Migrate to Laravel Airlock
+1. When a user creates a new project, that user should be associated with that
+project in project_user
 
 #Details
 ##BR000001

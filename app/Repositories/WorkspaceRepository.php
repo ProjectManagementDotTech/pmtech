@@ -80,13 +80,20 @@ class WorkspaceRepository
      * Create a new workspace based on the given data.
      *
      * @param array $data
-     * @return Workspace
+     * @return Workspace|null
      * @throws \Exception
      */
-    static public function create(array $data): Workspace
+    static public function create(array $data): ?Workspace
     {
-        $data['id'] = Uuid::uuid4()->toString();
-        return Workspace::create($data);
+        $user = UserRepository::find($data['owner_user_id']);
+        if($user !== NULL) {
+            $data['id'] = Uuid::uuid4()->toString();
+            $workspace = Workspace::create($data);
+            $workspace->users()->attach($user);
+            return $workspace;
+        }
+
+        return NULL;
     }
 
     /**
@@ -95,7 +102,7 @@ class WorkspaceRepository
      * @param string $id
      * @return Workspace
      */
-    static public function get(string $id): Workspace
+    static public function find(string $id): Workspace
     {
         return Workspace::find($id);
     }

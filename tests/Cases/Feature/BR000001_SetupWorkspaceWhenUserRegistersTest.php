@@ -11,7 +11,8 @@ use Tests\Shared\TestCase;
 class BR000001_SetupWorkspaceWhenUserRegistersTest extends TestCase
 {
     /** @test */
-    public function registerNewUserAndVerifyThatWorkspaceWasCreatedAfterEmailVerification()
+    public function
+        registerNewUserAndVerifyThatWorkspaceWasCreatedAfterEmailVerification()
     {
         Log::info(__METHOD__);
 

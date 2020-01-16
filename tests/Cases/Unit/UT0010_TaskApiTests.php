@@ -3,6 +3,9 @@
 namespace Tests\Cases\Unit;
 
 use App\Project;
+use App\Repositories\ProjectRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\WorkspaceRepository;
 use Illuminate\Support\Facades\Log;
 use Tests\Shared\TestCase;
 
@@ -13,10 +16,12 @@ class UT0010_TaskApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $project = Project::where('name', 'PR000001 - Sample Project')->first();
+        $user = UserRepository::byEmail('user0001@test.com');
+        $project = ProjectRepository::byName('UT0008-0001',
+            $user->ownedWorkspaces[0]);
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/projects/' . $project->id . '/tasks', [
-            'name' => 'T000001 - Sample Task'
+            'name' => 'UT0010-0001'
         ], [
             'Authorization' => $token['type'] . ' ' . $token['token']
         ]);
@@ -34,14 +39,16 @@ class UT0010_TaskApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $project = Project::where('name', 'PR000001 - Sample Project')->first();
+        $user = UserRepository::byEmail('user0001@test.com');
+        $project = ProjectRepository::byName('UT0008-0001',
+            $user->ownedWorkspaces[0]);
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->get('/api/v1/projects/' . $project->id . '/tasks', [
             'Authorization' => $token['type'] . ' ' . $token['token']
         ]);
         $response->assertStatus(200)
             ->assertJsonFragment([
-                'name' => 'T000001 - Sample Task'
+                'name' => 'UT0010-0001'
             ])
             ->assertJsonCount(1);
     }

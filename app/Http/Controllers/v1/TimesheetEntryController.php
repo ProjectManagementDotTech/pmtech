@@ -22,9 +22,12 @@ class TimesheetEntryController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(Request $request)
     {
+        $this->authorize('create', TimesheetEntry::class);
+
         $startTime = Carbon::now();
         $endTime = Carbon::now()->subSecond();
         $user = Auth::user();
