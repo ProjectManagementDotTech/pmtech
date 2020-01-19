@@ -18,7 +18,7 @@ class BR000001_SetupWorkspaceWhenUserRegistersTest extends TestCase
 
         Mail::fake();
 
-        $this->post('/api/v1/register', [
+        $this->post('/register', [
             'name' => 'Business Requirement 000001',
             'email' => 'br000001@test.com',
             'password' => 'Welcome123',

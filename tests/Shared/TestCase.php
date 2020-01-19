@@ -43,7 +43,7 @@ class TestCase extends BaseTestCase
             '_token' => $cookieResponse->headers->getCookies()[0]->getValue()
 		]);
 		if($response->getStatusCode() !== 200) {
-            dd([$response->getContent(), $response->getStatusCode(), $email]);
+//            dd([$response->getContent(), $response->getStatusCode(), $email]);
         }
 		$response->assertStatus(200);
 

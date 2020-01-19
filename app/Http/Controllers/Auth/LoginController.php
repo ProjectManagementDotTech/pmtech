@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -23,7 +24,9 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        login as parentLogin;
+    }
 
     /**
      * Where to redirect users after login.
@@ -40,6 +43,18 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $user = UserRepository::byEmail($request->input('email', NULL));
+        if($user) {
+            if($user->hasVerifiedEmail()) {
+                return $this->parentLogin($request);
+            }
+        }
+
+        abort(403, "Your email address is not verified.");
     }
 
     /**

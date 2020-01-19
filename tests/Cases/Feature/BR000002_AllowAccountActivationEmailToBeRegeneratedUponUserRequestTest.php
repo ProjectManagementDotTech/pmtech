@@ -19,7 +19,7 @@ class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest
 
         Mail::fake();
 
-        $this->post('/api/v1/register', [
+        $this->post('/register', [
             'name' => 'Business Requirement 000002',
             'email' => 'br000002@test.com',
             'password' => 'Welcome123',

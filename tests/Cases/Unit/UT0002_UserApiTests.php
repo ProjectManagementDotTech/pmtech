@@ -73,7 +73,7 @@ class UT0002_UserApiTests extends TestCase
 
         Mail::fake();
 
-        $response = $this->post('/api/v1/register', [
+        $response = $this->post('/register', [
             'name' => 'Unit Test User 0004',
             'email' => 'user0004@test.com',
             'password' => 'Welcome123',
@@ -155,7 +155,7 @@ class UT0002_UserApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $response = $this->post('/api/v1/register', [
+        $response = $this->post('/register', [
             'name' => 'Unit Test User 0005',
             'email' => 'user0005@test.com',
             'password' => 'Welcome123',
