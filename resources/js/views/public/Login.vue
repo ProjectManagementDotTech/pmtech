@@ -21,6 +21,9 @@
         },
         data() {
             return {
+/*
+                user: {},
+*/
                 email: "",
                 failed: false,
             };
@@ -59,6 +62,38 @@
                     });
             }
         },
+/*
+        mounted() {
+            console.log('Component mounted.');
+            this.$axios.get("/airlock/csrf-cookie")
+                .then(response => {
+                    console.log("  We got a Laravel CSRF Cookie via Laravel " +
+                        "Airlock...");
+                    this.$axios.post("/api/v1/login", {
+                        email: "user0001@test.com",
+                        password: "Welcome123"
+                    })
+                        .then(response => {
+                            console.log("  We are logged in as well now...");
+                            console.log("  Token: '" + response.data + "'");
+                            this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data;
+                            this.$axios.get("/api/v1/user")
+                                .then(response => {
+                                    this.user = response.data
+                                });
+                        })
+                        .catch(error => {
+                            console.log("  There was an error logging in:");
+                            console.dir(error);
+                        });
+                })
+                .catch(error => {
+                    console.log("  There was an error getting a Laravel CSRF " +
+                        "Cookie");
+                    console.dir(error);
+                });
+        },
+*/
         name: "Login",
     }
 </script>

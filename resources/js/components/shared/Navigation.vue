@@ -15,8 +15,11 @@
         <div :class="isOpen ? 'block' : 'hidden'" class="sm:block">
             <template v-if="authenticated">
                 <div class="px-2 pt-2 sm:flex sm:pt-0">
-                    <router-link class="hover:bg-gray-800 block rounded px-2 py-1 text-white font-semibold sm:ml-2" exact :to="'/workspaces/' + $route.params.workspaceId">Projects</router-link>
+                    <router-link class="hover:bg-gray-800 block rounded px-2 py-1 text-white font-semibold sm:ml-2" exact :to="'/workspaces/' + $route.params.workspaceId">
+                        Projects
+                    </router-link>
                     <timesheet-dropdown-nav-item class="hidden sm:block" />
+                    <person-dropdown-nav-item class="hidden sm:block" />
                 </div>
                 <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
                     <div class="px-2">
@@ -29,10 +32,26 @@
                         </div>
                     </div>
                 </div>
+                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                    <div class="px-2">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                            {{ currentUser.name }}
+                        </div>
+                        <div class="mt-2 pl-2">
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" to="/logout" @click.native="isOpen = false">Logout</router-link>
+                        </div>
+                    </div>
+                </div>
             </template>
             <template v-else>
-                <router-link class="hover:bg-gray-800 block rounded px-2 py-1 text-white font-semibold sm:ml-2" exact to="/login">Login</router-link>
-                <router-link class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 sm:mt-0" exact to="/register">Register</router-link>
+                <div class="px-2 pt-2 sm:flex sm:pt-0">
+                    <router-link class="hover:bg-gray-800 block rounded px-2 py-1 text-white font-semibold sm:ml-2" exact to="/login">
+                        Login
+                    </router-link>
+                    <router-link class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 sm:mt-0" exact to="/register">
+                        Register
+                    </router-link>
+                </div>
             </template>
         </div>
     </header>
@@ -40,15 +59,17 @@
 
 <script>
     import { mapGetters } from "vuex";
+    import PersonDropdownNavItem from "./Navgiation/PersonDropdownNavItem";
     import TimesheetDropdownNavItem
         from "./Navgiation/TimesheetDropdownNavItem";
 
     export default {
         components: {
+            PersonDropdownNavItem,
             TimesheetDropdownNavItem
         },
         computed: {
-            ...mapGetters([ "authenticated" ])
+            ...mapGetters(["authenticated", "currentUser"])
         },
         data() {
             return {

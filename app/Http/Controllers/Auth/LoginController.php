@@ -43,23 +43,14 @@ class LoginController extends Controller
     }
 
     /**
-     * Issue a login token
-     *
-     * @param Request $request
-     * @return array
-     * @throws \Illuminate\Validation\ValidationException
+     * @inheritDoc
      */
-    public function issueToken(Request $request)
+    protected function authenticated(Request $request, $user)
     {
-        $this->login($request);
-        if(Auth::user()->hasVerifiedEmail()) {
-            $apiToken = Auth::user()->createToken('PMTechSPA');
-            return [
-                'access_token' => $apiToken->plainTextToken,
-                'token_type' => 'Bearer'
-            ];
-        } else {
-            return abort(403, 'Your email address is not verified.');
-        }
+        $token = $user->createToken('VueSPA');
+        return [
+            'access_token' => $token->plainTextToken,
+            'token_type' => 'Bearer'
+        ];
     }
 }

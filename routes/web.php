@@ -54,6 +54,8 @@ Route::get('/activation-mailable', function () {
     ]);
 });
 
+Route::post('register', 'Auth\RegisterController@register');
+Route::post('logout', 'Auth\LoginController@logout');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')
     ->name('verification.verify');
 

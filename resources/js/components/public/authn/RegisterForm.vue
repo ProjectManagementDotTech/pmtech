@@ -61,21 +61,24 @@
         },
         methods: {
             onClickRegister() {
-                this.$axios.post("register", {
-                    email: this.email,
-                    name: this.name,
-                    password: this.password,
-                    password_confirmation: this.passwordConfirmation,
-                })
-                .then(response => {
-                    this.$emit("success", this.email);
-                })
-                .catch(error => {
-                    console.log("Error in RegisterForm")
-                    console.dir(error);
-                })
-                .finally(() => {
-                });
+                this.$axios.get("airlock/csrf-token")
+                    .then(response => {
+                        this.$axios.post("register", {
+                            email: this.email,
+                            name: this.name,
+                            password: this.password,
+                            password_confirmation: this.passwordConfirmation,
+                        })
+                            .then(response => {
+                                this.$emit("success", this.email);
+                            })
+                            .catch(error => {
+                                console.log("Error in RegisterForm")
+                                console.dir(error);
+                            })
+                            .finally(() => {
+                            });
+                    });
             }
         },
         name: "RegisterForm"

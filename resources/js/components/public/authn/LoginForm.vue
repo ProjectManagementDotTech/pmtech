@@ -51,32 +51,42 @@
         },
         methods: {
             onClickLogin() {
-                this.$axios.post("login", {
-                    email: this.email,
-                    password: this.password,
-                })
+                this.$axios.get("airlock/csrf-cookie")
                     .then(response => {
-                        window.localStorage.setItem("access_token",
-                            response.data.access_token);
-                        window.localStorage.setItem("token_type",
-                            response.data.token_type);
-                        this.$axios.defaults.headers.common["Authorization"] =
-                            response.data.token_type + " " +
-                            response.data.access_token;
-                        this.$emit("success");
+                        this.$axios.post("api/v1/login", {
+                            email: this.email,
+                            password: this.password,
+                        })
+                            .then(response => {
+                                window.localStorage.setItem("access_token",
+                                    response.data.access_token);
+                                window.localStorage.setItem("token_type",
+                                    response.data.token_type);
+                                this.$axios.defaults.headers.common["Authorization"] =
+                                    response.data.token_type + " " +
+                                    response.data.access_token;
+                                this.$axios.defaults.baseURL = "https://" +
+                                    window.location.hostname + "/api/v1/";
+                                this.$emit("success");
+                            })
+                            .catch(error => {
+                                if(error.response) {
+                                    if(error.response.status == 422) {
+                                        window.alert("Invalid credentials!");
+                                    } else if(error.response.status == 403) {
+                                        this.$emit("fail", this.email);
+                                    } else {
+                                        window.alert("Need to implement error mixin!");
+                                    }
+                                }
+                            })
+                            .finally(() => {
+                            });
                     })
                     .catch(error => {
-                        if(error.response) {
-                            if(error.response.status == 422) {
-                                window.alert("Invalid credentials!");
-                            } else if(error.response.status == 403) {
-                                this.$emit("fail", this.email);
-                            } else {
-                                window.alert("Need to implement error mixin!");
-                            }
-                        }
-                    })
-                    .finally(() => {
+                        console.log("LoginForm::onClickLogin");
+                        console.dir(error);
+                        window.alert("Need to implement global error handling!");
                     });
             }
         },

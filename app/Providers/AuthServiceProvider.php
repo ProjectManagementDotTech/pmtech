@@ -28,8 +28,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Route::post('/api/v1/login', [
-            'middleware' => ['throttle', 'web'],
-            'uses' => LoginController::class . '@issueToken'
+            'middleware' => ['web'],
+            'uses' => LoginController::class . '@login'
         ]);
     }
 }

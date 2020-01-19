@@ -11,6 +11,18 @@ class UserController extends Controller
     //region Public Status Report
 
     /**
+     * Revoke any and all personal access tokens.
+     *
+     * @return string
+     */
+    public function logout()
+    {
+        Auth::user()->tokens->each->delete();
+
+        return '';
+    }
+
+    /**
      * The logged-in user
      *
      * @return mixed

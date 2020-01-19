@@ -1,10 +1,8 @@
 import axios from "axios";
 
 export default function(Vue) {
-    Vue.axios = new axios.create({
-        baseURL: "https://" + window.location.hostname + "/api/v1"
-    });
-    Vue.axios.defaults.headers.common["X-Application-ID"] = "PMTechVue";
+    Vue.axios = new axios.create();
+    Vue.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
     Vue.axios.defaults.headers.common["Accept"] = "application/json";
 
     /* Setup interceptors, if we need to for things like 401 / 403 / 404 */
@@ -14,6 +12,8 @@ export default function(Vue) {
     if(accessToken && tokenType) {
         Vue.axios.defaults.headers.common["Authorization"] = tokenType + " " +
             accessToken;
+        Vue.axios.defaults.baseURL = "https://" +
+            window.location.hostname + "/api/v1/";
     }
 
     Vue.axios.interceptors.response.use((response) => {

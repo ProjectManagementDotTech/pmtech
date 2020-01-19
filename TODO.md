@@ -11,21 +11,14 @@
 1. Style input boxes according to
 https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Implement a generic error handler
-1. When logging out, the authenticated Vuex state needs to change
 ##Front-end
 1. Style and implement front-end
 ##Timesheets
 1. Generate timesheet report per workspace. Drill down per user, project or task
 1. Export timesheet report
-1. **BR000016** - `TimesheetEntry`.`started_at` must be before
-`TimesheetEntry`.`ended_at`
-1. **BR000017** - Two timesheet entries for the same user (regardless of
-workspace / project / task) may not overlap.
-1. **BR000018** - When POSTing a new timesheet entry, any still running
-timesheet entries must be stopped by setting their `ended_at` attribute to one
-second before the new entry's `started_at` attribute.
-1. **BR000019** - Timesheet entries can only be created through the API when a
-user is logged in.
+1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
+the user has a timesheet entry started **and** is not visiting the timesheet
+editor.
 ##Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
@@ -74,9 +67,7 @@ subcomponents)
 #To do (v2021.1)
 
 #To do (unassigned to release)
-1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
-the user has a timesheet entry started **and** is not visiting the timesheet
-editor.
+1. Write DropdownMenu component
 1. Disallow unauthorized actions in the WorkspaceRepository
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
@@ -157,6 +148,15 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
+1. **BR000016** - `TimesheetEntry`.`started_at` must be before
+`TimesheetEntry`.`ended_at`
+1. **BR000017** - Two timesheet entries for the same user (regardless of
+workspace / project / task) may not overlap.
+1. **BR000018** - When POSTing a new timesheet entry, any still running
+timesheet entries must be stopped by setting their `ended_at` attribute to one
+second before the new entry's `started_at` attribute.
+1. **BR000019** - Timesheet entries can only be created through the API when a
+user is logged in.
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -248,6 +248,8 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 1. Migrate to Laravel Airlock
 1. When a user creates a new project, that user should be associated with that
 project in project_user
+1. Add Logout to person's dropdown menu on the far right...
+1. When logging out, the authenticated Vuex state needs to change
 
 #Details
 ##BR000001
