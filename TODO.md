@@ -7,24 +7,24 @@
 * Text: text-gray-800
 
 #To do (v2020.1)
-##General
+###General
 1. Style input boxes according to
 https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Implement a generic error handler
-##Front-end
+###Front-end
 1. Style and implement front-end
-##Timesheets
+###Timesheets
 1. Generate timesheet report per workspace. Drill down per user, project or task
 1. Export timesheet report
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
-##Upgrade process
+###Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
 
 #To do (v2020.2)
-##Edit workspace settings
+###Edit workspace settings
 1. Let the user archive a workspace in SPA
 1. Let the user delete a workspace in SPA
 1. **BR000014** - If a user deletes / archives his / her last owned workspace, warn the user
@@ -34,7 +34,7 @@ not want to do that because they are in the process of removing their account.
 1. **BR000013** - Workspace names should be unique for the ownerUser
 1. Let the user create a new workspace in SPA
 1. Let the user assign ownership of a workspace to another user
-##Workspace members
+###Workspace members
 1. Invite users (new and existing) to the workspace
 1. When the workspace has more than 5 members the owner needs to pay
 1. When an email address registers again, but was not verified, send the whole
@@ -42,12 +42,12 @@ verification email again (also create a cache entry).
 1. When an email address registers again, and it was verified before, the
 request should send an *Unauthorized.* response.
 1. Allow user to request another activiation link
-##Clients
+###Clients
 1. Add Client model / migration / controller
 1. **BR000015** - Client name must unique inside a workspace
 1. Projects can be associated with a client
 1. Timesheet report can be drilled down by Client
-##DateTimePicker
+###DateTimePicker
 1. Support Clicking Year to show a list of 10 decades (based on the current
 Year). Each decade can be clicked to pick a specific year in that decade
 1. Support Clicking Month to show a list of months that can be picked
@@ -57,7 +57,7 @@ minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
 1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
 `props` and a new, merged, `config` in `data` which is passed on to
 subcomponents)
-##FilteringDropdownControl
+###FilteringDropdownControl
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
@@ -148,15 +148,6 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. **BR000016** - `TimesheetEntry`.`started_at` must be before
-`TimesheetEntry`.`ended_at`
-1. **BR000017** - Two timesheet entries for the same user (regardless of
-workspace / project / task) may not overlap.
-1. **BR000018** - When POSTing a new timesheet entry, any still running
-timesheet entries must be stopped by setting their `ended_at` attribute to one
-second before the new entry's `started_at` attribute.
-1. **BR000019** - Timesheet entries can only be created through the API when a
-user is logged in.
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -169,6 +160,15 @@ workspace.
 1. **BR000008** - TimesheetEntries can be created against a project as such or a
 task or simply in the workspace
 1. **BR000009** - Users can edit only their own timesheet entries
+1. **BR000016** - `TimesheetEntry`.`started_at` must be before
+`TimesheetEntry`.`ended_at`
+1. **BR000017** - Two timesheet entries for the same user (regardless of
+workspace / project / task) may not overlap.
+1. **BR000018** - When POSTing a new timesheet entry, any still running
+timesheet entries must be stopped by setting their `ended_at` attribute to one
+second before the new entry's `started_at` attribute.
+1. **BR000019** - Timesheet entries can only be created through the API when a
+user is logged in.
 1. **BR000020** - A user must have at least 1 owned Workspace at all times,
 unless the user is deleting its account.
 1. Create workspaces table - id (uuid), owner_user_id, name

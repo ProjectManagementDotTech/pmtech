@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\TimesheetEntry;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class TimesheetEntryRepository
@@ -68,8 +67,6 @@ class TimesheetEntryRepository
 
     static public function create(array $data): ?TimesheetEntry
     {
-        Log::info(__METHOD__);
-
         /*
          * Cannot create timesheet entries without user ID or description (even
          * if the description is empty...)
@@ -78,6 +75,22 @@ class TimesheetEntryRepository
             return NULL;
         }
 
+        if(isset($data['ended_at']) && isset($data['started_at'])) {
+            $endedAt = $data['ended_at'];
+            $startedAt = $data['started_at'];
+            if(is_string($endedAt)) {
+                $endedAt = Carbon::createFromFormat('Y-m-d H:i:s', $endedAt);
+            }
+            if(is_string($startedAt)) {
+                $startedAt = Carbon::createFromFormat('Y-m-d H:i:s', $startedAt);
+            }
+
+            /* BR000016 */
+            if($endedAt < $startedAt) {
+                $data['ended_at'] = $startedAt;
+                $data['started_at'] = $endedAt;
+            }
+        }
         /*
          * Set the started_at attribute, if it is not set
          */
@@ -136,14 +149,20 @@ class TimesheetEntryRepository
                 if($value) {
                     $result = $result->where($key, '<=', $value);
                 } else {
-                    $result = $result->where($key, $value);
+                    $result = $result->whereNull($key);
                 }
             } elseif($key == 'started_at') {
                 if($value) {
                     $result = $result->where($key, '>=', $value);
                 } else {
-                    $result = $result->where($key, $value);
+                    $result = $result->whereNull($key);
                 }
+            } elseif($key == 'between') {
+                $result = $result->where('started_at', '<=', $value)
+                    ->where('ended_at', '>=', $value);
+            } elseif($key == 'existing_between') {
+                $result = $result->where('started_at', '>=', $value[0])
+                    ->where('ended_at', '<=', $value[1]);
             } else {
                 $result = $result->where($key, $value);
             }

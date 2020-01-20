@@ -26,6 +26,7 @@ class TimesheetEntryController extends Controller
      */
     public function create(Request $request)
     {
+        /* BR000019 */
         $this->authorize('create', TimesheetEntry::class);
 
         $startTime = Carbon::now();
@@ -36,14 +37,17 @@ class TimesheetEntryController extends Controller
          * Check to see if there is a still running timesheet entry for the
          * logged in user. If so, close it.
          */
+        /* BR000018 */
         $openTimesheetEntries = TimesheetEntryRepository::filter([
             'user_id' => $user->id,
             'ended_at' => NULL
         ]);
-        if($openTimesheetEntries->count() == 1) {
-            TimesheetEntryRepository::update($openTimesheetEntries[0], [
-                'ended_at' => $endTime
-            ]);
+        if(count($openTimesheetEntries) > 0) {
+            foreach($openTimesheetEntries as $timesheetEntry) {
+                TimesheetEntryRepository::update($timesheetEntry, [
+                    'ended_at' => $endTime
+                ]);
+            }
         }
 
         $data = $request->input();
@@ -54,13 +58,29 @@ class TimesheetEntryController extends Controller
         if($data['description'] == NULL) {
             $data['description'] = '';
         }
-        $timesheetEntry = TimesheetEntryRepository::create($data);
 
-        return response('', 201, [
-            'Location' => route('timesheet_entries.show', [
-                'timesheetEntry' => $timesheetEntry->id
-            ])
-        ]);
+        /* BR000017 */
+        $overlappingEntries = $this->overlappingEntries($data);
+        if(!count($overlappingEntries)) {
+            $timesheetEntry = TimesheetEntryRepository::create($data);
+
+            return response('', 201, [
+                'Location' => route('timesheet_entries.show', [
+                    'timesheetEntry' => $timesheetEntry->id
+                ])
+            ]);
+        } else {
+            return response([
+                'message' => 'There are overlapping timesheet entries.',
+                'errors' => [
+                    'started_at' => [
+                        'There is at least one timesheet entry that overlaps ' .
+                        'with this new timesheet entry.'
+                    ]
+                ],
+                'timesheet_entries' => $overlappingEntries
+            ], 422);
+        }
     }
 
     public function index(Request $request)
@@ -129,6 +149,71 @@ class TimesheetEntryController extends Controller
         TimesheetEntryRepository::update($timesheetEntry, $data);
 
         return response('', 204);
+    }
+
+    //endregion
+
+    //region Protected Implementation
+
+    /**
+     * Retrieve all timesheet entries that overlap with the provided $newData.
+     *
+     * @param array $newData
+     * @return array
+     */
+    protected function overlappingEntries(array $newData): array
+    {
+        /*
+         * Overlapping entries (BR000017):
+         *
+         * existing record: |-----|
+         * existing record:             |-----|
+         * existing record:                         |-----|
+         * new record 1:        |----|
+         * new record 2:               |-------|
+         * new record 3:                              |-|
+         * new record 4:                        |-|
+         * new record 5: |----|
+         *
+         * Only new record 4 is good. New record 1, 3 and 5 are easy to detect
+         * by looking at their started_at or ended_at attribute only.
+         * New record 3 needs finding an existing entry where its started_at and
+         * ended_at attribute are surrounded by the new entry
+         * started_at > newStartedAt *and* endedAt < newEndedAt
+         */
+
+        $startedAtBetween = [];
+        $endedAtBetween = [];
+        $existingBetween = [];
+
+        $endedAtSet = FALSE;
+        $startedAtSet = FALSE;
+        if(isset($newData['started_at'])) {
+            $startedAtBetween = TimesheetEntryRepository::filter([
+                'user_id' => $newData['user_id'],
+                'between' => $newData['started_at']
+            ])->toArray();
+            $startedAtSet = TRUE;
+        }
+        if(isset($newData['ended_at'])) {
+            $endedAtBetween = TimesheetEntryRepository::filter([
+                'user_id' => $newData['user_id'],
+                'between' => $newData['started_at']
+            ])->toArray();
+            $endedAtSet = TRUE;
+        }
+        if($endedAtSet && $startedAtSet) {
+            $existingBetween = TimesheetEntryRepository::filter([
+                'user_id' => $newData['user_id'],
+                'existing_between' => [
+                    $newData['started_at'],
+                    $newData['ended_at']
+                ]
+            ])->toArray();
+        }
+
+        return array_merge($startedAtBetween, $endedAtBetween,
+            $existingBetween);
     }
 
     //endregion
