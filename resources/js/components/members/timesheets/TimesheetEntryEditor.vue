@@ -294,9 +294,16 @@
                             this.$axios.get("/timesheet_entries/" +
                                 timesheetEntryId)
                                 .then(response => {
+                                    let oldProject = JSON.parse(JSON.stringify(
+                                        this.editorTimesheetEntry.project));
+                                    let oldTask = JSON.parse(JSON.stringify(
+                                        this.editorTimesheetEntry.task));
                                     this.editorTimesheetEntry = JSON.parse(
                                         JSON.stringify(response.data)
                                     );
+                                    this.editorTimesheetEntry.project =
+                                        oldProject;
+                                    this.editorTimesheetEntry.task = oldTask;
                                 })
                                 .catch(error => {
                                     console.dir(error);

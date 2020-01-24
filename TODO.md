@@ -257,6 +257,8 @@ project in project_user
 1. Add Logout to person's dropdown menu on the far right...
 1. When logging out, the authenticated Vuex state needs to change
 1. Generate timesheet report per workspace. Drill down per user, project or task
+1. When clicking the start button, after selecting project & task, the selection
+for project and task disappears
 
 #Details
 ##BR000001

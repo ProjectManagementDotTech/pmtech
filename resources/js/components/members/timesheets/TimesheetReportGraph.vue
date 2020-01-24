@@ -19,7 +19,7 @@
                 components: {
                     bar: "",
                     donut: "",
-                    line: "TimesheetReportLineGraph"
+                    line: "TimesheetReportLineGraph",
                     pie: ""
                 }
             }
