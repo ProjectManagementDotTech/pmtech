@@ -90,9 +90,9 @@ class TimesheetEntryController extends Controller
         $user = Auth::user();
 
         if($endDate && $startDate) {
-            $startDate = Carbon::createFromFormat('d/m/Y', $startDate)
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)
                 ->startOfDay();
-            $endDate = Carbon::createFromFormat('d/m/Y', $endDate)
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)
                 ->endOfDay();
         } else {
             $numberOfDays = $request->get('number_of_days', 5);
@@ -102,11 +102,26 @@ class TimesheetEntryController extends Controller
                 ->addWeekday();
             $endDate = Carbon::now()->endOfDay();
         }
-        $timesheetEntries = TimesheetEntryRepository::filter([
+        $filterData = [
             'user_id' => $user->id,
             'started_at' => $startDate,
             'ended_at' => $endDate
-        ]);
+        ];
+        /*
+         * Assignment in if expression! Evaluates to the assigned value... So if
+         * `$request->input(...)` returns NULL, `$projectId` is not added to
+         * `$filterData`.
+         * Same for `$taskId`.
+         * -- glj
+         */
+        if($projectId = $request->input('project_id', NULL)) {
+            $filterData['project_id'] = $projectId;
+        }
+        if($taskId = $request->input('task_id', NULL)) {
+            $filterData['task_id'] = $taskId;
+        }
+
+        $timesheetEntries = TimesheetEntryRepository::filter($filterData);
 
         return $this->provideHumanReadableDurations(
             $this->groupTimesheetEntriesByDate($timesheetEntries));

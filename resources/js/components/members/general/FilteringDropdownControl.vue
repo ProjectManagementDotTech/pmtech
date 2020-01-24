@@ -19,7 +19,7 @@
                 tabindex="-1" @click="hideDropdown"></button>
         <transition name="fade">
             <div v-show="dropdownVisible"
-                 class="absolute block border border-gray-200 right-0 shadow-lg w-full z-10">
+                 class="absolute block border border-gray-200 right-0 shadow-lg w-full z-40">
                 <div class="bg-white border-b border-gray-200 pt-1">
                     <div class="inline-block px-1 float-left">
                         <i class="fas fa-search"></i>

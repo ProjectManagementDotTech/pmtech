@@ -23,9 +23,6 @@
     export default {
         methods: {
             onClickDay(aDate) {
-                console.log("DayPicker::onClickDay");
-                console.log("  aDate: " + aDate);
-
                 let newDate = this.$moment();
                 newDate.date(aDate);
                 newDate.month(this.value.month());

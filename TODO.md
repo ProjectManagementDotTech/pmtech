@@ -14,11 +14,11 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 ###Front-end
 1. Style and implement front-end
 ###Timesheets
-1. Generate timesheet report per workspace. Drill down per user, project or task
+1. When adding a project, the vuex store needs to reload its projects (through a
+Workspace Update Notification via Pusher?)
+1. When clicking the start button, after selecting project & task, the selection
+for project and task disappears
 1. Export timesheet report
-1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
-the user has a timesheet entry started **and** is not visiting the timesheet
-editor.
 ###Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
@@ -61,12 +61,18 @@ subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
+###Timesheets
+1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
+the user has a timesheet entry started **and** is not visiting the timesheet
+editor.
 
 #To do (v2020.3)
 
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Make timesheet report graphs responsive (including ticks on X axis)
+1. Start writing e2e UI tests using cypress.io
 1. Write DropdownMenu component
 1. Disallow unauthorized actions in the WorkspaceRepository
 1. Bruteforce POST login protection - Make sure that users cannot fail login
@@ -250,6 +256,7 @@ at about 04:40). See also `TimesheetDropdownNavItem`.
 project in project_user
 1. Add Logout to person's dropdown menu on the far right...
 1. When logging out, the authenticated Vuex state needs to change
+1. Generate timesheet report per workspace. Drill down per user, project or task
 
 #Details
 ##BR000001

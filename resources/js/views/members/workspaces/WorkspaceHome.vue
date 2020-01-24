@@ -36,14 +36,14 @@
             }
         },
         name: "WorkspaceHome",
-        watch: {
-            '$route': {
-                deep: true,
-                handler(newVal) {
-                    console.dir(newVal);
-                }
-            }
-        }
+        // watch: {
+        //     '$route': {
+        //         deep: true,
+        //         handler(newVal) {
+        //             console.dir(newVal);
+        //         }
+        //     }
+        // }
     }
 </script>
 
