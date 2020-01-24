@@ -17,7 +17,9 @@ class UT0008_ProjectApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        Event::fake();
+        Event::fake([
+            WorkspaceUpdated::class
+        ]);
 
         $user = UserRepository::byEmail('user0001@test.com');
         $this->assertNotNull($user);

@@ -10,18 +10,15 @@
 ###General
 1. Style input boxes according to
 https://codesandbox.io/s/vue-template-lldw2?from-embed
-1. Implement a generic error handler
+1. Implement a generic error handler (also in the API)
 ###Front-end
 1. Style and implement front-end
 ###Timesheets
-1. When adding a project, the vuex store needs to reload its projects (through a
-Workspace Update Notification via Pusher?)
-1. When clicking the start button, after selecting project & task, the selection
-for project and task disappears
 1. Export timesheet report
 ###Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
+###Workspaces
 
 #To do (v2020.2)
 ###Edit workspace settings
@@ -177,6 +174,8 @@ second before the new entry's `started_at` attribute.
 user is logged in.
 1. **BR000020** - A user must have at least 1 owned Workspace at all times,
 unless the user is deleting its account.
+1. **BR000021** - Only workspace users can retrieve workspace details from the
+API
 1. Create workspaces table - id (uuid), owner_user_id, name
 1. Create Workspace model
 1. Create relationship between User and Workspace models
@@ -259,6 +258,8 @@ project in project_user
 1. Generate timesheet report per workspace. Drill down per user, project or task
 1. When clicking the start button, after selecting project & task, the selection
 for project and task disappears
+1. When adding a project, the vuex store needs to reload its projects (through a
+Workspace Update Notification via Pusher?)
 
 #Details
 ##BR000001

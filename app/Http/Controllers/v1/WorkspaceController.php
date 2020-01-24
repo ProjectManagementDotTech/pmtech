@@ -30,6 +30,7 @@ class WorkspaceController extends Controller
         ];
         $project = ProjectRepository::create($data);
         $project->users()->attach(Auth::user()->id);
+
         return response('', 201, [
             'Location' => route('projects.show', ['project' => $project->id])
         ]);
@@ -68,6 +69,17 @@ class WorkspaceController extends Controller
         } else {
             return $result->get();
         }
+    }
+
+    /**
+     * Show the workspace.
+     *
+     * @param Workspace $workspace
+     * @return Workspace
+     */
+    public function show(Workspace $workspace)
+    {
+        return $workspace;
     }
 
     /**

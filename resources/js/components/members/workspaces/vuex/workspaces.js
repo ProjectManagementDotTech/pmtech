@@ -37,9 +37,20 @@ export default {
             },
             root: true
         },
-        update({ commit }, workspaceId) {
-            console.log("VUEX::workspaces::update");
-            console.log("workspaceId: '" + workspaceId + "'");
+        update({ commit, dispatch }, workspaceId) {
+            Vue.axios.get("/workspaces/" + workspaceId)
+                .then(response => {
+                    dispatch("workspaceChanged", workspaceId, { root: true });
+                    commit("updateWorkspace", response.data);
+                })
+                .catch(error => {
+                    /*
+                     * Log the error with the API, so it can report it in the
+                     * log, DB and appropriate Slack channels.
+                     */
+                    console.log(error);
+                    Vue.axios.post("/errors", error);
+                });
         }
     },
     getters: {
@@ -67,6 +78,12 @@ export default {
     mutations: {
         set(state, payload) {
             state.workspaces = payload;
+        },
+        updateWorkspace(state, newWorkspace) {
+            let workspace = state.workspaces.find(w => w.id == newWorkspace.id);
+            if(workspace) {
+                Vue.set(workspace, "name", newWorkspace.name);
+            }
         }
     },
     namespaced: true,

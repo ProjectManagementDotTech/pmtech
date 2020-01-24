@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Events\WorkspaceUpdated;
 use App\Project;
 use App\Traits\General\GeneratesRandomColor;
 use App\Workspace;
@@ -110,8 +109,6 @@ class ProjectRepository
             $data['color'] = self::generateRandomColor();
         }
         $project = Project::create($data);
-
-        event(new WorkspaceUpdated($data['workspace_id']));
 
         return $project;
     }
