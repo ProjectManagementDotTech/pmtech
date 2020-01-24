@@ -31,4 +31,15 @@ class UT0012_TimesheetEntryApiTests extends TestCase
         Log::info(__METHOD__);
     }
 
+    /** @test */
+    public function exportTimesheet()
+    {
+        Log::info(__METHOD__);
+
+        $token = $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/timesheet_entries/export', [
+            'Authorization' => $token['type'] . ' ' . $token['token']
+        ]);
+        $response->assertStatus(200);
+    }
 }

@@ -1,8 +1,5 @@
 <template>
     <div>
-<!--
-        Flick types: bar | donut | line | pie
--->
         <component v-bind:is="components[type]" :filter="filter" :timesheet-entries="timesheetEntries" />
     </div>
 </template>

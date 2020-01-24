@@ -141,6 +141,12 @@ class TimesheetEntryRepository
         return $result;
     }
 
+    /**
+     * Return a collection of timesheet entries based on the filterData.
+     *
+     * @param array $filterData
+     * @return Collection
+     */
     static public function filter(array $filterData): Collection
     {
         $result = TimesheetEntry::query();

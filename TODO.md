@@ -14,7 +14,6 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 ###Front-end
 1. Style and implement front-end
 ###Timesheets
-1. Export timesheet report
 ###Upgrade process
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
@@ -151,6 +150,7 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
+1. Export timesheet report
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers

@@ -2,6 +2,18 @@
     <div>
         <timesheet-report-filter-bar :filter="filter" @reset="onReset"
                                      @run-report="onRunReport" />
+        <div class="flex w-full">
+            <div class="w-1/2">
+                <!--
+                        Flick types: bar | donut | line | pie
+                -->
+            </div>
+            <div class="w-1/2 text-right">
+                <button @click="onClickExport">
+                    Export
+                </button>
+            </div>
+        </div>
         <template v-if="timesheetEntries && timesheetEntries.length > 0">
             <timesheet-report-graph :filter="filter"
                                     :timesheet-entries="timesheetEntries" />
@@ -16,6 +28,7 @@
 </template>
 
 <script>
+    import { mapGetters } from "vuex";
     import TimesheetIndexByDay
         from "../../../components/members/timesheets/TimesheetIndexByDay";
     import TimesheetReportFilterBar
@@ -30,6 +43,7 @@
             TimesheetReportGraph
         },
         computed: {
+            ...mapGetters(["currentUser"]),
             queryParamsFromFilter() {
                 let result = "?";
                 if(this.filter.endDate !== undefined) {
@@ -64,6 +78,39 @@
                 this.filter.startDate = this.$moment().startOf("week");
                 this.filter.endDate = this.$moment().endOf("week");
             },
+            onClickExport() {
+                this.$axios.get("timesheet_entries/export" +
+                    this.queryParamsFromFilter)
+                    .then(response => {
+                        let filename = this.$moment().format("YYYYMMDDHHmmss") +
+                            "_TimesheetExport_" +
+                            this.currentUser.name.replace(/ /gi, '') + ".xls";
+                        let bin = atob(response.data);
+                        let ab = this.s2ab(bin);
+                        if(
+                            window.navigator &&
+                            window.navigator.msSaveOrOpenBlob) {
+                            let blob = new Blob([ab], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+                            window.navigator.msSaveOrOpenBlob(blob, filename);
+                        } else {
+                            let blob = new Blob([ab], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+                            let link = document.createElement("a");
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+                            link.click();
+                        }
+                    })
+                    .catch(error => {
+                        console.dir(error);
+                        alert("TimesheetReport::onClickExport - We " +
+                            "need to implement a generic error " +
+                            "handler");
+                    });
+            },
             onReset() {
                 this.filter = {
                     endDate: undefined,
@@ -84,6 +131,14 @@
                             "need to implement a generic error " +
                             "handler");
                     });
+            },
+            s2ab(s) {
+                var buf = new ArrayBuffer(s.length);
+                var view = new Uint8Array(buf);
+                for(var i = 0; i != s.length; ++i) {
+                    view[i] = s.charCodeAt(i) & 0xFF;
+                }
+                return buf;
             }
         },
         mounted() {

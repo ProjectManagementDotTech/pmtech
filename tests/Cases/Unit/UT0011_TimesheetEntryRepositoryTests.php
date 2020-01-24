@@ -64,6 +64,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
+        sleep(2);
+
         $user = UserRepository::byEmail('user0004@test.com');
         $workspace = $user->ownedWorkspaces[0];
         TimesheetEntryRepository::create([
@@ -123,6 +125,19 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         $project = $task->project;
         $workspace = $project->workspace;
         $user = $workspace->ownerUser;
+
+        sleep(2);
+
+        $timesheetEntry = TimesheetEntry::query()
+            ->where('user_id', $user->id)
+            ->where('description', 'UT0011-0003')
+            ->first();
+        $this->assertNotNull($timesheetEntry);
+        $timesheetEntry->ended_at = Carbon::now();
+        $timesheetEntry->save();
+
+        sleep(2);
+
         TimesheetEntryRepository::create([
             'task_id' => $task->id,
             'user_id' => $user->id,

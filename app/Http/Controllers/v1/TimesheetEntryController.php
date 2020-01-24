@@ -8,8 +8,12 @@ use App\TimesheetEntry;
 use App\Traits\TimesheetEntries\GroupsTimesheetEntriesByDate;
 use App\Traits\TimesheetEntries\ProvidesHumanReadableDuration;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Ramsey\Uuid\Uuid;
 
 class TimesheetEntryController extends Controller
 {
@@ -30,25 +34,7 @@ class TimesheetEntryController extends Controller
         $this->authorize('create', TimesheetEntry::class);
 
         $startTime = Carbon::now();
-        $endTime = Carbon::now()->subSecond();
         $user = Auth::user();
-
-        /*
-         * Check to see if there is a still running timesheet entry for the
-         * logged in user. If so, close it.
-         */
-        /* BR000018 */
-        $openTimesheetEntries = TimesheetEntryRepository::filter([
-            'user_id' => $user->id,
-            'ended_at' => NULL
-        ]);
-        if(count($openTimesheetEntries) > 0) {
-            foreach($openTimesheetEntries as $timesheetEntry) {
-                TimesheetEntryRepository::update($timesheetEntry, [
-                    'ended_at' => $endTime
-                ]);
-            }
-        }
 
         $data = $request->input();
         if(!isset($data['started_at'])) {
@@ -59,69 +45,39 @@ class TimesheetEntryController extends Controller
             $data['description'] = '';
         }
 
-        /* BR000017 */
-        $overlappingEntries = $this->overlappingEntries($data);
-        if(!count($overlappingEntries)) {
-            $timesheetEntry = TimesheetEntryRepository::create($data);
+        $timesheetEntry = TimesheetEntryRepository::create($data);
 
-            return response('', 201, [
-                'Location' => route('timesheet_entries.show', [
-                    'timesheetEntry' => $timesheetEntry->id
-                ])
-            ]);
-        } else {
-            return response([
-                'message' => 'There are overlapping timesheet entries.',
-                'errors' => [
-                    'started_at' => [
-                        'There is at least one timesheet entry that overlaps ' .
-                        'with this new timesheet entry.'
-                    ]
-                ],
-                'timesheet_entries' => $overlappingEntries
-            ], 422);
-        }
+        return response('', 201, [
+            'Location' => route('timesheet_entries.show', [
+                'timesheetEntry' => $timesheetEntry->id
+            ])
+        ]);
+    }
+
+    /**
+     * Generate an XLS file with the timesheet data, and return a base64 encoded
+     * string representing the contents of the file.
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function export(Request $request)
+    {
+        $timesheetEntries = $this->getTimesheetEntriesBasedOnRequest($request);
+
+        $filename = $this->generateTimesheetExport($timesheetEntries);
+
+        $contents = file_get_contents($filename);
+        $base64Encoded = base64_encode($contents);
+
+        unlink($filename);
+
+        return $base64Encoded;
     }
 
     public function index(Request $request)
     {
-        $endDate = $request->get('end_date', NULL);
-        $startDate = $request->get('start_date', NULL);
-        $user = Auth::user();
-
-        if($endDate && $startDate) {
-            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)
-                ->startOfDay();
-            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)
-                ->endOfDay();
-        } else {
-            $numberOfDays = $request->get('number_of_days', 5);
-            $startDate = Carbon::now()
-                ->startOfDay()
-                ->subWeekdays($numberOfDays)
-                ->addWeekday();
-            $endDate = Carbon::now()->endOfDay();
-        }
-        $filterData = [
-            'user_id' => $user->id,
-            'started_at' => $startDate,
-            'ended_at' => $endDate
-        ];
-        /*
-         * Assignment in if expression! Evaluates to the assigned value... So if
-         * `$request->input(...)` returns NULL, `$projectId` is not added to
-         * `$filterData`.
-         * Same for `$taskId`.
-         * -- glj
-         */
-        if($projectId = $request->input('project_id', NULL)) {
-            $filterData['project_id'] = $projectId;
-        }
-        if($taskId = $request->input('task_id', NULL)) {
-            $filterData['task_id'] = $taskId;
-        }
-
-        $timesheetEntries = TimesheetEntryRepository::filter($filterData);
+        $timesheetEntries = $this->getTimesheetEntriesBasedOnRequest($request);
 
         return $this->provideHumanReadableDurations(
             $this->groupTimesheetEntriesByDate($timesheetEntries));
@@ -171,64 +127,97 @@ class TimesheetEntryController extends Controller
     //region Protected Implementation
 
     /**
-     * Retrieve all timesheet entries that overlap with the provided $newData.
+     * Store the given timesheet entries in an XLS file, and return the
+     * filename.
      *
-     * @param array $newData
-     * @return array
+     * @param Collection $timesheetEntries
+     * @return string
      */
-    protected function overlappingEntries(array $newData): array
+    protected function generateTimesheetExport(Collection $timesheetEntries):
+        string
     {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Workspace');
+        $sheet->setCellValue('B1', 'Project');
+        $sheet->setCellValue('C1', 'Task');
+        $sheet->setCellValue('D1', 'Description');
+        $sheet->setCellValue('E1', 'Started at');
+        $sheet->setCellValue('F1', 'Ended at');
+        $sheet->setCellValue('G1', 'Duration');
+
+        $row = 2;
+        foreach($timesheetEntries as $timesheetEntry) {
+            if($timesheetEntry->workspace)
+                $sheet->setCellValue("A$row", $timesheetEntry->workspace->name);
+            if($timesheetEntry->project)
+                $sheet->setCellValue("B$row", $timesheetEntry->project->name);
+            if($timesheetEntry->task)
+                $sheet->setCellValue("C$row", $timesheetEntry->task->name);
+            $sheet->setCellValue("D$row", $timesheetEntry->description);
+            $sheet->setCellValue("E$row", $timesheetEntry->started_at->format("d M Y H:i:s"));
+            $sheet->setCellValue("F$row", $timesheetEntry->ended_at->format("d M Y H:i:s"));
+            $sheet->setCellValue("G$row", $timesheetEntry->duration);
+            $row++;
+        }
+
+        $sheet->setAutoFilter("A1:G$row");
+
+        $fileName = storage_path('app') . '/' . Uuid::uuid4()->getHex() .
+            '.xls';
+        $writer = new Xls($spreadsheet);
+        $writer->save($fileName);
+
+        return $fileName;
+    }
+
+    /**
+     * Return the timesheet entries requested in the $request.
+     *
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function getTimesheetEntriesBasedOnRequest(Request $request)
+    {
+        $endDate = $request->get('end_date', NULL);
+        $startDate = $request->get('start_date', NULL);
+        $user = Auth::user();
+
+        if($endDate && $startDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate)
+                ->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate)
+                ->endOfDay();
+        } else {
+            $numberOfDays = $request->get('number_of_days', 5);
+            $startDate = Carbon::now()
+                ->startOfDay()
+                ->subWeekdays($numberOfDays)
+                ->addWeekday();
+            $endDate = Carbon::now()->endOfDay();
+        }
+        $filterData = [
+            'user_id' => $user->id,
+            'started_at' => $startDate,
+            'ended_at' => $endDate
+        ];
+
         /*
-         * Overlapping entries (BR000017):
-         *
-         * existing record: |-----|
-         * existing record:             |-----|
-         * existing record:                         |-----|
-         * new record 1:        |----|
-         * new record 2:               |-------|
-         * new record 3:                              |-|
-         * new record 4:                        |-|
-         * new record 5: |----|
-         *
-         * Only new record 4 is good. New record 1, 3 and 5 are easy to detect
-         * by looking at their started_at or ended_at attribute only.
-         * New record 3 needs finding an existing entry where its started_at and
-         * ended_at attribute are surrounded by the new entry
-         * started_at > newStartedAt *and* endedAt < newEndedAt
+         * Assignment in if expression! Evaluates to the assigned value... So if
+         * `$request->input(...)` returns NULL, `$projectId` is not added to
+         * `$filterData`.
+         * Same for `$taskId`.
+         * -- glj
          */
-
-        $startedAtBetween = [];
-        $endedAtBetween = [];
-        $existingBetween = [];
-
-        $endedAtSet = FALSE;
-        $startedAtSet = FALSE;
-        if(isset($newData['started_at'])) {
-            $startedAtBetween = TimesheetEntryRepository::filter([
-                'user_id' => $newData['user_id'],
-                'between' => $newData['started_at']
-            ])->toArray();
-            $startedAtSet = TRUE;
+        if($projectId = $request->input('project_id', NULL)) {
+            $filterData['project_id'] = $projectId;
         }
-        if(isset($newData['ended_at'])) {
-            $endedAtBetween = TimesheetEntryRepository::filter([
-                'user_id' => $newData['user_id'],
-                'between' => $newData['started_at']
-            ])->toArray();
-            $endedAtSet = TRUE;
-        }
-        if($endedAtSet && $startedAtSet) {
-            $existingBetween = TimesheetEntryRepository::filter([
-                'user_id' => $newData['user_id'],
-                'existing_between' => [
-                    $newData['started_at'],
-                    $newData['ended_at']
-                ]
-            ])->toArray();
+        if($taskId = $request->input('task_id', NULL)) {
+            $filterData['task_id'] = $taskId;
         }
 
-        return array_merge($startedAtBetween, $endedAtBetween,
-            $existingBetween);
+        return TimesheetEntryRepository::filter($filterData);
     }
 
     //endregion
