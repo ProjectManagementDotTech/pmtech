@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::prefix('v1')->group(base_path('/routes/api/v1/error.php'));
 Route::prefix('v1')->group(base_path('/routes/api/v1/project.php'));
 Route::prefix('v1')->group(base_path('/routes/api/v1/settings.php'));
 Route::prefix('v1')->group(base_path('/routes/api/v1/task.php'));

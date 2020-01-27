@@ -75,12 +75,6 @@
                         this.editorTimesheetEntry.task_id)
                         .then(response => {
                             this.editorTimesheetEntry.task = response.data;
-                        })
-                        .catch(error => {
-                            console.dir(error);
-                            alert("TimesheetEntryEditor::created - We " +
-                                "need to implement a generic error " +
-                                "handler");
                         });
                 }
                 if(this.editorTimesheetEntry.ended_at !== null) {
@@ -137,11 +131,6 @@
                                         );
                                 }
                             }
-                        })
-                        .catch(error => {
-                            console.dir(error);
-                            alert("TimesheetEntryEditor::loadRunningTimer - " +
-                                "We need to implement a generic error handler");
                         });
                 }
             },
@@ -209,9 +198,7 @@
                                 })
                                 .catch(error => {
                                     console.dir(error);
-                                    alert("TimesheetEntryEditor::onBlur - " +
-                                        "We need to implement a generic " +
-                                        "error handler");
+                                    debugger;
                                 });
                         }
                     }
@@ -304,12 +291,6 @@
                                     this.editorTimesheetEntry.project =
                                         oldProject;
                                     this.editorTimesheetEntry.task = oldTask;
-                                })
-                                .catch(error => {
-                                    console.dir(error);
-                                    alert("TimesheetEntryEditor::onStart - " +
-                                        "We need to implement a generic " +
-                                        "error handler");
                                 });
                         }
                     })
@@ -333,8 +314,7 @@
                     })
                     .catch(error => {
                         console.dir(error);
-                        alert("TimesheetEntryEditor::onStop - We need to " +
-                            "implement a generic error handler");
+                        debugger;
                     });
             },
         },

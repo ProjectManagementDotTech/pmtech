@@ -27,17 +27,53 @@ export default function(Vue) {
                  * where they were...
                  */
                 let route = window.router.currentRoute;
-                window.router.push("/login?back=" + route.fullPath);
+                if(route.query.back != undefined) {
+                    window.router.push("/login?back=" + route.query.back);
+                } else {
+                    window.router.push("/login?back=" + route.fullPath);
+                }
+            } else if(error.response.status == 405) {
+                Vue.axios.post("/errors", {
+                    error: {
+                        data: error.response.config.data,
+                        method: error.response.config.method,
+                        status: error.response.status,
+                        statusText: error.response.statusText,
+                        url: error.response.config.url
+                    }
+                }, {
+                    baseURL: "https://" + window.location.hostname
+                });
                 return Promise.resolve();
-            } else {
-                console.log("Vue.axios.interceptor.response::error");
-                console.dir(error);
+            } else if(error.response.status == 422) {
                 return Promise.reject(error);
+            } else {
+                Vue.axios.post("/errors", {
+                    error: {
+                        data: error.response.config.data,
+                        method: error.response.config.method,
+                        status: error.response.status,
+                        statusText: error.response.statusText,
+                        url: error.response.config.url
+                    }
+                }, {
+                    baseURL: "https://" + window.location.hostname
+                });
+                window.router.push("/" + error.response.status);
             }
         } else {
-            console.log("Vue.axios.interceptor.response::error");
-            console.dir(error);
-            return Promise.reject(error);
+            Vue.axios.post("/errors", {
+                error: {
+                    data: error.response.config.data,
+                    method: error.response.config.method,
+                    status: error.response.status,
+                    statusText: error.response.statusText,
+                    url: error.response.config.url
+                }
+            }, {
+                baseURL: "https://" + window.location.hostname
+            });
+            window.router.push("/unknown-error");
         }
     });
     Object.defineProperties(Vue.prototype, {

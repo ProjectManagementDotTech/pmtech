@@ -30,9 +30,9 @@ class UserRepository
      * The user matching the given $email address.
      *
      * @param string $email
-     * @return User
+     * @return User|null
      */
-    static public function byEmail(string $email): User
+    static public function byEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
     }

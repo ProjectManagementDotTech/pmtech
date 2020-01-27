@@ -103,12 +103,6 @@
                             link.download = filename;
                             link.click();
                         }
-                    })
-                    .catch(error => {
-                        console.dir(error);
-                        alert("TimesheetReport::onClickExport - We " +
-                            "need to implement a generic error " +
-                            "handler");
                     });
             },
             onReset() {
@@ -124,12 +118,6 @@
                 this.$axios.get("timesheet_entries" + this.queryParamsFromFilter)
                     .then(response => {
                         this.timesheetEntries = response.data;
-                    })
-                    .catch(error => {
-                        console.dir(error);
-                        alert("TimesheetReport::onRunReport - We " +
-                            "need to implement a generic error " +
-                            "handler");
                     });
             },
             s2ab(s) {

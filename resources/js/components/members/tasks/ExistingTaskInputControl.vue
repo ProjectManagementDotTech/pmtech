@@ -41,16 +41,17 @@
                 if(this.project) {
                     this.$axios.get("/projects/" + this.project.id + "/tasks")
                         .then(response => {
-                            this.taskList = response.data;
+                            if(response.data == undefined) {
+                                this.taskList = [];
+                            } else {
+                                this.taskList = response.data;
+                            }
                             this.value.task = this.taskList.find(
                                 t => t.id == this.value.task_id
                             );
                         })
-                        .catch(error => {
-                            console.dir(error);
-                            alert("ExistingTaskInputControl::updateTaskList - We " +
-                                "need to implement a generic error " +
-                                "handler");
+                        .finally(() => {
+                            /* Empty */
                         });
                 } else {
                     this.taskList = [];

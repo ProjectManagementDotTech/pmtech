@@ -8,7 +8,7 @@
 
 #To do (v2020.1)
 ###General
-1. Implement a generic error handler (also in the API)
+1. Style back-end
 ###Front-end
 1. Style and implement front-end
 ###Timesheets
@@ -55,6 +55,8 @@ subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
+###Project
+1. **BR000022** - Project names must be unique within a workspace
 ###Timesheets
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
@@ -260,6 +262,7 @@ Workspace Update Notification via Pusher?)
 1. Export timesheet report
 1. Style input boxes according to
 https://codesandbox.io/s/vue-template-lldw2?from-embed
+1. Implement a generic error handler (also in the API)
 
 #Details
 ##BR000001

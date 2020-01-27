@@ -213,13 +213,6 @@
                             });
                             console.log("Done calculating...");
                         })
-                        .catch(error => {
-                            console.dir(error);
-                            alert("TimesheetReportLineGraph::" +
-                                "initializeChartableLineDataAcrossTasks - We " +
-                                "need to implement a generic error " +
-                                "handler");
-                        })
                         .finally(() => {
                             console.log("<<< TimesheetReportLineGraph::" +
                                 "initializeChartableLineDataAcrossTasks");

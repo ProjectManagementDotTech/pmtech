@@ -1,3 +1,6 @@
+import Error402 from "./views/errors/Error402";
+import Error403 from "./views/errors/Error403";
+import Error404 from "./views/errors/Error404";
 import Home from "./views/public/Home";
 import Login from "./views/public/Login";
 import Logout from "./views/members/Logout";
@@ -10,6 +13,7 @@ import Test from "./views/members/Test";
 import TimesheetEditor from "./views/members/timesheet/TimesheetEditor";
 import TimesheetHome from "./views/members/timesheet/TimesheetHome";
 import TimesheetReport from "./views/members/timesheet/TimesheetReport";
+import UnknownError from "./views/errors/UnknownError";
 
 export default {
     mode: "history",
@@ -29,6 +33,22 @@ export default {
         {
             component: Register,
             path: "/register"
+        },
+        {
+            component: Error402,
+            path: "/402"
+        },
+        {
+            component: Error403,
+            path: "/403"
+        },
+        {
+            component: Error404,
+            path: "/404"
+        },
+        {
+            component: UnknownError,
+            path: "/unknown-error"
         },
         {
             component: WorkspaceHome,

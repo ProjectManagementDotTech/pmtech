@@ -73,13 +73,7 @@
                     .then(response => {
                         this.updateComponentKeys(response.data);
                         this.timesheetEntriesByDay = response.data;
-                    })
-                    .catch(error => {
-                        console.dir(error);
-                        alert("TimesheetEditor::" +
-                            "fetchHistoricTimesheetEntries - We need a " +
-                            "central generic error handling mechanism.");
-                    })
+                    });
             },
             updateComponentKeys(anArray) {
                 for(var i = 0; i < anArray.length; i++) {

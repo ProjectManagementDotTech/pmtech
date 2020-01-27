@@ -13,7 +13,7 @@
     export default {
         methods: {
             onSendNewActivationLink() {
-                this.$axios.post("/verification/resend", {
+                this.$axios.post("/api/v1/verification/resend", {
                     email: this.email
                 });
             },
