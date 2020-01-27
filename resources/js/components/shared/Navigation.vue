@@ -59,9 +59,9 @@
 
 <script>
     import { mapGetters } from "vuex";
-    import PersonDropdownNavItem from "./Navgiation/PersonDropdownNavItem";
+    import PersonDropdownNavItem from "./navgiation/PersonDropdownNavItem";
     import TimesheetDropdownNavItem
-        from "./Navgiation/TimesheetDropdownNavItem";
+        from "./navgiation/TimesheetDropdownNavItem";
 
     export default {
         components: {

@@ -8,8 +8,6 @@
 
 #To do (v2020.1)
 ###General
-1. Style input boxes according to
-https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Implement a generic error handler (also in the API)
 ###Front-end
 1. Style and implement front-end
@@ -260,6 +258,8 @@ for project and task disappears
 1. When adding a project, the vuex store needs to reload its projects (through a
 Workspace Update Notification via Pusher?)
 1. Export timesheet report
+1. Style input boxes according to
+https://codesandbox.io/s/vue-template-lldw2?from-embed
 
 #Details
 ##BR000001

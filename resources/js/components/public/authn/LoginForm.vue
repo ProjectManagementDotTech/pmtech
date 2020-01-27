@@ -7,25 +7,10 @@
             <template v-slot:header>
                 <h1>{{ $t("Login") }}</h1>
             </template>
-            <div>
-                <label for="email">{{ $t("Email") }}</label>
-                <validation-provider name="email" rules="required|email"
-                                     v-slot="{ errors }">
-                    <input id="email" name="email" type="email"
-                           v-model="email" />
-                    <div>{{ $t(errors[0]) }}</div>
-                </validation-provider>
-            </div>
-            <div>
-                <label for="password">{{ $t("Password") }}</label>
-                <validation-provider name="password"
-                                     rules="required"
-                                     v-slot="{ errors }">
-                    <input id="password" name="password" type="password"
-                           v-model="password" />
-                    <div>{{ $t(errors[0]) }}</div>
-                </validation-provider>
-            </div>
+            <pmtech-input label="Email address" name="email"
+                          rules="required|email" v-model="email" />
+            <pmtech-input label="Password" name="password" rules="required"
+                          type="password" v-model="password" />
             <template v-slot:footer>
                 <button :disabled="invalid"
                         @click="onClickLogin">
@@ -38,9 +23,11 @@
 
 <script>
     import Panel from "../../shared/Panel";
+    import PmtechInput from "../../shared/input/PmtechInput";
 
     export default {
         components: {
+            PmtechInput,
             Panel
         },
         data() {
