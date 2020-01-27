@@ -6,7 +6,6 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Log;
-use phpDocumentor\Reflection\Project;
 use Tests\Shared\TestCase;
 
 class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
@@ -30,6 +29,8 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
             'workspace_id' => $user->ownedWorkspaces[0]->id,
             'description' => 'BR000008-0001'
         ]);
+
+        sleep(3);
     }
 
     /** @test */
@@ -54,6 +55,8 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
             'workspace_id' => $user->ownedWorkspaces[0]->id,
             'description' => 'BR000008-0002'
         ]);
+
+        sleep(3);
     }
 
     /** @test */
@@ -80,5 +83,7 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
             'workspace_id' => $user->ownedWorkspaces[0]->id,
             'description' => 'BR000008-0003'
         ]);
+
+        sleep(3);
     }
 }

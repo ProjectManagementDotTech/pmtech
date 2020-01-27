@@ -20,6 +20,9 @@ class TimesheetEntryObserver
     {
         $endTime = Carbon::now()->subSecond();
         $user = Auth::user();
+        if(!$user) {
+            $user = $timesheetEntry->user;
+        }
 
         if($user) {
             /*
@@ -40,29 +43,59 @@ class TimesheetEntryObserver
             }
         }
 
-        $data = [
-            'user_id' => $timesheetEntry->user_id,
-            'started_at' => $timesheetEntry->started_at
-        ];
-        /* BR000017 */
-        $overlappingEntries = $this->overlappingEntries($data);
-        if(count($overlappingEntries) > 0) {
-            abort(422, json_encode([
-                'message' => 'There are overlapping timesheet entries.',
-                'errors' => [
-                    'started_at' => [
-                        'There is at least one timesheet entry that overlaps ' .
-                        'with this new timesheet entry.'
-                    ]
-                ],
-                'timesheet_entries' => $overlappingEntries
-            ]));
-        }
+        $this->abortIfThereAreOverlappingTimesheetEntries($timesheetEntry);
+    }
+
+    /**
+     * Do some checks before finally storing the timesheet entry.
+     *
+     * @param TimesheetEntry $timesheetEntry
+     */
+    public function updating(TimesheetEntry $timesheetEntry)
+    {
+        $this->abortIfThereAreOverlappingTimesheetEntries($timesheetEntry);
     }
 
     //endregion
 
     //region Protected Implementation
+
+    protected function abortIfThereAreOverlappingTimesheetEntries(
+        TimesheetEntry $timesheetEntry)
+    {
+        $data = [
+            'id' => $timesheetEntry->id,
+            'user_id' => $timesheetEntry->user_id,
+            'started_at' => $timesheetEntry->started_at
+        ];
+        if($timesheetEntry->ended_at !== NULL) {
+            $data['ended_at'] = $timesheetEntry->ended_at;
+        }
+
+        /* BR000017 */
+        $overlappingEntries = $this->overlappingEntries($data);
+        if(count($overlappingEntries) > 0) {
+            $messageData = [
+                'message' => 'There are overlapping timesheet entries.',
+                'errors' => [
+                    'id' => 'This timesheet entry has id "' .
+                        $timesheetEntry->id . '"',
+                    'started_at' => [
+                        'This timesheet entry started at "' .
+                        $timesheetEntry->started_at->format('Y-m-d H:i:s') . '"'
+                    ],
+                ],
+                'timesheet_entries' => $overlappingEntries
+            ];
+            if($timesheetEntry->ended_at !== NULL) {
+                $messageData['errors']['ended_at'] = 'This timesheet entry ' .
+                    'ended at "' .
+                    $timesheetEntry->ended_at->format('Y-m-d H:i:s') . '"';
+            }
+
+            abort(422, json_encode($messageData));
+        }
+    }
 
     /**
      * Retrieve all timesheet entries that overlap with the provided $newData.
@@ -99,6 +132,7 @@ class TimesheetEntryObserver
         $startedAtSet = FALSE;
         if(isset($newData['started_at'])) {
             $startedAtBetween = TimesheetEntryRepository::filter([
+                'id' => '<>:' . $newData['id'],
                 'user_id' => $newData['user_id'],
                 'between' => $newData['started_at']
             ])->toArray();
@@ -106,13 +140,15 @@ class TimesheetEntryObserver
         }
         if(isset($newData['ended_at'])) {
             $endedAtBetween = TimesheetEntryRepository::filter([
+                'id' => '<>:' . $newData['id'],
                 'user_id' => $newData['user_id'],
-                'between' => $newData['started_at']
+                'between' => $newData['ended_at']
             ])->toArray();
             $endedAtSet = TRUE;
         }
         if($endedAtSet && $startedAtSet) {
             $existingBetween = TimesheetEntryRepository::filter([
+                'id' => '<>:' . $newData['id'],
                 'user_id' => $newData['user_id'],
                 'existing_between' => [
                     $newData['started_at'],

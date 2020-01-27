@@ -28,6 +28,8 @@ class BR000007_TimesheetEntryCreationForAuthorizedWorkspaceUsersTest extends
         $this->assertDatabaseHas('timesheet_entries', [
             'description' => 'BR000007-0001'
         ]);
+
+        sleep(3);
     }
 
     /** @test */

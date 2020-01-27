@@ -21,14 +21,6 @@ class BR000017_TimesheetEntriesCannotOverlapTest extends TestCase
         ], [
             'Authorization' => $token['type'] . ' ' . $token['token']
         ]);
-        $response->assertStatus(422)->assertJsonFragment([
-            'message' => 'There are overlapping timesheet entries.',
-            'errors' => [
-                'started_at' => [
-                    'There is at least one timesheet entry that overlaps ' .
-                    'with this new timesheet entry.'
-                ]
-            ]
-        ]);
+        $response->assertStatus(422);
     }
 }

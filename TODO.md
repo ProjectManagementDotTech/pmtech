@@ -150,7 +150,6 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. Export timesheet report
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -260,6 +259,7 @@ project in project_user
 for project and task disappears
 1. When adding a project, the vuex store needs to reload its projects (through a
 Workspace Update Notification via Pusher?)
+1. Export timesheet report
 
 #Details
 ##BR000001

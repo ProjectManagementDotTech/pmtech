@@ -33,6 +33,12 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
         $this->assertNull($timesheetEntry->ended_at);
+
+        Log::debug('Timesheet Entry #' . $timesheetEntry->id);
+        Log::debug('  started_at "' .
+            $timesheetEntry->started_at->format('Y-m-d H:i:s') . '"');
+
+        sleep(3);
     }
 
     /** @test */
@@ -44,8 +50,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'description' => 'UT0011-0001',
-            'ended_at' => Carbon::now(),
-            'started_at' => Carbon::now()->subHour(),
+            'ended_at' => Carbon::now()->addSeconds(4),
+            'started_at' => Carbon::now(),
         ]);
         $this->assertDatabaseHas('timesheet_entries', [
             'user_id' => $user->id,
@@ -57,14 +63,14 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
         $this->assertNotNull($timesheetEntry->ended_at);
+
+        sleep(8);
     }
 
     /** @test */
     public function createTimesheetEntryAgainstWorkspace()
     {
         Log::info(__METHOD__);
-
-        sleep(2);
 
         $user = UserRepository::byEmail('user0004@test.com');
         $workspace = $user->ownedWorkspaces[0];
@@ -85,6 +91,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
         $this->assertNull($timesheetEntry->ended_at);
+
+        sleep(3);
     }
 
     /** @test */
@@ -114,6 +122,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
         $this->assertNull($timesheetEntry->ended_at);
+
+        sleep(3);
     }
 
     /** @test */
@@ -126,17 +136,13 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         $workspace = $project->workspace;
         $user = $workspace->ownerUser;
 
-        sleep(2);
-
         $timesheetEntry = TimesheetEntry::query()
             ->where('user_id', $user->id)
             ->where('description', 'UT0011-0003')
             ->first();
         $this->assertNotNull($timesheetEntry);
-        $timesheetEntry->ended_at = Carbon::now();
+        $timesheetEntry->ended_at = Carbon::now()->subSecond();
         $timesheetEntry->save();
-
-        sleep(2);
 
         TimesheetEntryRepository::create([
             'task_id' => $task->id,
@@ -159,6 +165,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
         $this->assertNull($timesheetEntry->ended_at);
+
+        sleep(3);
     }
 
     /** @test */
@@ -200,6 +208,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
             'description' => 'UT0011-0005',
             'started_at' => $newStartedAt
         ]);
+
+        sleep(3);
     }
 
     /** @test */

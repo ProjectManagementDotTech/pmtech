@@ -170,7 +170,13 @@ class TimesheetEntryRepository
                 $result = $result->where('started_at', '>=', $value[0])
                     ->where('ended_at', '<=', $value[1]);
             } else {
-                $result = $result->where($key, $value);
+                $operator = '=';
+                if(strpos($value, ':') !== FALSE) {
+                    $parts = preg_split('/:/', $value);
+                    $operator = $parts[0];
+                    $value = $parts[1];
+                }
+                $result = $result->where($key, $operator, $value);
             }
         }
 

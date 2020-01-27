@@ -41,5 +41,7 @@ class UT0012_TimesheetEntryApiTests extends TestCase
             'Authorization' => $token['type'] . ' ' . $token['token']
         ]);
         $response->assertStatus(200);
+
+        sleep(3);
     }
 }
