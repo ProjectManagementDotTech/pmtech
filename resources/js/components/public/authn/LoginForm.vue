@@ -4,15 +4,12 @@
                          method="POST" action="javascript:void(0);"
                          v-slot="{ invalid }">
         <panel>
-            <template v-slot:header>
-                <h1>{{ $t("Login") }}</h1>
-            </template>
             <pmtech-input label="Email address" name="email"
                           rules="required|email" v-model="email" />
             <pmtech-input label="Password" name="password" rules="required"
                           type="password" v-model="password" />
             <template v-slot:footer>
-                <button :disabled="invalid"
+                <button class="btn btn-primary" :disabled="invalid"
                         @click="onClickLogin">
                     {{ $t("Login") }}
                 </button>

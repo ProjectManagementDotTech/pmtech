@@ -2,7 +2,14 @@
     <header class="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
         <div class="flex items-center justify-between px-4 py-3 sm:px-0 sm:py-0">
             <div>
-                <img class="h-8" src="/images/logo.png" alt="Project-Management.tech">
+                <template v-if="authenticated">
+
+                </template>
+                <template v-else>
+                    <router-link to="/">
+                        <img class="h-8" src="/images/logo.png" alt="Project-Management.tech">
+                    </router-link>
+                </template>
             </div>
             <div class="sm:hidden">
                 <button class="block text-gray-500 hover:text-white focus:text-white focus:outline-none"
@@ -45,10 +52,16 @@
             </template>
             <template v-else>
                 <div class="px-2 pt-2 sm:flex sm:pt-0">
-                    <router-link class="hover:bg-gray-800 block rounded px-2 py-1 text-white font-semibold sm:ml-2" exact to="/login">
+                    <router-link class="hover:bg-gray-800 block sm:mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 focus:outline-none" exact to="/how-it-works">
+                        How it works
+                    </router-link>
+                    <router-link class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 focus:outline-none" exact to="/pricing-and-plans">
+                        Pricing and plans
+                    </router-link>
+                    <router-link class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 focus:outline-none" exact to="/login">
                         Login
                     </router-link>
-                    <router-link class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 sm:mt-0" exact to="/register">
+                    <router-link class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold sm:ml-2 focus:outline-none" exact to="/register">
                         Register
                     </router-link>
                 </div>
@@ -81,5 +94,7 @@
 </script>
 
 <style scoped>
-
+    .router-link-exact-active {
+        @apply bg-gray-800;
+    }
 </style>

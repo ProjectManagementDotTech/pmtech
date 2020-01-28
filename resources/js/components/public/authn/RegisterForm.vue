@@ -3,39 +3,18 @@
                          ref="validationObserver" tag="div"
                          v-slot="{ invalid }">
         <panel>
-            <template v-slot:header>
-                <h1>{{ $t("Register") }}</h1>
-            </template>
-            <div>
-                <label for="name">{{ $t("Name") }}</label>
-                <validation-provider name="name" rules="required" v-slot="{ errors }">
-                    <input name="name" id="name" type="text" v-model="name" autofocus />
-                    <div>{{ $t(errors[0]) }}</div>
-                </validation-provider>
-            </div>
-            <div>
-                <label for="email">{{ $t("Email") }}</label>
-                <validation-provider name="email" rules="required|email" v-slot="{ errors }">
-                    <input name="email" id="email" type="email" v-model="email" />
-                    <div>{{ $t(errors[0]) }}</div>
-                </validation-provider>
-            </div>
-            <div>
-                <label for="password">{{ $t("Password") }}</label>
-                <validation-provider name="password" rules="required|confirmed:passwordConfirmation" v-slot="{ errors }">
-                    <input name="password" id="password" type="password" v-model="password" />
-                    <div>{{ $t(errors[0]) }}</div>
-                </validation-provider>
-            </div>
-            <div>
-                <label for="password-confirmation">{{ $t("Confirm password") }}</label>
-                <validation-provider name="password-confirmation" v-slot="{ errors }" vid="passwordConfirmation">
-                    <input name="password-confirmation" id="password-confirmation" type="password" v-model="passwordConfirmation" />
-                    <div>{{ $t(errors[0]) }}</div>
-                </validation-provider>
-            </div>
+            <pmtech-input name="name" rules="required" v-model="name"
+                          :label="$t('Name')" />
+            <pmtech-input name="email" rules="required|email" type="email"
+                          v-model="email" :label="$t('Email')" />
+            <pmtech-input name="password"
+                          rules="required|confirmed:passwordConfirmation"
+                          type="password" v-model="password" :label="$t('Password')" />
+            <pmtech-input name="password-confirmation" rules="required"
+                          type="password" vid="passwordConfirmation"
+                          v-model="passwordConfirmation" :label="$t('Confirm password')"/>
             <template v-slot:footer>
-                <button :disabled="invalid"
+                <button class="btn btn-primary" :disabled="invalid"
                         @click="onClickRegister">
                     {{ $t("Register") }}
                 </button>
@@ -46,10 +25,12 @@
 
 <script>
     import Panel from "../../shared/Panel";
+    import PmtechInput from "../../shared/input/PmtechInput";
 
     export default {
         components: {
-            Panel
+            Panel,
+            PmtechInput,
         },
         data() {
             return {

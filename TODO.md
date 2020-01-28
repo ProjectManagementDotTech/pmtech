@@ -5,12 +5,15 @@
 * Active selection: bg-indigo-400 text-white 
 * Hover background: bg-gold-100
 * Text: text-gray-800
+* Primary color: indigo-500
+* Secondary color: gold-500
+* Danger color: red-500
+* Warning color: yellow-500
+* OK color: green-500
 
 #To do (v2020.1)
 ###General
-1. Style back-end
 ###Front-end
-1. Style and implement front-end
 ###Timesheets
 ###Upgrade process
 1. Migrate data from current www.project-management.tech to new
@@ -150,6 +153,7 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
+1. Style back-end
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -263,6 +267,7 @@ Workspace Update Notification via Pusher?)
 1. Style input boxes according to
 https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Implement a generic error handler (also in the API)
+1. Style and implement front-end
 
 #Details
 ##BR000001

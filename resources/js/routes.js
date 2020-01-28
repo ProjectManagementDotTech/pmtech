@@ -2,8 +2,10 @@ import Error402 from "./views/errors/Error402";
 import Error403 from "./views/errors/Error403";
 import Error404 from "./views/errors/Error404";
 import Home from "./views/public/Home";
+import HowItWorks from "./views/public/HowItWorks";
 import Login from "./views/public/Login";
 import Logout from "./views/members/Logout";
+import PricingAndPlans from "./views/public/PricingAndPlans";
 import ProjectDashboard from "./views/members/projects/ProjectDashboard";
 import ProjectHome from "./views/members/projects/ProjectHome";
 import Register from "./views/public/Register";
@@ -21,6 +23,14 @@ export default {
         {
             component: Home,
             path: "/"
+        },
+        {
+            component: HowItWorks,
+            path: "/how-it-works"
+        },
+        {
+            component: PricingAndPlans,
+            path: "/pricing-and-plans"
         },
         {
             component: Login,
