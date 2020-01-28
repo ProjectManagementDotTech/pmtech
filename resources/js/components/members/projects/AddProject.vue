@@ -7,25 +7,12 @@
         <validation-observer class="needs-validation" novalidate
                              ref="validationObserver" tag="form"
                              v-slot="{ invalid }">
-            <div>
-                <div>
-                    <label for="name">Project name</label>
-                </div>
-                <div>
-                    <validation-provider name="name" rules="required"
-                                         v-slot="{ errors }">
-                        <input class="input" id="name" name="name" required
-                               type="text" v-model="name" />
-                        <div>{{ errors[0] }}</div>
-                    </validation-provider>
-                </div>
-                <div>
-                    <div>
-                        <label for="color">Project color</label>
-                    </div>
-                    <div>
-                        <compact v-model="colors" />
-                    </div>
+            <div class="px-2">
+                <pmtech-input label="Project name" name="name" rules="required"
+                              v-model="name" />
+                <div class="w-full flex items-center">
+                    <label class="mr-6" for="color">Project color</label>
+                    <compact v-model="colors" />
                 </div>
             </div>
         </validation-observer>
@@ -36,9 +23,11 @@
     import { Compact } from "vue-color";
     import { Swatches } from "vue-color";
     import ModalDialogBox from "../../shared/ModalDialogBox";
+    import PmtechInput from "../../shared/input/PmtechInput";
 
     export default {
         components: {
+            PmtechInput,
             Compact,
             ModalDialogBox,
             Swatches

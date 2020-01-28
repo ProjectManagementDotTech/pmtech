@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <vuetable pagination-path="" ref="indexProjectsTable" :fields="fields"
-                  :http-fetch="fetchProjectIndex"
+    <div class="pt-1 px-2">
+        <vuetable pagination-path="" ref="indexProjectsTable" :css="tableStyles"
+                  :fields="fields" :http-fetch="fetchProjectIndex"
                   @vuetable:pagination-data="onPaginationData">
             <template slot="color" slot-scope="props">
                 <div :style="'background-color: #' + props.rowData.color + '; display: block; min-height: 16px;'" />
@@ -13,6 +13,7 @@
             </template>
         </vuetable>
         <vuetable-pagination ref="indexProjectsPagination"
+                             :css="paginationStyles"
                              @vuetable-pagination:change-page="onChangePage" />
     </div>
 </template>
@@ -45,7 +46,32 @@
                         name: "__slot:name",
                         title: "Project name"
                     }
-                ]
+                ],
+                paginationStyles: {
+                    wrapperClass: "mb-2 bg-white border border-gray-200 rounded-lg inline-flex",
+                    activeClass: "bg-indigo-400 text-white",
+                    disabledClass: "text-gray-200 cursor-not-allowed",
+                    pageClass: "cursor-pointer px-2 py-1",
+                    linkClass: "cursor-pointer px-2 py-1",
+                    paginationClass: "",
+                    paginationInfoClass: "",
+                    dropdownClass: "",
+                    icons: {
+                        first: "fas fa-angle-double-left",
+                        prev: "fas fa-angle-left",
+                        next: "fas fa-angle-right",
+                        last: "fas fa-angle-double-right",
+                    }
+                },
+                tableStyles: {
+                    tableClass: "",
+                    loadingClass: "",
+                    ascendingIcon: "",
+                    descendingIcon: "",
+                    detailsRowClass: "",
+                    handleIcon: "",
+                    sortableIcon: ""
+                }
             }
         },
         methods: {

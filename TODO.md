@@ -6,7 +6,7 @@
 * Hover background: bg-gold-100
 * Text: text-gray-800
 * Primary color: indigo-500
-* Secondary color: gold-500
+* Secondary color: gray-500
 * Danger color: red-500
 * Warning color: yellow-500
 * OK color: green-500

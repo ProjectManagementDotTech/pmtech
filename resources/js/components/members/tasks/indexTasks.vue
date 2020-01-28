@@ -1,8 +1,5 @@
 <template>
     <article>
-        <header>
-            Tasks
-        </header>
         <main>
             <vuetable pagination-path="" ref="indexTasksTable" :fields="fields"
                       :http-fetch="fetchTaskIndex"

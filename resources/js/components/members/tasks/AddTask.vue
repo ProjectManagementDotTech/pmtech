@@ -2,17 +2,8 @@
     <validation-observer class="needs-validation" novalidate
                          ref="validationObserver" tag="div"
                          v-slot="{ invalid }">
-        <div>
-            <label for="name">Task</label>
-        </div>
-        <div>
-            <validation-provider name="name" rules="required"
-                                 v-slot="{ errors }">
-                <input id="name" name="name" required type="text"
-                       v-model="name" />
-                <div>{{ errors[0] }}</div>
-            </validation-provider>
-        </div>
+        <pmtech-input label="Task" name="name" rules="required"
+                      v-model="name" />
         <div>
             <button :disabled="invalid" @click.stop="onAddTask">Add task</button>
         </div>
@@ -20,7 +11,9 @@
 </template>
 
 <script>
+    import PmtechInput from "../../shared/input/PmtechInput";
     export default {
+        components: {PmtechInput},
         data() {
             return {
                 name: ""

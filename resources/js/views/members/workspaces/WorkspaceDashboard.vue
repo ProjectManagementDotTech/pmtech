@@ -2,16 +2,14 @@
     <div>
         <div v-if="$store.getters['projects/all'].length == 0">
             <p>
-                You currently have no projects in this workspace
+                You currently have no projects in this workspace.
+                <button class="btn btn-primary" @click="onAddProject">
+                    Add project
+                </button>
             </p>
         </div>
         <div v-else>
             <index-projects />
-        </div>
-        <div>
-            <button @click="onAddProject">
-                Add project
-            </button>
         </div>
     </div>
 </template>

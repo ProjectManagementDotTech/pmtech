@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between px-4 py-3 sm:px-0 sm:py-0">
             <div>
                 <template v-if="authenticated">
-
+                    <img class="h-8" src="/images/logo.png" alt="Project-Management.tech">
                 </template>
                 <template v-else>
                     <router-link to="/">
@@ -22,11 +22,20 @@
         <div :class="isOpen ? 'block' : 'hidden'" class="sm:block">
             <template v-if="authenticated">
                 <div class="px-2 pt-2 sm:flex sm:pt-0">
-                    <router-link class="hover:bg-gray-800 block rounded px-2 py-1 text-white font-semibold sm:ml-2" exact :to="'/workspaces/' + $route.params.workspaceId">
-                        Projects
-                    </router-link>
+                    <project-dropdown-nav-item class="hidden sm:block" />
                     <timesheet-dropdown-nav-item class="hidden sm:block" />
                     <person-dropdown-nav-item class="hidden sm:block" />
+                </div>
+                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                    <div class="px-2">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                            Projects
+                        </div>
+                        <div class="mt-2 pl-2">
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId" @click.native="isOpen = false">Overview</router-link>
+                            <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddProject">Add</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
                     <div class="px-2">
@@ -75,9 +84,11 @@
     import PersonDropdownNavItem from "./navgiation/PersonDropdownNavItem";
     import TimesheetDropdownNavItem
         from "./navgiation/TimesheetDropdownNavItem";
+    import ProjectDropdownNavItem from "./navgiation/ProjectDropdownNavItem";
 
     export default {
         components: {
+            ProjectDropdownNavItem,
             PersonDropdownNavItem,
             TimesheetDropdownNavItem
         },
@@ -87,6 +98,12 @@
         data() {
             return {
                 isOpen: false
+            }
+        },
+        methods: {
+            onClickAddProject() {
+                this.isOpen = false;
+                this.$eventBus.$emit("add-project");
             }
         },
         name: "Navigation"

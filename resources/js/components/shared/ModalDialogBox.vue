@@ -1,9 +1,8 @@
 <template>
-    <div class="modal-backdrop">
-        <div class="row">
-            <div class="inline-block" />
-            <div class="inline-block" @click.stop>
-                <article class="dialog-box">
+    <div class="modal-backdrop" @click.self="onClickCancel">
+        <div class="flex flex-row w-full">
+            <div class="w-1/2 mx-auto">
+                <article class="dialog-box" @keypress.esc="onClickCancel">
                     <h2 class="dialog-header">
                         <slot name="header">
                             Default header
@@ -15,21 +14,27 @@
                         </slot>
                     </section>
                     <section class="dialog-footer">
-                        <div class="row">
-                            <div class="col-2">
-                                <button v-if="showHelpButton">
+                        <div class="flex flex-wrap items-center justify-between -mb-4 px-2">
+                            <div class="w-1/2 sm:w-1/3 mb-4 text-left">
+                                <button class="btn btn-secondary"
+                                        v-if="showHelpButton">
                                     {{ helpButtonText }}
                                 </button>
                             </div>
-                            <div class="col-4" />
-                            <div class="col-3">
-                                <button v-if="showCancelButton" :diabled="false"
-                                        @click="onClickCancel">
+                            <div class="w-1/2 sm:w-1/3 mb-4 text-right lg:hidden">
+                                <button class="btn btn-secondary " v-if="showCancelButton"
+                                        :diabled="false" @click="onClickCancel">
                                     {{ cancelButtonText }}
                                 </button>
                             </div>
-                            <div class="col-3">
-                                <button :disabled="okButtonDisabled()"
+                            <div class="hidden sm:w-1/2 sm:inline-block md:hidden">&nbsp;</div>
+                            <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/2 mb-4 text-right">
+                                <button class="hidden lg:inline-block lg:mr-2 btn btn-secondary" v-if="showCancelButton"
+                                        :diabled="false" @click="onClickCancel">
+                                    {{ cancelButtonText }}
+                                </button>
+                                <button class="btn btn-primary"
+                                        :disabled="okButtonDisabled()"
                                         @click="onClickOk">
                                     {{ okButtonText }}
                                 </button>
@@ -88,5 +93,4 @@
 </script>
 
 <style scoped>
-
 </style>
