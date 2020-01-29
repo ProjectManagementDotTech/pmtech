@@ -8,8 +8,8 @@
                         Flick types: bar | donut | line | pie
                 -->
             </div>
-            <div class="w-1/2 text-right">
-                <button @click="onClickExport">
+            <div class="w-1/2 pr-5 text-right">
+                <button class="btn btn-primary" @click="onClickExport">
                     Export
                 </button>
             </div>

@@ -107,9 +107,6 @@
             },
             initializeChartableLineDataAcrossProjects() {
                 return new Promise((resolve, reject) => {
-                    console.log(">>> TimesheetReportLineGraph::" +
-                        "initializeChartableLineDataAcrossProjects");
-
                     let projects = this.$store.getters["projects/all"];
                     projects.forEach(project => {
                         let durations = [];
@@ -152,21 +149,14 @@
                         name: "No Project"
                     });
 
-                    console.log("<<< TimesheetReportLineGraph::" +
-                        "initializeChartableLineDataAcrossProjects");
-
                     resolve();
                 });
             },
             initializeChartableLineDataAcrossTasks() {
                 return new Promise((resolve, reject) => {
-                    console.log(">>> TimesheetReportLineGraph::" +
-                        "initializeChartableLineDataAcrossTasks");
-
                     let project = this.$store.getters["projects/byId"](this.filter.selectedProject.id);
                     this.$axios.get("/projects/" + this.filter.selectedProject.id + "/tasks")
                         .then(response => {
-                            console.log("Response from axios...");
                             let tasks = response.data;
                             let luminosity = -0.85;
                             let luminosityFactor = 1.7/(tasks.length);
@@ -211,12 +201,8 @@
                                 durations: durations,
                                 name: "No Task"
                             });
-                            console.log("Done calculating...");
                         })
                         .finally(() => {
-                            console.log("<<< TimesheetReportLineGraph::" +
-                                "initializeChartableLineDataAcrossTasks");
-                            console.log("Resolving...");
                             resolve();
                         });
                 });
@@ -238,7 +224,7 @@
             renderChart() {
                 let svg = d3
                     .select("svg")
-                    .attr("width", 1908)
+                    .attr("width", 1230)
                     .attr("height", 256);
 
                 this.chart = svg
@@ -254,11 +240,18 @@
                     .append("g")
                     .call(d3.axisLeft(yScale).ticks([this.maximumHours]));
 
+                console.dir(this.chartableDateRange);
+                console.dir(this.chartableDateRange[0].day.format("DD MMM YYYY"));
+                console.dir(this.chartableDateRange[this.chartableDateRange.length - 1].day.format("DD MMM YYYY"));
+
+                let scaleStart = this.chartableDateRange[0].day;
+                let scaleEnd = this.chartableDateRange[this.chartableDateRange.length - 1].day;
+
                 let xScale = d3
                     .scaleBand()
-                    .range([0, 1858])
+                    .range([0, 1230])
                     .domain(this.chartableDateRange.map(entry => entry.day.format("DD MMM YYYY")))
-                    .padding(0.2);
+                    .padding(1);
 
                 this.chart
                     .append("g")
@@ -266,13 +259,9 @@
                     .call(d3.axisBottom(xScale));
 
                 this.chartableLineData.forEach(chartLine => {
-                    console.log("Here...");
-                    console.dir(chartLine);
                     let line = d3.line()
                         .x(duration => xScale(duration.day))
                         .y(duration => yScale(duration.hours));
-
-                    console.log("Chartline.color: " + chartLine.color);
                     this.chart
                         .append("path")
                         .datum(chartLine.durations)
@@ -288,10 +277,6 @@
                 this.initializeChartableDateRange();
                 this.initializeChartableLineData()
                     .then(() => {
-                        console.log("Rendering data...");
-                        console.log("Maximum hours: " + this.maximumHours);
-                        console.log("ChartableLineData");
-                        console.dir(this.chartableLineData);
                         this.normalizeChartableLineData();
                         this.renderChart();
                     });

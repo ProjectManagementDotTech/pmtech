@@ -19,10 +19,10 @@
                                    @input:start-date="onInputStartDate" />
             </div>
             <div class="w-6/12 md:w-3/12">
-                <button type="button" @click="onClickResetFilter">
+                <button class="btn btn-secondary" type="button" @click="onClickResetFilter">
                     Reset filter
                 </button>
-                <button type="button" @click="onClickGo">
+                <button class="btn btn-primary" type="button" @click="onClickGo">
                     Go
                 </button>
             </div>

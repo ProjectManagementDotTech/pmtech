@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <component v-bind:is="components[type]" :filter="filter" :timesheet-entries="timesheetEntries" />
+    <div class="w-full flex">
+        <div class="hidden xl:inline-block xl:mx-auto" style="width: 1280px;">
+            <component v-bind:is="components[type]" :filter="filter" :timesheet-entries="timesheetEntries" />
+        </div>
     </div>
 </template>
 
