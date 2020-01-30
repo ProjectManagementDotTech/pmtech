@@ -16,7 +16,7 @@
     "moment": "^2.24.0",
     "pusher-js": "^5.0.3",
     "tailwindcss": "^1.1.4",
-    "vee-validate": "^3.2.2",
+    "vee-validate": "^3.2.3",
     "vue": "^2.6.11",
     "vue-color": "^2.7.0",
     "vue-i18n": "^8.0.0",

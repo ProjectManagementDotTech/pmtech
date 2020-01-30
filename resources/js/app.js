@@ -66,13 +66,20 @@ router.afterEach((to, from) => {
     }
 });
 router.beforeEach((to, from, next) => {
+    let toProjectId = to.params.projectId;
     let toWorkspaceId = to.params.workspaceId;
+    let fromProjectId = from.params.projectId;
     let fromWorkspaceId = from.params.workspaceId;
 
     if(toWorkspaceId && fromWorkspaceId !== toWorkspaceId) {
         store.dispatch("workspaceChanged", toWorkspaceId);
     } else if(fromWorkspaceId && !toWorkspaceId) {
         store.dispatch("clearWorkspaceData");
+    }
+    if(toProjectId && fromProjectId !== toProjectId) {
+        store.dispatch("projectChanged", toProjectId);
+    } else if(fromProjectId && !toProjectId) {
+        store.dispatch("clearProjectData");
     }
 
     next();

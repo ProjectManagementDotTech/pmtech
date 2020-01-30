@@ -23,7 +23,8 @@ module.exports = {
         }
     },
     variants: {
-        backgroundColor: ['responsive', 'odd', 'even', 'hover', 'focus']
+        backgroundColor: ['responsive', 'odd', 'even', 'hover', 'focus'],
+        borderWidth: ['responsive', 'last', 'hover', 'focus']
     },
     plugins: []
 };

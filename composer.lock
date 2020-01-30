@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4161b59c27d8a2d18e55a4a4e376101",
+    "content-hash": "be8d59d894ac4a14834c085896af563a",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -424,16 +424,16 @@
         },
         {
             "name": "laravel/airlock",
-            "version": "v0.1.0",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/airlock.git",
-                "reference": "ae43b6eb7d6bcc0e5d32536b85a5092b9b90a78f"
+                "reference": "f246dfab0fe0103a9db731511b89e69e4fdf87eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/airlock/zipball/ae43b6eb7d6bcc0e5d32536b85a5092b9b90a78f",
-                "reference": "ae43b6eb7d6bcc0e5d32536b85a5092b9b90a78f",
+                "url": "https://api.github.com/repos/laravel/airlock/zipball/f246dfab0fe0103a9db731511b89e69e4fdf87eb",
+                "reference": "f246dfab0fe0103a9db731511b89e69e4fdf87eb",
                 "shasum": ""
             },
             "require": {
@@ -480,7 +480,7 @@
                 "auth",
                 "laravel"
             ],
-            "time": "2020-01-20T16:57:40+00:00"
+            "time": "2020-01-28T21:03:57+00:00"
         },
         {
             "name": "laravel/framework",

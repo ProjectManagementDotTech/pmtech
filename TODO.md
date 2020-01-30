@@ -135,6 +135,12 @@ Allen for interacting with the exchangeratesapi.io API.".
 1. Allow task index to be ordered by name, progress, etc.
 1. Allow project index to be ordered by name, progress, etc.
 1. Implement logic in Login SPA Component to go to the back URL
+1. Listen to private broadcast channel for each project in Vuex
+1. Listen to private broadcast channel for each task in Vuex
+1. Send TaskUpdated event when task was updated
+1. Protect tasks with e-tags (so that multiple clients can view tasks...)
+1. GridTextEditor needs to send input updates more frequently than onBlur
+1. GanttChart should only update API if the task was truly altered
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot
@@ -153,9 +159,6 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. Style back-end
-   1. Tasks
-      1. Build a grid input thingy much like MS Project
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -270,6 +273,7 @@ Workspace Update Notification via Pusher?)
 https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Implement a generic error handler (also in the API)
 1. Style and implement front-end
+1. Style back-end
 
 #Details
 ##BR000001

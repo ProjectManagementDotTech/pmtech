@@ -13,16 +13,12 @@ export default {
                 Vue.axios.get("/workspaces/" + workspaceId + "/projects")
                     .then(response => {
                         commit("set", response.data);
-                        /*
-                         * TODO Listen to private broadcast channel for each
-                         *   project
-                         */
                         resolve();
                     })
                     .catch(error => {
                         reject(error);
-                    })
-            })
+                    });
+            });
         },
         workspaceChanged: {
             handler({ dispatch }, workspaceId) {

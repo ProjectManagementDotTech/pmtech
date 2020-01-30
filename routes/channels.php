@@ -12,7 +12,7 @@
 */
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+    return $user->id === $id;
 });
 
 Broadcast::channel('App.Workspace.{workspace}', function($user, \App\Workspace $workspace) {

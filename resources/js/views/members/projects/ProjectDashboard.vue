@@ -1,14 +1,14 @@
 <template>
-    <div>
-        <index-tasks />
-    </div>
+    <gantt-chart />
 </template>
 
 <script>
-    import IndexTasks from "../../../components/members/tasks/indexTasks";
+    import GanttChart
+        from "../../../components/members/projects/charts/GanttChart";
+
     export default {
         components: {
-            IndexTasks
+            GanttChart
         },
         name: "ProjectDashboard"
     }

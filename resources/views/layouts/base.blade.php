@@ -8,7 +8,8 @@
         <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
 
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <script src="https://kit.fontawesome.com/c7a25fd50c.js" crossorigin="anonymous"></script>
+        <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/solid.min.css') }}" rel="stylesheet">
         <!-- Google Fonts -->
     </head>
     <body class="text-gray-800">

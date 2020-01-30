@@ -21,5 +21,19 @@ class TaskController extends Controller
         return $task;
     }
 
+    public function update(Task $task, Request $request)
+    {
+        if(($newName = $request->input('name', NULL)) !== NULL) {
+            $task->name = $newName;
+        }
+        if(($newWbs = $request->input('wbs', NULL)) !== NULL) {
+            $task->wbs = $newWbs;
+        }
+
+        $task->save();
+
+        return response('', 204);
+    }
+
     //endregion
 }
