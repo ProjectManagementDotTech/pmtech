@@ -19,7 +19,7 @@ export default function(Vue) {
                                         })
                                         .catch(error => {
                                             callback(true, error);
-                                        })
+                                        });
                                 }
                             }
                         },

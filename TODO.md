@@ -139,6 +139,10 @@ Allen for interacting with the exchangeratesapi.io API.".
 1. Protect tasks with e-tags (so that multiple clients can view tasks...)
 1. GridTextEditor needs to send input updates more frequently than onBlur
 1. GanttChart should only update API if the task was truly altered
+1. Replace App.vue `loading` with a full modal div that shows whenever there are
+Axios requests in progress for longer than 2 seconds
+1. Implement 401 interceptor to ask for the user's password, login, and then
+submit the intercepted request again
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot

@@ -26,7 +26,6 @@
             this.$store.dispatch("authenticated")
                 .finally(() => {
                     this.loading = false;
-                    debugger;
                 })
         },
         data() {
