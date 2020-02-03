@@ -2,7 +2,7 @@
     <header class="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
         <div class="flex items-center justify-between px-4 py-3 sm:px-0 sm:py-0">
             <div>
-                <template v-if="authenticated">
+                <template v-if="currentUser != undefined">
                     <img class="h-8" src="/images/logo.png" alt="Project-Management.tech">
                 </template>
                 <template v-else>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div :class="isOpen ? 'block' : 'hidden'" class="sm:block">
-            <template v-if="authenticated">
+            <template v-if="currentUser != undefined">
                 <div class="px-2 pt-2 sm:flex sm:pt-0">
                     <project-dropdown-nav-item class="hidden sm:block" />
                     <timesheet-dropdown-nav-item class="hidden sm:block" />
@@ -93,7 +93,7 @@
             TimesheetDropdownNavItem
         },
         computed: {
-            ...mapGetters(["authenticated", "currentUser"])
+            ...mapGetters(["currentUser"])
         },
         data() {
             return {
@@ -106,7 +106,7 @@
                 this.$eventBus.$emit("add-project");
             }
         },
-        name: "Navigation"
+        name: "Navigation",
     }
 </script>
 

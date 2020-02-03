@@ -155,7 +155,7 @@
             initializeChartableLineDataAcrossTasks() {
                 return new Promise((resolve, reject) => {
                     let project = this.$store.getters["projects/byId"](this.filter.selectedProject.id);
-                    this.$axios.get("/projects/" + this.filter.selectedProject.id + "/tasks")
+                    this.$axios.get("/api/v1/projects/" + this.filter.selectedProject.id + "/tasks")
                         .then(response => {
                             let tasks = response.data;
                             let luminosity = -0.85;

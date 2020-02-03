@@ -39,7 +39,7 @@
         methods: {
             fetchTaskIndex(apiUri, httpOptions) {
                 return new Promise((resolve, reject) => {
-                    this.$axios.get("/projects/" +
+                    this.$axios.get("/api/v1/projects/" +
                         this.$route.params.projectId + "/tasks", httpOptions)
                         .then(response => {
                             resolve(response);

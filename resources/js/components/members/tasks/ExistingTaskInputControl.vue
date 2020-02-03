@@ -39,7 +39,7 @@
             },
             updateTaskList() {
                 if(this.project) {
-                    this.$axios.get("/projects/" + this.project.id + "/tasks")
+                    this.$axios.get("/api/v1/projects/" + this.project.id + "/tasks")
                         .then(response => {
                             if(response.data == undefined) {
                                 this.taskList = [];

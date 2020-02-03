@@ -55,7 +55,7 @@
                         color: this.colors.hex.substr(1),
                         name: this.name
                     };
-                    this.$axios.post("/workspaces/" +
+                    this.$axios.post("/api/v1/workspaces/" +
                         this.$route.params.workspaceId + "/projects", data)
                         .then(() => {
                             this.$eventBus.$emit("update-project-index");

@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Events\WorkspaceUpdated;
 use App\Workspace;
 use Ramsey\Uuid\Uuid;
 
@@ -54,8 +53,6 @@ class WorkspaceRepository
         }
 
         $workspace->save();
-
-        event(new WorkspaceUpdated($workspace));
     }
 
     //endregion

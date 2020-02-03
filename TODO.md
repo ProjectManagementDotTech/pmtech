@@ -16,8 +16,6 @@
 ###Front-end
 ###Timesheets
 ###Upgrade process
-1. Migrate data from current www.project-management.tech to new
-www.project-management.tech implementation
 ###Workspaces
 
 #To do (v2020.2)
@@ -159,6 +157,8 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
+1. Migrate data from current www.project-management.tech to new
+www.project-management.tech implementation
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -274,6 +274,7 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Implement a generic error handler (also in the API)
 1. Style and implement front-end
 1. Style back-end
+1. Make sure Laravel Airlock can authorize broadcasting private channel access
 
 #Details
 ##BR000001

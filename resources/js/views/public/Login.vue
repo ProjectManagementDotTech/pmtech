@@ -31,7 +31,6 @@
                 this.email = payload;
             },
             onLoginSuccess() {
-                this.$store.commit("loggedIn");
                 this.$store.dispatch("authenticated")
                     .then(() => {
                         let user = this.$store.getters["currentUser"];

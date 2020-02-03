@@ -22,10 +22,7 @@ class UT0002_UserApiTests extends TestCase
             'email' => $user->email,
             'password' => 'Welcome123'
         ]);
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'token_type' => 'Bearer'
-            ]);
+        $response->assertStatus(302);
     }
 
     /** @test */
@@ -55,10 +52,8 @@ class UT0002_UserApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $token = $this->login('user0001@test.com', 'Welcome123');
-        $response = $this->get('/api/v1/user', [
-            'Authorization' => $token['type'] . ' ' . $token['token']
-        ]);
+        $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/user');
         $response->assertStatus(200)
             ->assertJson([
                 'email' => 'user0001@test.com',
@@ -134,15 +129,8 @@ class UT0002_UserApiTests extends TestCase
             'email' => $user->email,
             'password' => 'Welcome123'
         ]);
-        $response->assertStatus(200);
-        $jsonObj = json_decode($response->getContent());
-        $token = [
-            'token' => $jsonObj->access_token,
-            'type' => $jsonObj->token_type,
-        ];
-        $response = $this->get('/api/v1/user', [
-            'Authorization' => $token['type'] . ' ' . $token['token']
-        ]);
+        $response->assertStatus(302);
+        $response = $this->get('/api/v1/user');
         $response->assertStatus(200)
             ->assertJson([
                 'email' => 'user0004@test.com',

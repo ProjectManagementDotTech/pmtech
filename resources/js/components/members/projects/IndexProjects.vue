@@ -77,7 +77,7 @@
         methods: {
             fetchProjectIndex(apiUri, httpOptions) {
                 return new Promise((resolve, reject) => {
-                    this.$axios.get("/workspaces/" +
+                    this.$axios.get("/api/v1/workspaces/" +
                         this.$route.params.workspaceId + "/projects",
                         httpOptions)
                     .then(response => {

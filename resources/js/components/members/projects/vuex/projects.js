@@ -10,7 +10,7 @@ export default {
         },
         fetchAll({ commit }, workspaceId) {
             return new Promise((resolve, reject) => {
-                Vue.axios.get("/workspaces/" + workspaceId + "/projects")
+                Vue.axios.get("/api/v1/workspaces/" + workspaceId + "/projects")
                     .then(response => {
                         commit("set", response.data);
                         resolve();

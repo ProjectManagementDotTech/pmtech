@@ -7,30 +7,29 @@ export default function(Vue) {
 
     /* Setup interceptors, if we need to for things like 401 / 403 / 404 */
 
-    let accessToken = localStorage.getItem("access_token");
-    let tokenType = localStorage.getItem("token_type");
-    if(accessToken && tokenType) {
-        Vue.axios.defaults.headers.common["Authorization"] = tokenType + " " +
-            accessToken;
-        Vue.axios.defaults.baseURL = "https://" +
-            window.location.hostname + "/api/v1/";
-    }
-
     Vue.axios.interceptors.response.use((response) => {
         return response;
     }, (error) => {
         if(error.response !== undefined) {
             if(error.response.status == 401) {
+                if(error.response.config.url == "/broadcasting/auth") {
+                    return Promise.reject(error);
+                }
+
                 /*
                  * For now (January 4, 2020), when we get a 401, we let the user
                  * login again, and provide a back-link to push them back to
                  * where they were...
                  */
                 let route = window.router.currentRoute;
-                if(route.query.back != undefined) {
-                    window.router.push("/login?back=" + route.query.back);
+                if (route.meta.isMemberPage) {
+                    if (route.query.back != undefined) {
+                        window.router.push("/login?back=" + route.query.back);
+                    } else {
+                        window.router.push("/login?back=" + route.fullPath);
+                    }
                 } else {
-                    window.router.push("/login?back=" + route.fullPath);
+                    return Promise.reject(error);
                 }
             } else if(error.response.status == 405) {
                 Vue.axios.post("/errors", {

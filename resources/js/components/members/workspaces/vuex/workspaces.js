@@ -10,21 +10,23 @@ export default {
         },
         fetchAll({ commit, dispatch }) {
             return new Promise((resolve, reject) => {
-                Vue.axios.get("/workspaces")
+                Vue.axios.get("/api/v1/workspaces")
                     .then(response => {
                         commit("set", response.data);
-                        Vue.utils.setupLaravelEcho();
-                        response.data.forEach(workspace => {
-                            window.Echo.private("App.Workspace." + workspace.id)
-                                .listen(".App\\Events\\WorkspaceUpdated", (event) => {
-                                    dispatch("update", event.workspaceId);
-                                })
-                                .notification((notification) => {
-                                    console.log("Workspace received notification");
-                                    console.dir(notification);
+                        Vue.utils.setupLaravelEcho()
+                            .then(() => {
+                                response.data.forEach(workspace => {
+                                    window.Echo.private("App.Workspace." + workspace.id)
+                                        .listen(".App\\Events\\WorkspaceUpdated", (event) => {
+                                            dispatch("update", event.workspaceId);
+                                        })
+                                        .notification((notification) => {
+                                            console.log("Workspace received notification");
+                                            console.dir(notification);
+                                        });
                                 });
-                        });
-                        resolve();
+                                resolve();
+                            });
                     })
                     .catch(error => {
                         reject(error);
@@ -38,7 +40,7 @@ export default {
             root: true
         },
         update({ commit, dispatch }, workspaceId) {
-            Vue.axios.get("/workspaces/" + workspaceId)
+            Vue.axios.get("/api/v1/workspaces/" + workspaceId)
                 .then(response => {
                     dispatch("workspaceChanged", workspaceId, { root: true });
                     commit("updateWorkspace", response.data);

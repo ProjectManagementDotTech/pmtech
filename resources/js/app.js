@@ -19,9 +19,7 @@ window.router = new VueRouter(routes);
 import { axios } from "./modules";
 import Echo from "laravel-echo";
 import { eventBus } from "./modules";
-import Footer from "./components/shared/Footer";
 import { moment } from "./modules";
-import Navigation from "./components/shared/Navigation";
 import store from "./store";
 import { utils } from "./modules";
 import { ValidationObserver, ValidationProvider } from
@@ -37,8 +35,6 @@ Vue.use(utils);
 Vue.use(VueI18n);
 Vue.use(VueRouter);
 
-Vue.component("pmtech-footer", Footer);
-Vue.component("navigation", Navigation);
 Vue.component("validation-observer", ValidationObserver);
 Vue.component("validation-provider", ValidationProvider);
 
@@ -60,7 +56,7 @@ Vue.component("validation-provider", ValidationProvider);
  */
 router.afterEach((to, from) => {
     if(store.getters["currentUser"] != undefined && to.fullPath !== "/logout") {
-        Vue.axios.put("/settings", {
+        Vue.axios.put("/api/v1/settings", {
             last_visited_view: to.fullPath
         });
     }
@@ -85,66 +81,18 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-let accessToken = localStorage.getItem("access_token");
-let tokenType = localStorage.getItem("token_type");
-if(accessToken && tokenType) {
-    store.commit("loggedIn");
-    store.dispatch("authenticated")
-        .then(() => {
-            if(router.currentRoute && router.currentRoute == '') {
-                let user = store.getters["currentUser"];
-                if (user.settings.last_visited_view != null) {
-                    router.push(user.settings.last_visited_view);
-                } else {
-                    let workspaces =
-                        store.getters['workspaces/all'];
-                    debugger;
-                    if (workspaces.length == 1) {
-                        debugger;
-                        router.push("/workspaces/" +
-                            workspaces[0].id);
-                    } else {
-                        let defaultWorkspace = workspaces.find(
-                            w => w.name == "Default"
-                        );
-                        debugger;
-                        if (defaultWorkspace) {
-                            debugger;
-                            router.push("/workspaces/" +
-                                defaultWorkspace.id);
-                        } else {
-                            debugger;
-                            router.push("/workspaces/" +
-                                workspaces[0].id);
-                        }
-                    }
-                }
-            }
-        })
-        .catch(error => {
-            console.dir(error);
-            debugger;
-        });
-
-}
-
 const i18n = new VueI18n({
     locale: "en",
     messages: loadLocaleMessages(),
     silentFallbackWarn: true
 });
 
+import App from "./views/App";
+
 const app = new Vue({
-    el: "#app",
     i18n,
     router,
-    store
-});
+    store,
+    render: h => h(App)
+}).$mount('#app');
 
-const appEl = document.getElementById("app");
-appEl.onclick = () => {
-    Vue.eventBus.$emit("blur");
-/*
-    console.log("App::onclick");
-*/
-};

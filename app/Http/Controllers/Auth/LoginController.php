@@ -60,12 +60,12 @@ class LoginController extends Controller
     /**
      * @inheritDoc
      */
-    protected function authenticated(Request $request, $user)
-    {
-        $token = $user->createToken('VueSPA');
-        return [
-            'access_token' => $token->plainTextToken,
-            'token_type' => 'Bearer'
-        ];
-    }
+//    protected function authenticated(Request $request, $user)
+//    {
+//        $token = $user->createToken('VueSPA');
+//        return [
+//            'access_token' => $token->plainTextToken,
+//            'token_type' => 'Bearer'
+//        ];
+//    }
 }

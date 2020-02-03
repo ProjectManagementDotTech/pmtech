@@ -22,42 +22,72 @@ export default {
     routes: [
         {
             component: Home,
+            meta: {
+                isMemberPage: false
+            },
             path: "/"
         },
         {
             component: HowItWorks,
+            meta: {
+                isMemberPage: false
+            },
             path: "/how-it-works"
         },
         {
             component: PricingAndPlans,
+            meta: {
+                isMemberPage: false
+            },
             path: "/pricing-and-plans"
         },
         {
             component: Login,
+            meta: {
+                isMemberPage: false
+            },
             path: "/login"
         },
         {
             component: Logout,
+            meta: {
+                isMemberPage: true
+            },
             path: "/logout"
         },
         {
             component: Register,
+            meta: {
+                isMemberPage: false
+            },
             path: "/register"
         },
         {
             component: Error402,
+            meta: {
+                isMemberPage: true
+            },
             path: "/402"
         },
         {
             component: Error403,
+            meta: {
+                isMemberPage: true
+            },
             path: "/403"
         },
         {
             component: Error404,
+            meta: {
+                isMemberPage: true
+            },
             path: "/404"
         },
         {
             component: UnknownError,
+            meta: {
+                isMemberPage: true
+            },
             path: "/unknown-error"
         },
         {
@@ -65,6 +95,9 @@ export default {
             children: [
                 {
                     component: WorkspaceDashboard,
+                    meta: {
+                        isMemberPage: true
+                    },
                     path: ""
                 },
                 {
@@ -75,6 +108,9 @@ export default {
                             path: ""
                         }
                     ],
+                    meta: {
+                        isMemberPage: true
+                    },
                     path: "projects/:projectId"
                 },
                 {
@@ -89,9 +125,15 @@ export default {
                             path: "report"
                         }
                     ],
+                    meta: {
+                        isMemberPage: true
+                    },
                     path: "timesheet"
                 }
             ],
+            meta: {
+                isMemberPage: true
+            },
             path: "/workspaces/:workspaceId"
         }
     ]

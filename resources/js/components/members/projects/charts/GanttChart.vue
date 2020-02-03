@@ -39,18 +39,18 @@
                 if (newTaskObject.name != "") {
                     if (newTaskObject.id !== undefined && newTaskObject.id !== "") {
                         console.dir(newTaskObject);
-                        this.$axios.put("/tasks/" + newTaskObject.id,
+                        this.$axios.put("/api/v1/tasks/" + newTaskObject.id,
                             newTaskObject);
                         this.$store.commit("tasks/update", newTaskObject);
                     } else {
-                        this.$axios.post("/projects/" +
+                        this.$axios.post("/api/v1/projects/" +
                             this.$route.params.projectId + "/tasks",
                             newTaskObject)
                             .then(response => {
                                 let loc = response.headers.location;
                                 let newTaskId = loc.substring(
                                     loc.lastIndexOf("/") + 1);
-                                this.$axios.get("/tasks/" + newTaskId)
+                                this.$axios.get("/api/v1/tasks/" + newTaskId)
                                     .then(response => {
                                         this.$store.commit("tasks/add",
                                             response.data);

@@ -4,7 +4,7 @@ export default {
     actions: {
         authenticated({ commit }) {
             return new Promise((resolve, reject) => {
-                Vue.axios.get("user")
+                Vue.axios.get("/api/v1/user")
                     .then(response => {
                         commit("currentUser", response.data);
                         resolve();
@@ -15,14 +15,10 @@ export default {
             });
         },
         loggedOut({ commit }) {
-            commit("loggedOut");
-            commit("currentUser", { name: '...' });
+            commit("currentUser", undefined);
         }
     },
     getters: {
-        authenticated(state) {
-            return state.authenticated;
-        },
         currentUser(state) {
             return state.currentUser;
         }
@@ -31,17 +27,8 @@ export default {
         currentUser(state, payload) {
             state.currentUser = payload;
         },
-        loggedIn(state) {
-            state.authenticated = true;
-        },
-        loggedOut(state) {
-            state.authenticated = false;
-        }
     },
     state: {
-        authenticated: false,
-        currentUser: {
-            name: "..."
-        }
+        currentUser: undefined
     }
 };

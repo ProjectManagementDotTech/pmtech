@@ -10,7 +10,7 @@ export default {
         },
         fetchAll({ commit }, projectId) {
             return new Promise((resolve, reject) => {
-                Vue.axios.get("/projects/" + projectId + "/tasks")
+                Vue.axios.get("/api/v1/projects/" + projectId + "/tasks")
                     .then(response => {
                         commit("set", response.data);
                         resolve();

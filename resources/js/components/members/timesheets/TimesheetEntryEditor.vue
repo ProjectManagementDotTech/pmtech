@@ -71,7 +71,7 @@
                             this.editorTimesheetEntry.project_id);
                 }
                 if(this.editorTimesheetEntry.task_id) {
-                    this.$axios.get("/tasks/" +
+                    this.$axios.get("/api/v1/tasks/" +
                         this.editorTimesheetEntry.task_id)
                         .then(response => {
                             this.editorTimesheetEntry.task = response.data;
@@ -115,7 +115,7 @@
         methods: {
             loadRunningTimer() {
                 if(this.timesheetEntry == null) {
-                    this.$axios.get("/timesheet_entries/running")
+                    this.$axios.get("/api/v1/timesheet_entries/running")
                         .then(response => {
                             if (response.data.length > 0) {
                                 this.goldenCopy = JSON.parse(
@@ -191,7 +191,7 @@
                     let gCData = this.normalizeTimesheetEntry(this.goldenCopy);
                     if(JSON.stringify(data) !== JSON.stringify(gCData)) {
                         if (data.id) {
-                            this.$axios.put("/timesheet_entries/" + data.id, data)
+                            this.$axios.put("/api/v1/timesheet_entries/" + data.id, data)
                                 .then(response => {
                                     this.goldenCopy = JSON.parse(JSON.stringify(
                                         this.editorTimesheetEntry));
@@ -219,10 +219,10 @@
                     this.editorTimesheetEntry);
                 let promise = null;
                 if(data.id !== null && data.id !== undefined) {
-                    promise = this.$axios.put("/timesheet_entries/" + data.id,
+                    promise = this.$axios.put("/api/v1/timesheet_entries/" + data.id,
                         data);
                 } else {
-                    promise = this.$axios.post("/timesheet_entries", data);
+                    promise = this.$axios.post("/api/v1/timesheet_entries", data);
                 }
                 promise
                     .then(response => {
@@ -266,7 +266,7 @@
                     data = this.normalizeTimesheetEntry(
                         this.editorTimesheetEntry);
                 }
-                this.$axios.post("/timesheet_entries", data)
+                this.$axios.post("/api/v1/timesheet_entries", data)
                     .then(response => {
                         if(payload !== undefined) {
                             this.$eventBus.$emit("reload-running-timer");
@@ -278,7 +278,7 @@
                                         .location
                                         .lastIndexOf("/") + 1
                                 );
-                            this.$axios.get("/timesheet_entries/" +
+                            this.$axios.get("/api/v1/timesheet_entries/" +
                                 timesheetEntryId)
                                 .then(response => {
                                     let oldProject = JSON.parse(JSON.stringify(
@@ -303,7 +303,7 @@
             onStop() {
                 let data = this.normalizeTimesheetEntry(
                     this.editorTimesheetEntry);
-                this.$axios.put("/timesheet_entries/" + data.id, data)
+                this.$axios.put("/api/v1/timesheet_entries/" + data.id, data)
                     .then(response => {
                         if(this.timesheetEntry == null) {
                             this.editorTimesheetEntry = JSON.parse(

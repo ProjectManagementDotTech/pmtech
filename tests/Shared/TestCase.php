@@ -4,6 +4,7 @@ namespace Tests\Shared;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Auth;
 
 class TestCase extends BaseTestCase
 {
@@ -30,9 +31,9 @@ class TestCase extends BaseTestCase
 	 *
 	 * @param string $email
 	 * @param string $password
-	 * @return array
+	 * @return void
 	 */
-	public function login(string $email, string $password): array
+	public function login(string $email, string $password)
 	{
 	    $cookieResponse = $this->get('/airlock/csrf-cookie');
         $cookieResponse->assertCookie('XSRF-TOKEN');
@@ -42,19 +43,16 @@ class TestCase extends BaseTestCase
 			'password' => $password,
             '_token' => $cookieResponse->headers->getCookies()[0]->getValue()
 		]);
-		if($response->getStatusCode() !== 200) {
-//            dd([$response->getContent(), $response->getStatusCode(), $email]);
-        }
-		$response->assertStatus(200);
-
-		/* NOTREACHED in case Status Code !== 200 */
-
-		$responseBody = json_decode($response->getContent());
-		return [
-			'token' => $responseBody->access_token,
-			'type' => $responseBody->token_type,
-		];
+		$response->assertStatus(302);
 	}
+
+    /**
+     * Log the user out.
+     */
+	public function logout()
+    {
+        Auth::logout();
+    }
 
     //region Protected Attributes
 

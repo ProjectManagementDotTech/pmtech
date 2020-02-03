@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Observers\ProjectObserver;
 use App\Observers\TimesheetEntryObserver;
+use App\Observers\WorkspaceObserver;
 use App\Project;
 use App\TimesheetEntry;
+use App\Workspace;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
@@ -38,5 +40,6 @@ class AppServiceProvider extends ServiceProvider
 
         Project::observe(ProjectObserver::class);
         TimesheetEntry::observe(TimesheetEntryObserver::class);
+        Workspace::observe(WorkspaceObserver::class);
     }
 }

@@ -14,7 +14,7 @@
             };
         },
         mounted() {
-            this.$axios.get("/user")
+            this.$axios.get("/api/v1/user")
             .then(response => {
                 console.dir(response);
                 this.user = response.data;

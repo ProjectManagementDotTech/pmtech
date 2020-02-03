@@ -21,7 +21,7 @@
         },
         methods: {
             onAddTask() {
-                this.$axios.post("/projects/" + this.$route.params.projectId +
+                this.$axios.post("/api/v1/projects/" + this.$route.params.projectId +
                     "/tasks", {
                         name: this.name
                     })

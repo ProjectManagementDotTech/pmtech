@@ -41,16 +41,7 @@
                             email: this.email,
                             password: this.password,
                         })
-                            .then(response => {
-                                window.localStorage.setItem("access_token",
-                                    response.data.access_token);
-                                window.localStorage.setItem("token_type",
-                                    response.data.token_type);
-                                this.$axios.defaults.headers.common["Authorization"] =
-                                    response.data.token_type + " " +
-                                    response.data.access_token;
-                                this.$axios.defaults.baseURL = "https://" +
-                                    window.location.hostname + "/api/v1/";
+                            .then(() => {
                                 this.$emit("success");
                             })
                             .catch(error => {
@@ -61,7 +52,7 @@
                                         this.$emit("fail", this.email);
                                     } else {
                                         console.log("LoginForm::onClickLogin" +
-                                            "::catch")
+                                            "::catch");
                                         console.dir(error);
                                     }
                                 }
