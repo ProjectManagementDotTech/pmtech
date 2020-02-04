@@ -2,7 +2,7 @@
 ##Colors
 * Inactive border: border-gray-200
 * Active border: border-indigo-400 text-white
-* Active selection: bg-indigo-400 text-white 
+* Active element: bg-indigo-400 text-white 
 * Hover background: bg-gold-100
 * Text: text-gray-800
 * Primary color: indigo-500
@@ -29,7 +29,6 @@ that a new Default workspace will be set up for them, unless they explicitly do
 not want to do that because they are in the process of removing their account.
 1. Let the user edit the workspace name in SPA
 1. Let the user assign ownership of a workspace to another user
-1. Let the user switch between workspaces
 ###Workspace members
 1. Invite users (new and existing) to the workspace
 1. When the workspace has more than 5 members the owner needs to pay
@@ -282,6 +281,7 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Style back-end
 1. Make sure Laravel Airlock can authorize broadcasting private channel access
 1. Let the user create a new workspace in SPA
+1. Let the user switch between workspaces
 
 #Details
 ##BR000001
