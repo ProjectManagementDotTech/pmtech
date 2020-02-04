@@ -2,24 +2,31 @@
     <validation-observer class="needs-validation" novalidate
                          ref="validationObserver" tag="div"
                          v-slot="{ invalid }">
-        <panel>
-            <pmtech-input name="name" rules="required" v-model="name"
-                          :label="$t('Name')" />
-            <pmtech-input name="email" rules="required|email" type="email"
-                          v-model="email" :label="$t('Email')" />
-            <pmtech-input name="password"
-                          rules="required|confirmed:passwordConfirmation"
-                          type="password" v-model="password" :label="$t('Password')" />
-            <pmtech-input name="password-confirmation" rules="required"
-                          type="password" vid="passwordConfirmation"
-                          v-model="passwordConfirmation" :label="$t('Confirm password')"/>
-            <template v-slot:footer>
+        <article class="w-2/3 md:w-1/3 mx-auto my-4 border rounded-lg shadow-lg overflow-hidden">
+            <header class="border-b border-indigo-500 bg-indigo-400 px-4 py-2 text-white">
+                <h2>Register</h2>
+            </header>
+            <main class="px-2 py-1">
+                <pmtech-input name="name" rules="required" v-model="name"
+                              :label="$t('Name')" />
+                <pmtech-input name="email" rules="required|email" type="email"
+                              v-model="email" :label="$t('Email')" />
+                <pmtech-input name="password"
+                              rules="required|confirmed:passwordConfirmation"
+                              type="password" v-model="password"
+                              :label="$t('Password')" />
+                <pmtech-input name="password-confirmation" rules="required"
+                              type="password" vid="passwordConfirmation"
+                              v-model="passwordConfirmation"
+                              :label="$t('Confirm password')"/>
+            </main>
+            <footer class="border-t border-gray-200 px-4 py-2">
                 <button class="btn btn-primary" :disabled="invalid"
                         @click="onClickRegister">
                     {{ $t("Register") }}
                 </button>
-            </template>
-        </panel>
+            </footer>
+        </article>
     </validation-observer>
 </template>
 
