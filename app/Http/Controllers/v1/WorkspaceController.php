@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\CreateProject;
 use App\Http\Requests\v1\CreateWorkspace;
 use App\Repositories\ProjectRepository;
 use App\Repositories\WorkspaceRepository;
@@ -39,7 +40,7 @@ class WorkspaceController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    public function createProject(Request $request, Workspace $workspace)
+    public function createProject(CreateProject $request, Workspace $workspace)
     {
         $data = [
             'color' => $request->color,

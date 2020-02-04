@@ -42,7 +42,9 @@ request should send an *Unauthorized.* response.
 1. **BR000015** - Client name must unique inside a workspace
 1. Projects can be associated with a client
 1. Timesheet report can be drilled down by Client
+1. Add project allows user to pick a client
 ###DateTimePicker
+1. Support i18n in terms of month and day names
 1. Support Clicking Year to show a list of 10 decades (based on the current
 Year). Each decade can be clicked to pick a specific year in that decade
 1. Support Clicking Month to show a list of months that can be picked
@@ -57,7 +59,6 @@ subcomponents)
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
 ###Project
-1. **BR000022** - Project names must be unique within a workspace
 ###Timesheets
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
@@ -189,6 +190,7 @@ user is logged in.
 unless the user is deleting its account.
 1. **BR000021** - Only workspace users can retrieve workspace details from the
 API
+1. **BR000022** - Project names must be unique within a workspace
 1. Create workspaces table - id (uuid), owner_user_id, name
 1. Create Workspace model
 1. Create relationship between User and Workspace models
