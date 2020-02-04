@@ -24,6 +24,7 @@
                 <div class="px-2 pt-2 sm:flex sm:pt-0">
                     <project-dropdown-nav-item class="hidden sm:block" />
                     <timesheet-dropdown-nav-item class="hidden sm:block" />
+                    <workspace-dropdown-nav-item class="hidden sm:block" />
                     <person-dropdown-nav-item class="hidden sm:block" />
                 </div>
                 <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
@@ -32,8 +33,8 @@
                             Projects
                         </div>
                         <div class="mt-2 pl-2">
-                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId" @click.native="isOpen = false">Overview</router-link>
                             <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddProject">Add</a>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId" @click.native="isOpen = false">Overview</router-link>
                         </div>
                     </div>
                 </div>
@@ -45,6 +46,16 @@
                         <div class="mt-2 pl-2">
                             <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet'" @click.native="isOpen = false">Entry</router-link>
                             <router-link class="hover:text-white mt-2 px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet/report'" @click.native="isOpen = false">Report</router-link>
+                        </div>
+                    </div>
+                </div>
+                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                    <div class="px-2">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                            Workspaces
+                        </div>
+                        <div class="mt-2 pl-2">
+                            <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddWorkspace">Add</a>
                         </div>
                     </div>
                 </div>
@@ -82,15 +93,18 @@
 <script>
     import { mapGetters } from "vuex";
     import PersonDropdownNavItem from "./navgiation/PersonDropdownNavItem";
+    import ProjectDropdownNavItem from "./navgiation/ProjectDropdownNavItem";
     import TimesheetDropdownNavItem
         from "./navgiation/TimesheetDropdownNavItem";
-    import ProjectDropdownNavItem from "./navgiation/ProjectDropdownNavItem";
+    import WorkspaceDropdownNavItem
+        from "./navgiation/WorkspaceDropdownNavItem";
 
     export default {
         components: {
             ProjectDropdownNavItem,
             PersonDropdownNavItem,
-            TimesheetDropdownNavItem
+            TimesheetDropdownNavItem,
+            WorkspaceDropdownNavItem
         },
         computed: {
             ...mapGetters(["currentUser"])
@@ -104,6 +118,10 @@
             onClickAddProject() {
                 this.isOpen = false;
                 this.$eventBus.$emit("add-project");
+            },
+            onClickAddWorkspace() {
+                this.isOpen = false;
+                this.$eventBus.$emit("add-workspace");
             }
         },
         name: "Navigation",

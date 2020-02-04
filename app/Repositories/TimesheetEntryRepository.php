@@ -71,7 +71,10 @@ class TimesheetEntryRepository
          * Cannot create timesheet entries without user ID or description (even
          * if the description is empty...)
          */
-        if(!isset($data['user_id']) || !isset($data['description'])) {
+        if(
+            !isset($data['user_id']) || !isset($data['description']) ||
+            !isset($data['workspace_id'])
+        ) {
             return NULL;
         }
 
@@ -119,16 +122,6 @@ class TimesheetEntryRepository
         if(isset($data['project_id']) && !isset($data['workspace_id'])) {
             $project = ProjectRepository::find($data['project_id']);
             $data['workspace_id'] = $project->workspace_id;
-        }
-
-        /* BR000008 */
-        if(!isset($data['workspace_id'])) {
-            $user = UserRepository::find($data['user_id']);
-            if(!$user->ownedWorkspaces()->count()) {
-                /* BR000020 */
-                return NULL;
-            }
-            $data['workspace_id'] = $user->ownedWorkspaces[0]->id;
         }
 
         /*

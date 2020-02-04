@@ -6,6 +6,7 @@ use App\Project;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
+use App\Workspace;
 use Illuminate\Support\Facades\Log;
 use Tests\Shared\TestCase;
 
@@ -16,9 +17,9 @@ class UT0010_TaskApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = UserRepository::byEmail('user0001@test.com');
+        $workspace = Workspace::where('name', 'Test0001')->first();
         $project = ProjectRepository::byName('UT0008-0001',
-            $user->ownedWorkspaces[0]);
+            $workspace);
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/projects/' . $project->id . '/tasks', [
             'name' => 'UT0010-0001'
@@ -39,9 +40,9 @@ class UT0010_TaskApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = UserRepository::byEmail('user0001@test.com');
+        $workspace = Workspace::where('name', 'Test0001')->first();
         $project = ProjectRepository::byName('UT0008-0001',
-            $user->ownedWorkspaces[0]);
+            $workspace);
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->get('/api/v1/projects/' . $project->id . '/tasks', [
             'Authorization' => $token['type'] . ' ' . $token['token']

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\CreateWorkspace;
 use App\Repositories\ProjectRepository;
 use App\Repositories\WorkspaceRepository;
 use App\Workspace;
@@ -12,6 +13,23 @@ use Illuminate\Support\Facades\Auth;
 class WorkspaceController extends Controller
 {
     //region Public Status Report
+
+    public function create(CreateWorkspace $request)
+    {
+        $data = $request->input();
+        $data['owner_user_id'] = Auth::user()->id;
+        $workspace = WorkspaceRepository::create($data);
+
+        if($workspace) {
+            return response('', 201, [
+                'Location' => route('workspaces.show', [
+                    'workspace' => $workspace->id
+                ])
+            ]);
+        } else {
+            abort(500);
+        }
+    }
 
     /**
      * Create a new project, based on the given input, in the given workspace.

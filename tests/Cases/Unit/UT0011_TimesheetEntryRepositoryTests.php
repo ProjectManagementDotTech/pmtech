@@ -5,8 +5,10 @@ namespace Tests\Unit;
 use App\Repositories\TaskRepository;
 use App\Repositories\TimesheetEntryRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\WorkspaceRepository;
 use App\Task;
 use App\TimesheetEntry;
+use App\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Tests\Shared\TestCase;
@@ -18,17 +20,23 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
+        $workspace = WorkspaceRepository::filter([
+            'name' => 'UT0004-0001'
+        ])[0];
         $user = UserRepository::byEmail('user0004@test.com');
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'description' => ''
         ]);
         $this->assertDatabaseHas('timesheet_entries', [
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'description' => ''
         ]);
         $timesheetEntry = TimesheetEntry::query()
             ->where('user_id', $user->id)
+            ->where('workspace_id', $workspace->id)
             ->where('description', '')
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
@@ -47,18 +55,24 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $user = UserRepository::byEmail('user0004@test.com');
+        $workspace = WorkspaceRepository::filter([
+            'name' => 'UT0004-0001'
+        ])[0];
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'description' => 'UT0011-0001',
             'ended_at' => Carbon::now()->addSeconds(4),
             'started_at' => Carbon::now(),
         ]);
         $this->assertDatabaseHas('timesheet_entries', [
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'description' => 'UT0011-0001'
         ]);
         $timesheetEntry = TimesheetEntry::query()
             ->where('user_id', $user->id)
+            ->where('workspace_id', $workspace->id)
             ->where('description', 'UT0011-0001')
             ->first();
         $this->assertNotNull($timesheetEntry->started_at);
@@ -73,7 +87,9 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $user = UserRepository::byEmail('user0004@test.com');
-        $workspace = $user->ownedWorkspaces[0];
+        $workspace = WorkspaceRepository::filter([
+            'name' => 'UT0004-0001'
+        ])[0];
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
@@ -101,11 +117,12 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $user = UserRepository::byEmail('user0001@test.com');
-        $workspace = $user->ownedWorkspaces[0];
+        $workspace = Workspace::where('name', 'Test0001')->first();
         $project = $workspace->projects[0];
         TimesheetEntryRepository::create([
             'project_id' => $project->id,
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'description' => 'UT0011-0003',
         ]);
         $this->assertDatabaseHas('timesheet_entries', [
@@ -147,6 +164,7 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         TimesheetEntryRepository::create([
             'task_id' => $task->id,
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'description' => 'UT0011-0004',
         ]);
         $this->assertDatabaseHas('timesheet_entries', [

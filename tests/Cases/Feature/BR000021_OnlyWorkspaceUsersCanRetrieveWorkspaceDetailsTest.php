@@ -14,13 +14,13 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
     {
         Log::info(__METHOD__);
 
-        $token = $this->login('user0001@test.com', 'Welcome123');
+        $this->login('user0001@test.com', 'Welcome123');
 
         $user = UserRepository::byEmail('user0001@test.com');
-        $workspace = $user->ownedWorkspaces[0];
-        $response = $this->get('/api/v1/workspaces/' . $workspace->id, [
-            'Authorization' => $token['type'] . ' ' . $token['token']
-        ]);
+        $workspace = WorkspaceRepository::filter([
+            'name' => 'Test0001'
+        ])[0];
+        $response = $this->get('/api/v1/workspaces/' . $workspace->id);
         $response->assertStatus(200)->assertJsonFragment([
             'name' => 'Test0001'
         ]);
@@ -29,7 +29,6 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
     /** @test */
     public function retrieveWorkspaceInformationWithUnauthorizedUser()
     {
-        Log::info(__METHOD__);
         Log::info(__METHOD__);
 
         $token = $this->login('user0001@test.com', 'Welcome123');

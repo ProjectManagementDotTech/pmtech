@@ -78,7 +78,7 @@
             },
             onCancel() {
                 this.$eventBus.$emit("close-modal");
-            },
+            }
         },
         name: "AddProject"
     }

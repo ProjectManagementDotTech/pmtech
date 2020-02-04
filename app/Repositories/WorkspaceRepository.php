@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Workspace;
+use Illuminate\Database\Eloquent\Collection;
 use Ramsey\Uuid\Uuid;
 
 class WorkspaceRepository
@@ -94,12 +95,27 @@ class WorkspaceRepository
     }
 
     /**
+     * Filter the workspaces by the given criteria
+     *
+     * @param array $criteria
+     * @return Collection
+     */
+    static public function filter(array $criteria): Collection
+    {
+        $result = Workspace::query();
+        foreach($criteria as $key => $value) {
+            $result = $result->where($key, $value);
+        }
+        return $result->get();
+    }
+
+    /**
      * Get the workspace identified by $id.
      *
      * @param string $id
-     * @return Workspace
+     * @return Workspace|null
      */
-    static public function find(string $id): Workspace
+    static public function find(string $id): ?Workspace
     {
         return Workspace::find($id);
     }

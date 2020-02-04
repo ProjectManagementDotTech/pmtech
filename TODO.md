@@ -13,6 +13,8 @@
 
 #To do (v2020.1)
 ###General
+1. Migrate data from current www.project-management.tech to new
+www.project-management.tech implementation
 ###Front-end
 ###Timesheets
 ###Upgrade process
@@ -26,9 +28,8 @@
 that a new Default workspace will be set up for them, unless they explicitly do
 not want to do that because they are in the process of removing their account.
 1. Let the user edit the workspace name in SPA
-1. **BR000013** - Workspace names should be unique for the ownerUser
-1. Let the user create a new workspace in SPA
 1. Let the user assign ownership of a workspace to another user
+1. Let the user switch between workspaces
 ###Workspace members
 1. Invite users (new and existing) to the workspace
 1. When the workspace has more than 5 members the owner needs to pay
@@ -71,7 +72,7 @@ editor.
 1. Make timesheet report graphs responsive (including ticks on X axis)
 1. Start writing e2e UI tests using cypress.io
 1. Write DropdownMenu component
-1. Disallow unauthorized actions in the WorkspaceRepository
+1. Complete WorkspacePolicy with reference to all Business Requirements
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
 1. Complete CRUD actions in UserRepository - And write corresponding test cases
@@ -143,6 +144,8 @@ Allen for interacting with the exchangeratesapi.io API.".
 Axios requests in progress for longer than 2 seconds
 1. Implement 401 interceptor to ask for the user's password, login, and then
 submit the intercepted request again
+1. Rewrite repositories to implement a common interface and derive from a
+common parent class
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot
@@ -161,8 +164,6 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. Migrate data from current www.project-management.tech to new
-www.project-management.tech implementation
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -175,6 +176,7 @@ workspace.
 1. **BR000008** - TimesheetEntries can be created against a project as such or a
 task or simply in the workspace
 1. **BR000009** - Users can edit only their own timesheet entries
+1. **BR000013** - Workspace names should be unique for the ownerUser
 1. **BR000016** - `TimesheetEntry`.`started_at` must be before
 `TimesheetEntry`.`ended_at`
 1. **BR000017** - Two timesheet entries for the same user (regardless of
@@ -279,6 +281,7 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Style and implement front-end
 1. Style back-end
 1. Make sure Laravel Airlock can authorize broadcasting private channel access
+1. Let the user create a new workspace in SPA
 
 #Details
 ##BR000001
