@@ -37,9 +37,7 @@
 use Illuminate\Support\Facades\Cache;
 
 Route::get('/activation-mailable', function () {
-    phpinfo();
-    exit(0);
-    $user = \App\User::find('443cb036-8048-4d97-bebf-b846f10dcb45');
+    $user = \App\User::find('3d58dbea-e0d6-4a0f-ad97-771687372bf7');
     $buttons = [
         [
             'href' => env('APP_URL') . 'email/verify/' .

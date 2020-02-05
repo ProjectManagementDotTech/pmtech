@@ -85,16 +85,12 @@ workspaces.
 1. Write tests around SettingsRepository and SettingsController
 1. Write WorkspaceController actions
 1. Create routes for workspace things - CRUD actions for API
-1. Look and feel of activation email - Just verify it, modify it if needed -
-Depends on the look and feel of the main site... Currently left blank without
-styles, really.
 1. Write tests around ProjectRepository
 1. Delete Project in SPA
 1. Archive Project in SPA
 1. Update Project in SPA
 1. Archive Task in SPA
 1. Delete Task in SPA
-1. Update Task in SPA
 1. Sort tasks by name in SPA
 1. Write tests around Project API
 1. Submit weekly timesheet
@@ -284,6 +280,10 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Make sure Laravel Airlock can authorize broadcasting private channel access
 1. Let the user create a new workspace in SPA
 1. Let the user switch between workspaces
+1. Update Task in SPA
+1. Look and feel of activation email - Just verify it, modify it if needed -
+Depends on the look and feel of the main site... Currently left blank without
+styles, really.
 
 #Details
 ##BR000001
