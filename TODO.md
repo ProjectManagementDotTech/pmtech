@@ -127,7 +127,6 @@ package mentioned in Laravel News "Laravel Exchange Rates is a package by Ash
 Allen for interacting with the exchangeratesapi.io API.".  
 1. Allow task to be work-driven
 1. Add `percent_completion` to `Task`
-1. Allow task index to be ordered by name, progress, etc.
 1. Allow project index to be ordered by name, progress, etc.
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
@@ -142,6 +141,14 @@ Axios requests in progress for longer than 2 seconds
 submit the intercepted request again
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
+1. `GridTable` to support `sortable` flag in field definition and sorting by
+multiple `sortable` fields
+1. `GridTable` to support notion of visible and hidden columns. Right click
+shows a popup menu where one can select to make hidden columns visible; also one
+can make visible columns hidden
+1. `GridTable` to support clicking on row headers to select entire row. Multiple
+selections are possible through use of Shift-Click and Ctrl-Click
+1. `GridTable` needs `GridPercentageEditor`
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot
