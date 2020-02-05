@@ -70,8 +70,6 @@ editor.
 
 #To do (unassigned to release)
 1. Make timesheet report graphs responsive (including ticks on X axis)
-1. Start writing e2e UI tests using cypress.io
-1. Write DropdownMenu component
 1. Complete WorkspacePolicy with reference to all Business Requirements
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
@@ -167,6 +165,7 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
+1. Start writing e2e UI tests using cypress.io
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
