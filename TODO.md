@@ -13,8 +13,6 @@
 
 #To do (v2020.1)
 ###General
-1. Migrate data from current www.project-management.tech to new
-www.project-management.tech implementation
 ###Front-end
 ###Timesheets
 ###Upgrade process
@@ -165,7 +163,8 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. Start writing e2e UI tests using cypress.io
+1. Migrate data from current www.project-management.tech to new
+www.project-management.tech implementation
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -290,6 +289,7 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 1. Look and feel of activation email - Just verify it, modify it if needed -
 Depends on the look and feel of the main site... Currently left blank without
 styles, really.
+1. Start writing e2e UI tests using cypress.io
 
 #Details
 ##BR000001
