@@ -56,13 +56,24 @@ subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
-###Project
+###Projects
+1. Add `abbreviation` and `start_date` attributes to project Model
 ###Timesheets
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
 
 #To do (v2020.3)
+### Tasks
+1. Archive Task in SPA
+1. Delete Task in SPA
+1. Sort tasks by name in SPA
+1. Add dropdown menu "Tasks" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
+1. Add `percent_completion` to `Task`
+1. Send TaskUpdated event when task was updated
+1. Add `nesting_level` and `parent_task_id` to Task model
+1. Add actual `duration`, `ended_at`, `started_at` and `work` to Task model
+1. Add planned `duration`, `ended_at`, `started_at` and `work` to Task model
 
 #To do (v2021.1)
 
@@ -85,9 +96,6 @@ workspaces.
 1. Delete Project in SPA
 1. Archive Project in SPA
 1. Update Project in SPA
-1. Archive Task in SPA
-1. Delete Task in SPA
-1. Sort tasks by name in SPA
 1. Write tests around Project API
 1. Submit weekly timesheet
 1. Lock timesheet entries after submitting
@@ -103,7 +111,6 @@ committers
 1. Currency per workspace and apply xe exchange rate between project and
 workspace defined in the workspace yet
 1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
-1. Add dropdown menu "Tasks" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. Unit test NotificationRepository
 1. Write Notification routes and Controller methods
 1. Unit test Notification API
@@ -122,12 +129,10 @@ details in a different currency (payable and submitted invoices). Use the
 package mentioned in Laravel News "Laravel Exchange Rates is a package by Ash
 Allen for interacting with the exchangeratesapi.io API.".  
 1. Allow task to be work-driven
-1. Add `percent_completion` to `Task`
 1. Allow project index to be ordered by name, progress, etc.
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
 1. Listen to private broadcast channel for each task in Vuex
-1. Send TaskUpdated event when task was updated
 1. Protect tasks with e-tags (so that multiple clients can view tasks...)
 1. GridTextEditor needs to send input updates more frequently than onBlur
 1. GanttChart should only update API if the task was truly altered
@@ -163,8 +168,6 @@ edited by the user, but only approved / rejected by the respective Manager users
 address
 
 #In Progress
-1. Migrate data from current www.project-management.tech to new
-www.project-management.tech implementation
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -290,6 +293,8 @@ https://codesandbox.io/s/vue-template-lldw2?from-embed
 Depends on the look and feel of the main site... Currently left blank without
 styles, really.
 1. Start writing e2e UI tests using cypress.io
+1. Migrate data from current www.project-management.tech to new
+www.project-management.tech implementation
 
 #Details
 ##BR000001
