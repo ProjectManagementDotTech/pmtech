@@ -16,5 +16,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('App.Workspace.{workspace}', function($user, \App\Workspace $workspace) {
-    return $user->id === $workspace->owner_user_id;
+    return $user->workspaces()
+        ->where('workspace_id', $workspace->id)
+        ->first() !== NULL;
 });
