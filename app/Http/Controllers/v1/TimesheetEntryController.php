@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\ProjectRepository;
 use App\Repositories\TimesheetEntryRepository;
 use App\TimesheetEntry;
 use App\Traits\TimesheetEntries\GroupsTimesheetEntriesByDate;
@@ -45,6 +46,10 @@ class TimesheetEntryController extends Controller
             $data['description'] = '';
         }
 
+        if(isset($data['project_id']) && !isset($data['workspace_id'])) {
+            $project = ProjectRepository::find($data['project_id']);
+            $data['workspace_id'] = $project->workspace_id;
+        }
         $timesheetEntry = TimesheetEntryRepository::create($data);
 
         return response('', 201, [

@@ -68,8 +68,8 @@ class TimesheetEntryRepository
     static public function create(array $data): ?TimesheetEntry
     {
         /*
-         * Cannot create timesheet entries without user ID or description (even
-         * if the description is empty...)
+         * Cannot create timesheet entries without description, user ID or
+         * workspace ID (even if the description is empty...)
          */
         if(
             !isset($data['user_id']) || !isset($data['description']) ||
@@ -118,10 +118,6 @@ class TimesheetEntryRepository
         if(isset($data['task_id']) && !isset($data['project_id'])) {
             $task = TaskRepository::find($data['task_id']);
             $data['project_id'] = $task->project_id;
-        }
-        if(isset($data['project_id']) && !isset($data['workspace_id'])) {
-            $project = ProjectRepository::find($data['project_id']);
-            $data['workspace_id'] = $project->workspace_id;
         }
 
         /*
