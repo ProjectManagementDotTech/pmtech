@@ -79,7 +79,9 @@
                 this.filter.endDate = this.$moment().endOf("week");
             },
             onClickExport() {
-                this.$axios.get("/api/v1/timesheet_entries/export" +
+                this.$axios.get("/api/v1/workspaces/" +
+                    this.$route.params.workspaceId +
+                    "/timesheet_entries/export" +
                     this.queryParamsFromFilter)
                     .then(response => {
                         let filename = this.$moment().format("YYYYMMDDHHmmss") +
@@ -115,7 +117,9 @@
                 this.initializeFilter();
             },
             onRunReport() {
-                this.$axios.get("/api/v1/timesheet_entries" + this.queryParamsFromFilter)
+                this.$axios.get("/api/v1/workspaces/" +
+                    this.$route.params.workspaceId + "/timesheet_entries" +
+                    this.queryParamsFromFilter)
                     .then(response => {
                         this.timesheetEntries = response.data;
                     });

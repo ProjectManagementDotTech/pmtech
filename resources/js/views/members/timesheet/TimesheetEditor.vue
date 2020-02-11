@@ -69,7 +69,8 @@
         },
         methods: {
             fetchHistoricTimesheetEntries() {
-                this.$axios.get("/api/v1/timesheet_entries")
+                this.$axios.get("/api/v1/workspaces/" +
+                    this.$route.params.workspaceId + "/timesheet_entries")
                     .then(response => {
                         this.updateComponentKeys(response.data);
                         this.timesheetEntriesByDay = response.data;

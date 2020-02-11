@@ -1,9 +1,10 @@
 <?php
 
 Route::middleware(['verified', 'auth:airlock'])->group(function () {
-    Route::get('/timesheet_entries', 'v1\TimesheetEntryController@index')
+    Route::get('/workspaces/{workspace}/timesheet_entries',
+        'v1\TimesheetEntryController@index')
         ->name('timesheet_entries.index');
-    Route::get('/timesheet_entries/export',
+    Route::get('/workspaces/{workspace}/timesheet_entries/export',
         'v1\TimesheetEntryController@export')
         ->name('timesheet_entries.export');
     Route::get('/timesheet_entries/running',

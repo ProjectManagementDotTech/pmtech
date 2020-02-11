@@ -8,6 +8,7 @@ use App\Repositories\TimesheetEntryRepository;
 use App\TimesheetEntry;
 use App\Traits\TimesheetEntries\GroupsTimesheetEntriesByDate;
 use App\Traits\TimesheetEntries\ProvidesHumanReadableDuration;
+use App\Workspace;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -66,9 +67,11 @@ class TimesheetEntryController extends Controller
      * @param Request $request
      * @return string
      */
-    public function export(Request $request)
+    public function export(Workspace $workspace, Request $request)
     {
-        $timesheetEntries = $this->getTimesheetEntriesBasedOnRequest($request);
+        $timesheetEntries =
+            $this->getTimesheetEntriesBasedOnWorkspaceAndRequest($workspace,
+                $request);
 
         $filename = $this->generateTimesheetExport($timesheetEntries);
 
@@ -80,9 +83,11 @@ class TimesheetEntryController extends Controller
         return $base64Encoded;
     }
 
-    public function index(Request $request)
+    public function index(Workspace $workspace, Request $request)
     {
-        $timesheetEntries = $this->getTimesheetEntriesBasedOnRequest($request);
+        $timesheetEntries =
+            $this->getTimesheetEntriesBasedOnWorkspaceAndRequest($workspace,
+                $request);
 
         return $this->provideHumanReadableDurations(
             $this->groupTimesheetEntriesByDate($timesheetEntries));
@@ -161,8 +166,10 @@ class TimesheetEntryController extends Controller
             if($timesheetEntry->task)
                 $sheet->setCellValue("C$row", $timesheetEntry->task->name);
             $sheet->setCellValue("D$row", $timesheetEntry->description);
-            $sheet->setCellValue("E$row", $timesheetEntry->started_at->format("d M Y H:i:s"));
-            $sheet->setCellValue("F$row", $timesheetEntry->ended_at->format("d M Y H:i:s"));
+            $sheet->setCellValue("E$row",
+                $timesheetEntry->started_at->format("d M Y H:i:s"));
+            $sheet->setCellValue("F$row",
+                $timesheetEntry->ended_at->format("d M Y H:i:s"));
             $sheet->setCellValue("G$row", $timesheetEntry->duration);
             $row++;
         }
@@ -183,7 +190,8 @@ class TimesheetEntryController extends Controller
      * @param Request $request
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function getTimesheetEntriesBasedOnRequest(Request $request)
+    protected function getTimesheetEntriesBasedOnWorkspaceAndRequest(
+        Workspace $workspace, Request $request)
     {
         $endDate = $request->get('end_date', NULL);
         $startDate = $request->get('start_date', NULL);
@@ -204,6 +212,7 @@ class TimesheetEntryController extends Controller
         }
         $filterData = [
             'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
             'started_at' => $startDate,
             'ended_at' => $endDate
         ];
