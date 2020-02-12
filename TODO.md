@@ -164,8 +164,6 @@ the role "Programme Manager" or "Portfolio Manager"
 edited by the user, but only approved / rejected by the respective Manager users
 
 #To do (Good first issue)
-1. Fix `UT000002_UserApiTests` rather wasteful method of retrieving the email
-address
 
 #In Progress
 

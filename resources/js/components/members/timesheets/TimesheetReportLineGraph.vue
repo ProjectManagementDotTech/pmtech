@@ -240,10 +240,6 @@
                     .append("g")
                     .call(d3.axisLeft(yScale).ticks([this.maximumHours]));
 
-                console.dir(this.chartableDateRange);
-                console.dir(this.chartableDateRange[0].day.format("DD MMM YYYY"));
-                console.dir(this.chartableDateRange[this.chartableDateRange.length - 1].day.format("DD MMM YYYY"));
-
                 let scaleStart = this.chartableDateRange[0].day;
                 let scaleEnd = this.chartableDateRange[this.chartableDateRange.length - 1].day;
 
