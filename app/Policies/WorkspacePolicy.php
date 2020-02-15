@@ -37,6 +37,18 @@ class WorkspacePolicy
     }
 
     /**
+     * Can $user edit $workspace?
+     *
+     * @param User $user
+     * @param Workspace $workspace
+     * @return bool
+     */
+    public function edit(User $user, Workspace $workspace)
+    {
+        return $workspace->owner_user_id == $user->id;
+    }
+
+    /**
      * Can $user view $workspace?
      *
      * @param User $user

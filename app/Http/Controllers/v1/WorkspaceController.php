@@ -172,6 +172,8 @@ class WorkspaceController extends Controller
         ]);
 
         WorkspaceRepository::update($workspace, $validatedData);
+
+        return response('', 204);
     }
 
     //endregion

@@ -20,7 +20,6 @@
 
 #To do (v2020.2)
 ###Edit workspace settings
-1. Let the user edit the workspace name in SPA
 1. Let the user assign ownership of a workspace to another user
 ###Workspace members
 1. Invite users (new and existing) to the workspace
@@ -297,6 +296,7 @@ styles, really.
 www.project-management.tech implementation
 1. Let the user archive a workspace in SPA
 1. Let the user delete a workspace in SPA
+1. Let the user edit the workspace name in SPA
 
 #Details
 ##BR000001

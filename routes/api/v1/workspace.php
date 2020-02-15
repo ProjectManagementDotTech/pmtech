@@ -15,6 +15,11 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:view,workspace'
         );
+    Route::put('workspaces/{workspace}', 'v1\WorkspaceController@update')
+        ->name('workspaces.update')
+        ->middleware(
+            'can:edit,workspace'
+        );
     Route::post('workspaces/{workspace}/archive',
         'v1\WorkspaceController@archive')
         ->name('workspaces.archive')

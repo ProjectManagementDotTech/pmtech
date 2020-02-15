@@ -143,4 +143,73 @@ class UT0004_WorkspaceApiTests extends TestCase
             'id' => $workspace->id
         ]);
     }
+
+    /** @test */
+    public function editOwnedWorkspace()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $workspace = WorkspaceRepository::filter([
+            'name' => 'UT0004-0001'
+        ])[0];
+        $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
+            'name' => 'UT0004-0003'
+        ]);
+        $response->assertStatus(204)->assertNoContent();
+        $this->assertDatabaseHas('workspaces', [
+            'id' => $workspace->id,
+            'name' => 'UT0004-0003'
+        ]);
+
+        $workspace->refresh();
+        $workspace->name = 'UT0004-0001';
+        $workspace->save();
+    }
+
+    /** @test */
+    public function giveWorkspaceAlreadyUsedName()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $workspace = WorkspaceRepository::filter([
+            'name' => 'UT0004-0001'
+        ])[0];
+        $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
+            'name' => 'Test0001'
+        ]);
+        $response->assertStatus(422)->assertJson([
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'name' => [
+                    'The given value is already in use for name.'
+                ]
+            ]
+        ]);
+        $this->assertDatabaseHas('workspaces', [
+            'id' => $workspace->id,
+            'name' => 'UT0004-0001'
+        ]);
+    }
+
+    /** @test */
+    public function editNotOwnedWorkspace()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $user = UserRepository::byEmail('user0004@test.com');
+        $workspace = $user->workspaces[0];
+        $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
+            'name' => 'UT0004-0004'
+        ]);
+        $response->assertStatus(403)->assertJsonFragment([
+            'message' => 'This action is unauthorized.'
+        ]);
+        $this->assertDatabaseHas('workspaces', [
+            'id' => $workspace->id,
+            'name' => $workspace->name
+        ]);
+    }
 }

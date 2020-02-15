@@ -73,7 +73,7 @@ class WorkspaceRepository
     static public function allFromSameOwnerExcept(Workspace $workspace)
     {
         return $workspace->ownerUser->ownedWorkspaces()
-            ->whereNot('id', $workspace->id)
+            ->where('id', '<>', $workspace->id)
             ->get();
     }
 
