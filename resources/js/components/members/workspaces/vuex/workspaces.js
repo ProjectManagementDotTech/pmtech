@@ -62,6 +62,9 @@ export default {
         byId: (state) => (id) => {
             return state.workspaces.find(w => w.id == id);
         },
+        byOwnerUserId: (state) => (ownerUserId) => {
+            return state.workspaces.filter(w => w.owner_user_id == ownerUserId);
+        },
         current(state) {
             return state.workspaces.find(
                 w => w.id == Vue.router.currentRoute.params.workspaceId

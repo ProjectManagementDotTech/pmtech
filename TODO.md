@@ -20,9 +20,6 @@
 
 #To do (v2020.2)
 ###Edit workspace settings
-1. **BR000014** - If a user deletes / archives his / her last owned workspace, warn the user
-that a new Default workspace will be set up for them, unless they explicitly do
-not want to do that because they are in the process of removing their account.
 1. Let the user edit the workspace name in SPA
 1. Let the user assign ownership of a workspace to another user
 ###Workspace members
@@ -162,6 +159,8 @@ approve submitted timesheets
 the role "Programme Manager" or "Portfolio Manager"
 1. **BR000012** - Lock timesheet entries after submitting so that they cannot be
 edited by the user, but only approved / rejected by the respective Manager users
+1. **BR000014** - Write cypress tests to make sure that the correct confirmation
+messages are shown.
 
 #To do (Good first issue)
 
@@ -179,6 +178,9 @@ workspace.
 task or simply in the workspace
 1. **BR000009** - Users can edit only their own timesheet entries
 1. **BR000013** - Workspace names should be unique for the ownerUser
+1. **BR000014** - If a user deletes / archives his / her last owned workspace,
+warn the user specifically that that is the last owned workspace. The user can
+always create a new workspace any time (s)he wants.
 1. **BR000016** - `TimesheetEntry`.`started_at` must be before
 `TimesheetEntry`.`ended_at`
 1. **BR000017** - Two timesheet entries for the same user (regardless of
