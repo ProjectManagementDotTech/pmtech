@@ -10,4 +10,10 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:view,workspace'
         );
+    Route::post('workspaces/{workspace}/archive',
+        'v1\WorkspaceController@archive')
+        ->name('workspaces.archive')
+        ->middleware(
+            'can:archive,workspace'
+        );
 });

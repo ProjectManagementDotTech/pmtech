@@ -55,7 +55,13 @@
                             Workspaces
                         </div>
                         <div class="mt-2 pl-2">
-                            <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddWorkspace">Add</a>
+                            <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400 cursor-pointer" @click="onClickAddWorkspace">Add</a>
+                            <div class="border-t border-gray-700">
+                                <div class="cursor-default px-2 py-1 text-gray-700 text-xs uppercase">
+                                    {{ $store.getters["workspaces/byId"]($route.params.workspaceId).name }}
+                                </div>
+                                <router-link class="block px-4 py-2 hover:text-white focus:text-white focus:outline-none text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/settings'" @click.native="isOpen = false">Settings</router-link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,7 +117,7 @@
         },
         data() {
             return {
-                isOpen: false
+                isOpen: true
             }
         },
         methods: {

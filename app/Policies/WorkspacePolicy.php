@@ -12,6 +12,11 @@ class WorkspacePolicy
 
     //region Public Status Report
 
+    public function archive(User $user, Workspace $workspace)
+    {
+        return $workspace->owner_user_id == $user->id;
+    }
+
     /**
      * Can $user view $workspace?
      *

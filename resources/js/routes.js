@@ -16,6 +16,7 @@ import TimesheetEditor from "./views/members/timesheet/TimesheetEditor";
 import TimesheetHome from "./views/members/timesheet/TimesheetHome";
 import TimesheetReport from "./views/members/timesheet/TimesheetReport";
 import UnknownError from "./views/errors/UnknownError";
+import WorkspaceSettings from "./views/members/workspaces/WorkspaceSettings";
 
 export default {
     mode: "history",
@@ -91,7 +92,6 @@ export default {
             path: "/unknown-error"
         },
         {
-            component: WorkspaceHome,
             children: [
                 {
                     component: WorkspaceDashboard,
@@ -101,20 +101,26 @@ export default {
                     path: ""
                 },
                 {
-                    component: ProjectHome,
+                    component: WorkspaceSettings,
+                    meta: {
+                        isMemberPage: true
+                    },
+                    path: "settings"
+                },
+                {
                     children: [
                         {
                             component: ProjectDashboard,
                             path: ""
                         }
                     ],
+                    component: ProjectHome,
                     meta: {
                         isMemberPage: true
                     },
                     path: "projects/:projectId"
                 },
                 {
-                    component: TimesheetHome,
                     children: [
                         {
                             component: TimesheetEditor,
@@ -125,12 +131,14 @@ export default {
                             path: "report"
                         }
                     ],
+                    component: TimesheetHome,
                     meta: {
                         isMemberPage: true
                     },
                     path: "timesheet"
                 }
             ],
+            component: WorkspaceHome,
             meta: {
                 isMemberPage: true
             },

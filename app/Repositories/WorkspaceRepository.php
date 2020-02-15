@@ -38,7 +38,10 @@ class WorkspaceRepository
      */
     static public function restore(Workspace $workspace)
     {
-        $workspace->restore();
+        $archivedWorkspace = Workspace::withTrashed()->find($workspace->id);
+        if($archivedWorkspace) {
+            $archivedWorkspace->restore();
+        }
     }
 
     /**

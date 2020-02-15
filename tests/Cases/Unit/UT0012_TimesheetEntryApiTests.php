@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Tests\Shared\TestCase;
 
@@ -36,10 +37,10 @@ class UT0012_TimesheetEntryApiTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $token = $this->login('user0001@test.com', 'Welcome123');
-        $response = $this->get('/api/v1/timesheet_entries/export', [
-            'Authorization' => $token['type'] . ' ' . $token['token']
-        ]);
+        $this->login('user0001@test.com', 'Welcome123');
+        $workspace = Auth::user()->workspaces[0];
+        $response = $this->get('/api/v1/workspaces/' . $workspace->id .
+            '/timesheet_entries/export');
         $response->assertStatus(200);
 
         sleep(3);

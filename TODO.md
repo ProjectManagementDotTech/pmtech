@@ -20,7 +20,6 @@
 
 #To do (v2020.2)
 ###Edit workspace settings
-1. Let the user archive a workspace in SPA
 1. Let the user delete a workspace in SPA
 1. **BR000014** - If a user deletes / archives his / her last owned workspace, warn the user
 that a new Default workspace will be set up for them, unless they explicitly do
@@ -56,6 +55,8 @@ subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
+###Navigation
+1. Allow user to switch workspaces in xs / sm screens
 ###Projects
 1. Add `abbreviation` and `start_date` attributes to project Model
 ###Timesheets
@@ -293,6 +294,7 @@ styles, really.
 1. Start writing e2e UI tests using cypress.io
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
+1. Let the user archive a workspace in SPA
 
 #Details
 ##BR000001
