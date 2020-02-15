@@ -15,6 +15,14 @@ class WorkspaceController extends Controller
 {
     //region Public Status Report
 
+    /**
+     * Archive $workspace and send a header location back as to which workspace
+     * should be loaded in the front-end.
+     *
+     * @param Workspace $workspace
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     */
     public function archive(Workspace $workspace)
     {
         WorkspaceRepository::archive($workspace);
@@ -70,6 +78,24 @@ class WorkspaceController extends Controller
 
         return response('', 201, [
             'Location' => route('projects.show', ['project' => $project->id])
+        ]);
+    }
+
+    /**
+     * Delete $workspace and send a header location back as to which workspace
+     * should be loaded in the front-end.
+     *
+     * @param Workspace $workspace
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function delete(Workspace $workspace)
+    {
+        WorkspaceRepository::delete($workspace);
+
+        return response('', 205, [
+            'Location' => route('workspaces.show', [
+                'workspace' => Auth::user()->workspaces[0]->id
+            ])
         ]);
     }
 

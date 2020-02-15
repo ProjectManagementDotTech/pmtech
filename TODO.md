@@ -20,7 +20,6 @@
 
 #To do (v2020.2)
 ###Edit workspace settings
-1. Let the user delete a workspace in SPA
 1. **BR000014** - If a user deletes / archives his / her last owned workspace, warn the user
 that a new Default workspace will be set up for them, unless they explicitly do
 not want to do that because they are in the process of removing their account.
@@ -295,6 +294,7 @@ styles, really.
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
 1. Let the user archive a workspace in SPA
+1. Let the user delete a workspace in SPA
 
 #Details
 ##BR000001

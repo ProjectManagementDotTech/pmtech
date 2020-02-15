@@ -5,6 +5,11 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->name('workspaces.index');
     Route::post('workspaces', 'v1\WorkspaceController@create')
         ->name('workspaces.create');
+    Route::delete('workspaces/{workspace}', 'v1\WorkspaceController@delete')
+        ->name('workspaces.delete')
+        ->middleware(
+            'can:delete,workspace'
+        );
     Route::get('workspaces/{workspace}', 'v1\WorkspaceController@show')
         ->name('workspaces.show')
         ->middleware(
