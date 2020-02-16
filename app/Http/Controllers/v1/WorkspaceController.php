@@ -111,6 +111,17 @@ class WorkspaceController extends Controller
     }
 
     /**
+     * List all members of $workspace.
+     *
+     * @param Workspace $workspace
+     * @return mixed
+     */
+    public function indexMembers(Workspace $workspace)
+    {
+        return $workspace->users;
+    }
+
+    /**
      * List all the projects in the given workspace.
      *
      * @param Request $request

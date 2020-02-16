@@ -26,4 +26,10 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:archive,workspace'
         );
+    Route::get('workspaces/{workspace}/members',
+        'v1\WorkspaceController@indexMembers')
+        ->name('workspaces.members')
+        ->middleware(
+            'can:indexMembers,workspace'
+        );
 });

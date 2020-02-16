@@ -49,6 +49,18 @@ class WorkspacePolicy
     }
 
     /**
+     * Can $user see all members of $workspace?
+     *
+     * @param User $user
+     * @param Workspace $workspace
+     * @return bool
+     */
+    public function indexMembers(User $user, Workspace $workspace)
+    {
+        return $workspace->owner_user_id == $user->id;
+    }
+
+    /**
      * Can $user view $workspace?
      *
      * @param User $user

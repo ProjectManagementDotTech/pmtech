@@ -108,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @inheritDoc
      */
     protected $hidden = [
-        'created_at', 'deleted_at', 'email_verified_at', 'id', 'password',
+        'created_at', 'deleted_at', 'email_verified_at', 'password',
         'remember_token', 'updated_at',
     ];
 
@@ -121,7 +121,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @inheritDoc
      */
     protected $visible = [
-        'email', 'name', 'settings',
+        'id', 'email', 'name', 'settings',
     ];
 
     /**

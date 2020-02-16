@@ -20,7 +20,6 @@
 
 #To do (v2020.2)
 ###Edit workspace settings
-1. Let the user assign ownership of a workspace to another user
 ###Workspace members
 1. Invite users (new and existing) to the workspace
 1. When the workspace has more than 5 members the owner needs to pay
@@ -164,6 +163,7 @@ messages are shown.
 #To do (Good first issue)
 
 #In Progress
+1. Let the user assign ownership of a workspace to another user
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
