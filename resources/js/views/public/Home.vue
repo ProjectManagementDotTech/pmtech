@@ -3,7 +3,7 @@
         <div class="w-full bg-gray-200">
             <div class="w-full pt-4 pb-6 mx-auto">
                 <div class="hidden sm:block sm:w-full md:w-2/3 lg:w-1/2 md:mx-auto relative inline-block">
-                    <img class="shadow-xl" src="/images/plan_details.jpg" alt="" width="100%">
+                    <img class="shadow-xl" src="/images/looking_at_plan.jpg" alt="" width="100%">
 <!--
                     <img class="shadow-xl" src="/images/looking_at_plan.jpg" alt="" width="100%">
 -->

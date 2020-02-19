@@ -1,7 +1,7 @@
 <template>
     <footer class="w-full p-4 flex flex-wrap text-center border-t">
         <div class="w-full sm:pb-2 text-xs md:text-sm lg:text-base sm:border-b sm:border-gray-100">
-            Version 2020.2 - See the Release Notes
+            Version 2020.2 {{ envMoniker }}- See the Release Notes
             <a href="https://github.com/ProjectManagementDotTech/pmtech/releases" target="_blank">here.</a>
         </div>
         <div class="w-full sm:w-1/2 xl:w-1/3 sm:py-2 text-xs md:text-sm lg:text-base">
@@ -28,6 +28,16 @@
 
 <script>
     export default {
+        computed: {
+            envMoniker() {
+                console.log(process.env.NODE_ENV);
+                if(process.env.NODE_ENV == 'development') {
+                    return "DEV ";
+                } else {
+                    return "";
+                }
+            }
+        },
         name: "Footer"
     }
 </script>
