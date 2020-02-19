@@ -30,7 +30,6 @@
     export default {
         computed: {
             envMoniker() {
-                console.log(process.env.NODE_ENV);
                 if(process.env.NODE_ENV == "development") {
                     return "DEV ";
                 } else if(process.env.NODE_ENV == "preprod") {
