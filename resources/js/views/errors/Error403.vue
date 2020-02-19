@@ -13,7 +13,7 @@
     export default {
         methods: {
             onClick() {
-                window.router.go(-1);
+                window.router.go(-2);
             }
         },
         name: "Error403"

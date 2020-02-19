@@ -101,7 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @inheritDoc
      */
     protected $fillable = [
-        'email', 'id', 'name', 'password',
+        'email', 'email_verified_at', 'id', 'name', 'password',
     ];
 
     /**

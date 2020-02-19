@@ -1,3 +1,4 @@
+import AcceptInvitation from "./views/public/AcceptInvitation";
 import Error402 from "./views/errors/Error402";
 import Error403 from "./views/errors/Error403";
 import Error404 from "./views/errors/Error404";
@@ -36,11 +37,11 @@ export default {
             path: "/how-it-works"
         },
         {
-            component: PricingAndPlans,
+            component: AcceptInvitation,
             meta: {
-                isMemberPage: false
+                isMemberPage: false,
             },
-            path: "/pricing-and-plans"
+            path: "/invitation/accept/:invitationNonce/:cacheNonce"
         },
         {
             component: Login,
@@ -55,6 +56,13 @@ export default {
                 isMemberPage: true
             },
             path: "/logout"
+        },
+        {
+            component: PricingAndPlans,
+            meta: {
+                isMemberPage: false
+            },
+            path: "/pricing-and-plans"
         },
         {
             component: Register,

@@ -21,7 +21,6 @@
 #To do (v2020.2)
 ###Edit workspace settings
 ###Workspace members
-1. Invite users (new and existing) to the workspace
 1. When the workspace has more than 5 members the owner needs to pay
 1. When an email address registers again, but was not verified, send the whole
 verification email again (also create a cache entry).
@@ -69,10 +68,24 @@ editor.
 1. Add `nesting_level` and `parent_task_id` to Task model
 1. Add actual `duration`, `ended_at`, `started_at` and `work` to Task model
 1. Add planned `duration`, `ended_at`, `started_at` and `work` to Task model
+1. Reorder tasks
+### Projects
+1. Add `price` attribute for projects
+1. When adding price to project, show estimate based on project tasks and
+profit_margin.
+1. Allow project member to overwrite `cost` from workspace member
+1. Allow project to overwrite `profit_margin` from workspace
+1. Add `reduction_percentage` to Project
+### Workspace
+1. Add `cost` per workspace member
+1. Add `profit_margin` to workspace
 
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Remove members from workspace
+1. UserRepository should not create Settings object. That has to be done in a
+UserObserver class.
 1. Make timesheet report graphs responsive (including ticks on X axis)
 1. Complete WorkspacePolicy with reference to all Business Requirements
 1. Bruteforce POST login protection - Make sure that users cannot fail login
@@ -163,6 +176,8 @@ messages are shown.
 #To do (Good first issue)
 
 #In Progress
+1. Rewrite repositories to implement a common interface and derive from a
+common parent class
 1. Let the user assign ownership of a workspace to another user
 
 #Done
@@ -297,6 +312,7 @@ www.project-management.tech implementation
 1. Let the user archive a workspace in SPA
 1. Let the user delete a workspace in SPA
 1. Let the user edit the workspace name in SPA
+1. Invite users (new and existing) to the workspace
 
 #Details
 ##BR000001

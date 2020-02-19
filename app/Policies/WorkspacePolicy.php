@@ -61,6 +61,18 @@ class WorkspacePolicy
     }
 
     /**
+     * Can $user invite new members into $workspace?
+     *
+     * @param User $user
+     * @param Workspace $workspace
+     * @return bool
+     */
+    public function invite(User $user, Workspace $workspace)
+    {
+        return $workspace->owner_user_id == $user->id;
+    }
+
+    /**
      * Can $user view $workspace?
      *
      * @param User $user

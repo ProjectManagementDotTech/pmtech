@@ -5,14 +5,34 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CreateProject;
 use App\Http\Requests\v1\CreateWorkspace;
+use App\Http\Requests\v1\InvitationRequest;
+use App\Mail\Invitation;
+use App\Repositories\InvitationRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
 use App\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use Ramsey\Uuid\Uuid;
 
 class WorkspaceController extends Controller
 {
+    //region Public Construction
+
+    /**
+     * WorkspaceController constructor.
+     *
+     * @param InvitationRepository $invitationRepository
+     */
+    public function __construct(InvitationRepository $invitationRepository) {
+        $this->invitationRepository = $invitationRepository;
+    }
+
+    //endregion
+
     //region Public Status Report
 
     /**
@@ -118,7 +138,20 @@ class WorkspaceController extends Controller
      */
     public function indexMembers(Workspace $workspace)
     {
-        return $workspace->users;
+        $invitations = $this->invitationRepository->byWorkspace($workspace);
+        $result = [];
+        foreach($invitations as $invitation) {
+            $result[] = [
+                'name' => $invitation->email . ' (invitation pending ' .
+                    'acceptance)'
+            ];
+        }
+
+        foreach($workspace->users as $user) {
+            $result[] = $user;
+        }
+
+        return $result;
     }
 
     /**
@@ -146,6 +179,41 @@ class WorkspaceController extends Controller
     }
 
     /**
+     * Invite the email address (per $request) to $workspace.
+     *
+     * @param Request $request
+     * @param Workspace $workspace
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function invite(InvitationRequest $request, Workspace $workspace)
+    {
+        $user = UserRepository::byEmail($request->email);
+        if(!$user) {
+            /*
+             * This is a completely new user, and thus, we have to go through
+             * the process of sending the new user an invitation email, etc...
+             */
+            Cache::store('database')
+                ->put($request->email, Uuid::uuid4()->toString(), 3600);
+            $invitation = $this->invitationRepository->create([
+                'user_id' => Auth::user()->id,
+                'workspace_id' => $workspace->id,
+                'email' => $request->email,
+                'nonce' => Uuid::uuid4()->toString()
+            ]);
+
+            Mail::to($request->email)->send(new Invitation($invitation));
+
+            return response('', 201);
+        } else {
+            $user->workspaces()->attach($workspace);
+            return response('', 201);
+        }
+    }
+
+    /**
      * Show the workspace.
      *
      * @param Workspace $workspace
@@ -161,6 +229,7 @@ class WorkspaceController extends Controller
      *
      * @param Request $request
      * @param Workspace $workspace
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function update(Request $request, Workspace $workspace)
     {
@@ -186,6 +255,15 @@ class WorkspaceController extends Controller
 
         return response('', 204);
     }
+
+    //endregion
+
+    //region Protected Attributes
+
+    /**
+     * @var InvitationRepository
+     */
+    protected $invitationRepository;
 
     //endregion
 }

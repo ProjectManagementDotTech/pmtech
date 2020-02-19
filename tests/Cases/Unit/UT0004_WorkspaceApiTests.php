@@ -212,4 +212,16 @@ class UT0004_WorkspaceApiTests extends TestCase
             'name' => $workspace->name
         ]);
     }
+
+    /** @test */
+    public function listWorkspaceMembers()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $workspace = WorkspaceRepository::filter(['name' => 'UT0004-0001'])[0];
+        $response = $this->get('/api/v1/workspaces/' . $workspace->id .
+            '/members');
+        $response->assertStatus(200)->assertJsonCount(1);
+    }
 }

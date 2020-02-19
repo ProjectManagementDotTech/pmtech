@@ -26,6 +26,12 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:archive,workspace'
         );
+    Route::post('workspaces/{workspace}/invite',
+        'v1\WorkspaceController@invite')
+        ->name('workspaces.invite')
+        ->middleware(
+            'can:invite,workspace'
+        );
     Route::get('workspaces/{workspace}/members',
         'v1\WorkspaceController@indexMembers')
         ->name('workspaces.members')

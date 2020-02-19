@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Cases\Feature;
+namespace Tests\Cases\BusinessRequirements;
 
 use App\Repositories\TimesheetEntryRepository;
 use Illuminate\Support\Facades\Log;

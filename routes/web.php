@@ -52,11 +52,35 @@ Route::get('/activation-mailable', function () {
     ]);
 });
 
+Route::get('/invitation-mailable', function (\App\Repositories\InvitationRepository $invitationRepository) {
+    $invitation = $invitationRepository->byEmail('guus.leeuw@itpassion.com');
+    $buttons = [
+        [
+            'href' => env('APP_URL') . 'invitation/accept/' .
+                $invitation->nonce . '/' .
+                Cache::store('database')->get($invitation->email),
+            'text' => 'Accept invitation'
+        ]
+    ];
+    return view('emails.authn.invitation')->with([
+        'buttons' => $buttons,
+        'invitation' => $invitation
+    ]);
+});
+
 Route::post('errors', 'v1\ErrorController@store')->name('errors.store');
 Route::post('register', 'Auth\RegisterController@register');
 Route::post('logout', 'Auth\LoginController@logout');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')
     ->name('verification.verify');
+Route::get('invitation/accept/{invitationNonce}/{cacheNonce}',
+    'Auth\InvitationController@accept')
+    ->name('invitation.accept')
+    ->where('invitationNonce', '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/')
+    ->where('cacheNonce', '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/');
+Route::post('invitation/details/{invitationNonce}/{cacheNonce}',
+    'Auth\InvitationController@storeDetails')
+    ->name('invitation.storeDetails');
 
 /*
  * If nothing matches, we simply load the SPA app and let it deal with the

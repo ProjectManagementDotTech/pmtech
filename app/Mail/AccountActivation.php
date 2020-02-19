@@ -26,8 +26,7 @@ class AccountActivation extends Mailable
         $this->user = $user;
         $this->buttons = [
             [
-                'href' => env('APP_URL') . 'email/verify/' .
-                    $user->id . '/' .
+                'href' => env('APP_URL') . 'email/verify/' . $user->id . '/' .
                     Cache::store('database')->get($user->email),
                 'text' => 'Confirm my email address'
             ]

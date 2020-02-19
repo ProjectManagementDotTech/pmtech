@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Cases\Feature;
+namespace Tests\Cases\BusinessRequirements;
 
 use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
