@@ -38,4 +38,9 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:indexMembers,workspace'
         );
+    Route::post('workspaces/{workspace}/transfer/{newOwner}', 'v1\WorkspaceController@transferOwnership')
+        ->name('workspaces.transferOwnership')
+        ->middleware(
+            'can:transferOwnership,workspace,newOwner'
+        );
 });

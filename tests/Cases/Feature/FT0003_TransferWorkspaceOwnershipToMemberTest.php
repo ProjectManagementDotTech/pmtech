@@ -1,0 +1,52 @@
+<?php
+
+namespace Tests\Cases\Feature;
+
+use App\Repositories\UserRepository;
+use App\Repositories\WorkspaceRepository;
+use Tests\Shared\TestCase;
+
+class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
+{
+    /** @test */
+    public function transferOwnershipToMember()
+    {
+        $user = UserRepository::byEmail('user0001@test.com');
+        $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
+            ->first();
+        $newOwner = UserRepository::byEmail('user0004@test.com');
+        $this->login('user0001@test.com', 'Welcome123');
+
+        $response = $this->post('/api/v1/workspaces/' . $workspace->id .
+            '/transfer/' . $newOwner->id);
+        $response->assertNoContent(201);
+        $workspaceReloaded = WorkspaceRepository::find($workspace->id);
+        $this->assertNotEquals($workspace->owner_user_id,
+            $workspaceReloaded->owner_user_id);
+        $this->assertEquals($newOwner->id, $workspaceReloaded->owner_user_id);
+
+        /*
+         * Put it back, because other tests depend on this...
+         */
+        $workspaceReloaded->owner_user_id = $user->id;
+        $workspaceReloaded->save();
+    }
+
+    /** @test */
+    public function transferOwnershipToNonMember()
+    {
+        $user = UserRepository::byEmail('user0001@test.com');
+        $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
+            ->first();
+        $newOwner = UserRepository::byEmail('user0005@test.com');
+        $this->login('user0001@test.com', 'Welcome123');
+
+        $response = $this->post('/api/v1/workspaces/' . $workspace->id .
+            '/transfer/' . $newOwner->id);
+        $response->assertStatus(403);
+        $workspaceReloaded = WorkspaceRepository::find($workspace->id);
+        $this->assertEquals($workspace->owner_user_id,
+            $workspaceReloaded->owner_user_id);
+        $this->assertNotEquals($newOwner->id, $workspaceReloaded->owner_user_id);
+    }
+}

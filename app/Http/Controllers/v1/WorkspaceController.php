@@ -11,6 +11,7 @@ use App\Repositories\InvitationRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
+use App\User;
 use App\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -222,6 +223,21 @@ class WorkspaceController extends Controller
     public function show(Workspace $workspace)
     {
         return $workspace;
+    }
+
+    /**
+     * Transfer ownership of $workspace to $newOwner
+     *
+     * @param Workspace $workspace
+     * @param User $newOwner
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function transferOwnership(Workspace $workspace, User $newOwner)
+    {
+        $workspace->owner_user_id = $newOwner->id;
+        $workspace->save();
+
+        return response('', 201);
     }
 
     /**

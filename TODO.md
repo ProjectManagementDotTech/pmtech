@@ -178,7 +178,6 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
-1. Let the user assign ownership of a workspace to another user
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -313,6 +312,7 @@ www.project-management.tech implementation
 1. Let the user delete a workspace in SPA
 1. Let the user edit the workspace name in SPA
 1. Invite users (new and existing) to the workspace
+1. Let the user assign ownership of a workspace to another user
 
 #Details
 ##BR000001

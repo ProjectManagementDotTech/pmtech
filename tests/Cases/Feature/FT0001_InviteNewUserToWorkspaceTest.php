@@ -49,13 +49,9 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
         $cacheValue = Cache::store('database')->get('user0002@test.com');
         $response = $this->get('/invitation/accept/' . $invitation->nonce .
             '/' . $cacheValue);
-        $cacheValue = Cache::store('database')->get('user0002@test.com');
         $response
-            ->assertStatus(302)
-            ->assertHeader('Location', route('invitation.detailsShow', [
-                'invitationNonce' => $invitation->nonce,
-                'cacheNonce' => $cacheValue
-            ]));
+            ->assertStatus(200)
+            ->assertViewIs('app');
 
         $response = $this->post('/invitation/details/' . $invitation->nonce .
             '/' . $cacheValue, [
