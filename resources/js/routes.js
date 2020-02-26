@@ -119,6 +119,9 @@ export default {
                     children: [
                         {
                             component: ProjectDashboard,
+                            meta: {
+                                isMemberPage: true
+                            },
                             path: ""
                         }
                     ],
@@ -132,10 +135,16 @@ export default {
                     children: [
                         {
                             component: TimesheetEditor,
+                            meta: {
+                                isMemberPage: true
+                            },
                             path: ""
                         },
                         {
                             component: TimesheetReport,
+                            meta: {
+                                isMemberPage: true
+                            },
                             path: "report"
                         }
                     ],
@@ -144,7 +153,33 @@ export default {
                         isMemberPage: true
                     },
                     path: "timesheet"
+                }/*,
+                {
+                    children: [
+                        {
+                            children: [
+                                {
+                                    component:  PaymentSettings,
+                                    meta: {
+                                        isMemberPage: true
+                                    },
+                                    path: "payment"
+                                }
+                            ],
+                            component: UserSettings,
+                            meta: {
+                                isMemberPage: true
+                            },
+                            path: "settings"
+                        }
+                    ],
+                    component: UserHome,
+                    meta: {
+                        isMemberPage: true
+                    },
+                    path: "user/:userId"
                 }
+                */
             ],
             component: WorkspaceHome,
             meta: {

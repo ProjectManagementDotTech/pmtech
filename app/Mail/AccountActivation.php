@@ -23,7 +23,7 @@ class AccountActivation extends Mailable
     public function __construct(User $user)
     {
         $appUrl = env('APP_URL');
-        if($appUrl[strlen($appUrl - 1)] != '/') {
+        if($appUrl[strlen($appUrl) - 1] != '/') {
             $appUrl .= '/';
         }
         $this->user = $user;

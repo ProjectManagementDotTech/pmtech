@@ -90,7 +90,7 @@ class WorkspaceRepository
         if($user !== NULL) {
             $data['id'] = Uuid::uuid4()->toString();
             $workspace = Workspace::create($data);
-            $workspace->users()->attach($user);
+            $user->attachToWorkspace($workspace);
             return $workspace;
         }
 

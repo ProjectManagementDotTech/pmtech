@@ -75,6 +75,13 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Create simple analytics where we store only the user agent and screen size
+information in the database.
+1. Allow user to set for which events an email should be sent.
+1. Add full member profile in order to understand email domain and country
+information for each user / subscriber. This can be used to determine the amount
+of users in a workspace and to determine whether or not VAT is to be applied to
+the billable amount.
 1. Remove members from workspace
 1. UserRepository should not create Settings object. That has to be done in a
 UserObserver class.

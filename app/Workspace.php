@@ -2,12 +2,38 @@
 
 namespace App;
 
+use App\Mail\Payment\FirstTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
 
 class Workspace extends Model
 {
     use SoftDeletes;
+
+    //region Public Access
+
+    /**
+     * Update subscription information by updating the relevant information in
+     * owner user's subscription model.
+     * Sent a notification to the owner user to indicate that subscription
+     * payments become necessary. Currently, this will be done via email, but
+     * that may change to email *and* notification ot to notification only.
+     */
+    public function updateSubscriptionInformation()
+    {
+        $count = $this->users()->count();
+        $ownerUser = $this->ownerUser;
+
+        if($count > 5 && !$ownerUser->subscribed('default')) {
+            Mail::to($ownerUser)->send(
+                new FirstTime($this));
+        } elseif($ownerUser->subscribed('default')) {
+            $ownerUser->subscription('default')->updateQuantity($count);
+        }
+    }
+
+    //endregion
 
     //region Public Relationships
 

@@ -209,7 +209,7 @@ class WorkspaceController extends Controller
 
             return response('', 201);
         } else {
-            $user->workspaces()->attach($workspace);
+            $user->attachToWorkspace($workspace);
             return response('', 201);
         }
     }

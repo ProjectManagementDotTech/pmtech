@@ -69,7 +69,7 @@ class InvitationController extends Controller
                 'name' => $request->name,
                 'password' => Hash::make($request->password)
             ]);
-            $user->workspaces()->attach($invitation->workspace_id);
+            $user->attachToWorkspace($invitation->workspace);
             Cache::store('database')->pull($invitation->email);
             $invitation->delete();
             return redirect('/login');

@@ -21,7 +21,7 @@ class AssignUsersToOwnedWorkspaces extends Command
         $this->output->progressStart(count($users));
         foreach($users as $user) {
             foreach($user->ownedWorkspaces as $workspace) {
-                $user->workspaces()->attach($workspace->id);
+                $user->attachToWorkspace($workspace);
             }
             $this->output->progressAdvance();
         }

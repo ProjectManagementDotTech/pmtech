@@ -37,7 +37,7 @@
 use Illuminate\Support\Facades\Cache;
 
 /*Route::get('/activation-mailable', function () {
-    $user = \App\User::find('3d58dbea-e0d6-4a0f-ad97-771687372bf7');
+    $user = \App\User::find('something');
     $buttons = [
         [
             'href' => env('APP_URL') . 'email/verify/' .
@@ -51,6 +51,29 @@ use Illuminate\Support\Facades\Cache;
         'user' => $user
     ]);
 });*/
+Route::get('/emails/payments/first_time', function() {
+    $user = \App\User::find('2559e162-1dca-4c48-b3a0-0723937e01b1');
+    $workspace = $user->ownedWorkspaces()->where('name', 'Default')->first();
+    $subscriptionFee = ($workspace->users()->count() - 5) * 4.99;
+    if($subscriptionFee < 0) {
+        $subscriptionFee = 0.0;
+    }
+    $appUrl = env('APP_URL');
+    if($appUrl[strlen($appUrl) - 1] != '/') {
+        $appUrl .= '/';
+    }
+    $buttons = [
+        [
+            'href' => $appUrl . 'user/' . $workspace->owner_user_id .
+                '/settings/payment',
+            'text' => 'Pay subscription fee'
+        ]
+    ];
+
+    return view('emails.payments.first_time')->with(
+        compact('buttons', 'subscriptionFee', 'workspace')
+    );
+});
 
 Route::get('/invitation-mailable', function (\App\Repositories\InvitationRepository $invitationRepository) {
     $invitation = $invitationRepository->byEmail('guus.leeuw@itpassion.com');

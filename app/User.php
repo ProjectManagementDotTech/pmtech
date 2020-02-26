@@ -17,6 +17,30 @@ class User extends Authenticatable implements MustVerifyEmail
     //region Public Access
 
     /**
+     * Attach $workspace to the user's workspaces, and update $workspace's
+     * subscription information.
+     *
+     * @param Workspace $workspace
+     */
+    public function attachToWorkspace(Workspace $workspace)
+    {
+        $this->workspaces()->attach($workspace->id);
+        $workspace->updateSubscriptionInformation();
+    }
+
+    /**
+     * Detach $this User from $workspace, and update $workspace's subscription
+     * information.
+     *
+     * @param Workspace $workspace
+     */
+    public function detachFromWorkspace(Workspace $workspace)
+    {
+        $this->workspaces()->detach($workspace->id);
+        $workspace->updateSubscriptionInformation();
+    }
+
+    /**
      * @inheritDoc
      */
     public function sendEmailVerificationNotification()

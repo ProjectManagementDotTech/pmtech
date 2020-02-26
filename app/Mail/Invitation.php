@@ -22,10 +22,14 @@ class Invitation extends Mailable
      */
     public function __construct(InvitationModel $invitation)
     {
+        $appUrl = env('APP_URL');
+        if($appUrl[strlen($appUrl) - 1] != '/') {
+            $appUrl .= '/';
+        }
         $this->invitation = $invitation;
         $this->buttons = [
             [
-                'href' => env('APP_URL') . 'invitation/accept/' .
+                'href' => $appUrl . 'invitation/accept/' .
                     $invitation->nonce . '/' .
                     Cache::store('database')->get($invitation->email),
                 'text' => 'Accept invitation'
