@@ -36,7 +36,7 @@
 
 use Illuminate\Support\Facades\Cache;
 
-Route::get('/activation-mailable', function () {
+/*Route::get('/activation-mailable', function () {
     $user = \App\User::find('3d58dbea-e0d6-4a0f-ad97-771687372bf7');
     $buttons = [
         [
@@ -50,7 +50,7 @@ Route::get('/activation-mailable', function () {
         'buttons' => $buttons,
         'user' => $user
     ]);
-});
+});*/
 
 Route::get('/invitation-mailable', function (\App\Repositories\InvitationRepository $invitationRepository) {
     $invitation = $invitationRepository->byEmail('guus.leeuw@itpassion.com');
