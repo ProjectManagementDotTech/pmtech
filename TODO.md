@@ -11,17 +11,9 @@
 * Warning color: yellow-500
 * OK color: green-500
 
-#To do (v2020.1)
-###General
-###Front-end
-###Timesheets
-###Upgrade process
-###Workspaces
-
 #To do (v2020.2)
 ###Edit workspace settings
 ###Workspace members
-1. When the workspace has more than 5 members the owner needs to pay
 1. When an email address registers again, but was not verified, send the whole
 verification email again (also create a cache entry).
 1. When an email address registers again, and it was verified before, the
@@ -178,6 +170,7 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
+1. When the workspace has more than 5 members the owner needs to pay
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
