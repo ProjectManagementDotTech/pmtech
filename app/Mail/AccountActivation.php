@@ -23,11 +23,14 @@ class AccountActivation extends Mailable
      */
     public function __construct(User $user)
     {
+        $appUrl = env('APP_URL');
+        if($appUrl[strlen($appUrl - 1)] != '/') {
+            $appUrl .= '/';
+        }
         $this->user = $user;
         $this->buttons = [
             [
-                'href' => env('APP_URL') . 'email/verify/' .
-                    $user->id . '/' .
+                'href' => $appUrl . 'email/verify/' . $user->id . '/' .
                     Cache::store('database')->get($user->email),
                 'text' => 'Confirm my email address'
             ]
