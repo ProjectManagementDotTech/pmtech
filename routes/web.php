@@ -66,7 +66,7 @@ Route::get('/emails/payments/first_time', function() {
         [
             'href' => $appUrl . 'user/' . $workspace->owner_user_id .
                 '/settings/payment',
-            'text' => 'Pay subscription fee'
+            'text' => 'Setup payment method'
         ]
     ];
 
