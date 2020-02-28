@@ -25,11 +25,12 @@ class Workspace extends Model
         $count = $this->users()->count();
         $ownerUser = $this->ownerUser;
 
-        if($count > 5 && !$ownerUser->subscribed('default')) {
+        if($count > 5 && !$ownerUser->subscribed($this->id)) {
+            $ownerUser->createOrGetStripeCustomer();
             Mail::to($ownerUser)->send(
                 new FirstTime($this));
-        } elseif($ownerUser->subscribed('default')) {
-            $ownerUser->subscription('default')->updateQuantity($count);
+        } elseif($ownerUser->subscribed($this->id)) {
+            $ownerUser->subscription($this->id)->updateQuantity($count);
         }
     }
 

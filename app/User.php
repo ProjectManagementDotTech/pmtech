@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function attachToWorkspace(Workspace $workspace)
     {
-        $this->workspaces()->attach($workspace->id);
+        $this->workspaces()->attach($workspace);
         $workspace->updateSubscriptionInformation();
     }
 
@@ -36,7 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function detachFromWorkspace(Workspace $workspace)
     {
-        $this->workspaces()->detach($workspace->id);
+        $this->workspaces()->detach($workspace);
         $workspace->updateSubscriptionInformation();
     }
 

@@ -4,6 +4,7 @@ namespace Tests\Cases\Feature;
 
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
+use Illuminate\Support\Facades\Log;
 use Tests\Shared\TestCase;
 
 class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
@@ -11,6 +12,8 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
     /** @test */
     public function transferOwnershipToMember()
     {
+        Log::info(__METHOD__);
+
         $user = UserRepository::byEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
@@ -35,6 +38,8 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
     /** @test */
     public function transferOwnershipToNonMember()
     {
+        Log::info(__METHOD__);
+
         $user = UserRepository::byEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();

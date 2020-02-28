@@ -3,7 +3,7 @@
 @section('title', 'Setup Subscription Payment')
 @section('bodycopy')
     @php
-        $currencyFormatter = new \NumberFormatter('en_GB', \NumberFormatter::CURRENCY);
+        $currencyFormatter = new \NumberFormatter('en_IE', \NumberFormatter::CURRENCY);
     @endphp
     <h2>Hello {{ $workspace->ownerUser->name }},</h2>
     <p>
