@@ -179,14 +179,4 @@ class UT0002_UserApiTests extends TestCase
         $response = $this->get('/api/v1/user/payment-methods');
         $response->assertStatus(200)->assertJsonCount(0);
     }
-
-    /** @test */
-    public function indexDefaultPaymentMethods()
-    {
-        Log::info(__METHOD__);
-
-        $this->login('user0001@test.com', 'Welcome123');
-        $response = $this->get('/api/v1/user/default-payment-method');
-        $response->assertNoContent(200);
-    }
 }

@@ -183,8 +183,6 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
-1. When an email address registers again, but was not verified, send the whole
-verification email again (also create a cache entry).
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -321,6 +319,8 @@ www.project-management.tech implementation
 1. Invite users (new and existing) to the workspace
 1. Let the user assign ownership of a workspace to another user
 1. When the workspace has more than 5 members the owner needs to pay
+1. When an email address registers again, but was not verified, send the whole
+verification email again (also create a cache entry).
 
 #Details
 ##BR000001

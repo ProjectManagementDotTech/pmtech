@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AccountActivation;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\UserRepository;
 use App\User;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
 
@@ -53,6 +55,27 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
+        $registeredUser = UserRepository::byEmail($request->email);
+        if($registeredUser) {
+            if($registeredUser->hasVerifiedEmail()) {
+                return response([
+                    'message' => 'The given data was invalid.',
+                    'errors' => [
+                        'email' => [
+                            'The email has already been taken.'
+                        ]
+                    ]
+                ], 422);
+            } else {
+                Cache::store('database')
+                    ->put($registeredUser->email, Uuid::uuid4()->toString(),
+                        3600);
+                Mail::to($registeredUser)
+                    ->send(new AccountActivation($registeredUser));
+                return response('', 200);
+            }
+        }
+
         /**
          * Generate a cache entry so the user can verify his/her email address.
          */
@@ -74,7 +97,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
