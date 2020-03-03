@@ -8,7 +8,9 @@
 * Primary color: indigo-500
 * Secondary color: gray-500
 * Danger color: red-500
+* Info color: blue-100
 * Warning color: yellow-500
+* Success color: green-100
 * OK color: green-500
 
 #To do (v2020.2)
@@ -40,6 +42,10 @@ subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
+###General
+1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
+Implement silent keep-alive or increase lifetime of session / Airlock cookie.
+1. Make sure the workspace can be switched in small screens as well.
 ###Navigation
 1. Allow user to switch workspaces in xs / sm screens
 ###Projects
@@ -177,7 +183,6 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
-1. When the workspace has more than 5 members the owner needs to pay
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -313,6 +318,7 @@ www.project-management.tech implementation
 1. Let the user edit the workspace name in SPA
 1. Invite users (new and existing) to the workspace
 1. Let the user assign ownership of a workspace to another user
+1. When the workspace has more than 5 members the owner needs to pay
 
 #Details
 ##BR000001

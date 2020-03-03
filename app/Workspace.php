@@ -87,6 +87,17 @@ class Workspace extends Model
      */
     public $incrementing = FALSE;
 
+    /**
+     * The subscription fee for this workspace.
+     *
+     * @return float
+     */
+    public function subscriptionFee()
+    {
+        $count = $this->users()->count() - 5;
+        return $count > 0 ? $count * 4.99 : 0;
+    }
+
     //endregion
 
     //region Protected Attributes

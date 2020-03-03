@@ -33,7 +33,7 @@ class FirstTime extends Mailable
             ]
         ];
         $this->workspace = $workspace;
-        $this->calculateSubscriptionFee();
+        $this->subscriptionFee = $workspace->subscriptionFee();
     }
 
     //endregion
@@ -63,23 +63,6 @@ class FirstTime extends Mailable
      * @var Workspace
      */
     public $workspace;
-
-    //endregion
-
-    //region Private Implementation
-
-    /**
-     * Calculate the subscription fee.
-     */
-    private function calculateSubscriptionFee()
-    {
-        $count = $this->workspace->users()->count() - 5;
-        if($count > 0) {
-            $this->subscriptionFee = $count * 4.99;
-        } else {
-            $this->subscriptionFee = 0;
-        }
-    }
 
     //endregion
 }

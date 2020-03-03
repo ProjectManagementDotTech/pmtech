@@ -34,7 +34,7 @@
                         </div>
                         <div class="mt-2 pl-2">
                             <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddProject">Add</a>
-                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId" @click.native="isOpen = false">Overview</router-link>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId" @click.native="isOpen = false">Overview</router-link>
                         </div>
                     </div>
                 </div>
@@ -44,8 +44,8 @@
                             Timesheet
                         </div>
                         <div class="mt-2 pl-2">
-                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet'" @click.native="isOpen = false">Entry</router-link>
-                            <router-link class="hover:text-white mt-2 px-2 py-1 block text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/timesheet/report'" @click.native="isOpen = false">Report</router-link>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/timesheet'" @click.native="isOpen = false">Entry</router-link>
+                            <router-link class="hover:text-white mt-2 px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/timesheet/report'" @click.native="isOpen = false">Report</router-link>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400 cursor-pointer" @click="onClickAddWorkspace">Add</a>
                             <div class="border-t border-gray-700">
                                 <div class="cursor-default px-2 py-1 text-gray-700 text-xs uppercase">
-                                    {{ $store.getters["workspaces/byId"]($route.params.workspaceId).name }}
+                                    {{ $store.getters["workspaces/byId"](workspaceId).name }}
                                 </div>
                                 <router-link class="block px-4 py-2 hover:text-white focus:text-white focus:outline-none text-gray-400" :to="'/workspaces/' + $route.params.workspaceId + '/settings'" @click.native="isOpen = false">Settings</router-link>
                             </div>
@@ -69,6 +69,29 @@
                     <div class="px-2">
                         <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
                             {{ currentUser.name }}
+                        </div>
+                        <div class="mt-2 pl-2">
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings'" @click.native="isOpen = false">Settings</router-link>
+                        </div>
+                        <div class="mt-2 pl-4">
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings/billing'" @click.native="isOpen = false">Billing</router-link>
+                        </div>
+                        <div class="mt-2 pl-6">
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400"
+                                         :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings/billing/invoices'"
+                                         @click.native="isOpen = false">
+                                Invoices
+                            </router-link>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400"
+                                         :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings/billing/payment'"
+                                         @click.native="isOpen = false">
+                                Payment
+                            </router-link>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400"
+                                         :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings/billing/payment-methods'"
+                                         @click.native="isOpen = false">
+                                Payment methods
+                            </router-link>
                         </div>
                         <div class="mt-2 pl-2">
                             <router-link class="hover:text-white px-2 py-1 block text-gray-400" to="/logout" @click.native="isOpen = false">Logout</router-link>
@@ -113,12 +136,16 @@
             WorkspaceDropdownNavItem
         },
         computed: {
-            ...mapGetters(["currentUser"])
+            ...mapGetters(["currentUser"]),
+        },
+        created() {
+            this.workspaceId = this.$route.params.workspaceId;
         },
         data() {
             return {
-                isOpen: true
-            }
+                isOpen: false,
+                workspaceId: ""
+            };
         },
         methods: {
             onClickAddProject() {
@@ -131,11 +158,15 @@
             }
         },
         name: "Navigation",
+        watch: {
+            $route(to, from) {
+                if(to.params.workspaceId != from.params.workspaceId) {
+                    this.workspaceId = to.params.workspaceId;
+                }
+            }
+        }
     }
 </script>
 
 <style scoped>
-    .router-link-exact-active {
-        @apply bg-gray-800;
-    }
 </style>

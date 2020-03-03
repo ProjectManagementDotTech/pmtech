@@ -17,6 +17,15 @@ import TimesheetEditor from "./views/members/timesheet/TimesheetEditor";
 import TimesheetHome from "./views/members/timesheet/TimesheetHome";
 import TimesheetReport from "./views/members/timesheet/TimesheetReport";
 import UnknownError from "./views/errors/UnknownError";
+import UserHome from "./views/members/users/UserHome";
+import UserSettings from "./views/members/users/UserSettings";
+import UserSettingsBilling from "./views/members/users/UserSettingsBilling";
+import UserSettingsBillingInvoices from
+    "./views/members/users/UserSettingsBillingInvoices";
+import UserSettingsBillingPayment from
+    "./views/members/users/UserSettingsBillingPayment";
+import UserSettingsBillingPaymentMethods from
+        "./views/members/users/UserSettingsBillingPaymentMethods";
 import WorkspaceSettings from "./views/members/workspaces/WorkspaceSettings";
 
 export default {
@@ -153,17 +162,40 @@ export default {
                         isMemberPage: true
                     },
                     path: "timesheet"
-                }/*,
+                },
                 {
                     children: [
                         {
                             children: [
                                 {
-                                    component:  PaymentSettings,
+                                    children: [
+                                        {
+                                            component: UserSettingsBillingInvoices,
+                                            meta: {
+                                                isMemberPage: true
+                                            },
+                                            path: "invoices"
+                                        },
+                                        {
+                                            component: UserSettingsBillingPayment,
+                                            meta: {
+                                                isMemberPage: true
+                                            },
+                                            path: "payment"
+                                        },
+                                        {
+                                            component: UserSettingsBillingPaymentMethods,
+                                            meta: {
+                                                isMemberPage: true
+                                            },
+                                            path: "payment-methods"
+                                        }
+                                    ],
+                                    component:  UserSettingsBilling,
                                     meta: {
                                         isMemberPage: true
                                     },
-                                    path: "payment"
+                                    path: "billing"
                                 }
                             ],
                             component: UserSettings,
@@ -177,9 +209,8 @@ export default {
                     meta: {
                         isMemberPage: true
                     },
-                    path: "user/:userId"
+                    path: "users/:userId"
                 }
-                */
             ],
             component: WorkspaceHome,
             meta: {

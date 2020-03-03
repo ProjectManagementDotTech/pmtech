@@ -21,6 +21,7 @@ import Echo from "laravel-echo";
 import { eventBus } from "./modules";
 import { moment } from "./modules";
 import store from "./store";
+import SubMenu from "./components/shared/navgiation/SubMenu";
 import { utils } from "./modules";
 import { ValidationObserver, ValidationProvider } from
     "vee-validate/dist/vee-validate.full";
@@ -35,6 +36,7 @@ Vue.use(utils);
 Vue.use(VueI18n);
 Vue.use(VueRouter);
 
+Vue.component("sub-menu", SubMenu);
 Vue.component("validation-observer", ValidationObserver);
 Vue.component("validation-provider", ValidationProvider);
 

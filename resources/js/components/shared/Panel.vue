@@ -7,8 +7,9 @@
         <main class="px-4 py-2">
             <slot></slot>
         </main>
-        <footer class="border-t border-gray-100 mt-3 px-4 py-2"
-                v-if="hasFooter">
+        <footer class="border-t mt-3 px-4 py-2"
+                v-if="hasFooter"
+                :class="footerClasses">
             <slot name="footer"></slot>
         </footer>
     </div>
@@ -34,6 +35,11 @@
         },
         name: "Panel",
         props: {
+            footerClasses: {
+                default: "",
+                required: false,
+                type: String
+            },
             hasFooter: {
                 default: true,
                 required: false,

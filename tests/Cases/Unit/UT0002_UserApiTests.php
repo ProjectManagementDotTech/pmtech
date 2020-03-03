@@ -159,4 +159,34 @@ class UT0002_UserApiTests extends TestCase
             'key' => 'project_managementtech_cacheuser0005@test.com'
         ]);
     }
+
+    /** @test */
+    public function createSetupIntent()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/user/setup-intent');
+        $response->assertStatus(200)->assertSee('client_secret');
+    }
+
+    /** @test */
+    public function indexPaymentMethods()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/user/payment-methods');
+        $response->assertStatus(200)->assertJsonCount(0);
+    }
+
+    /** @test */
+    public function indexDefaultPaymentMethods()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/user/default-payment-method');
+        $response->assertNoContent(200);
+    }
 }

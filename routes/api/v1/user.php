@@ -7,6 +7,21 @@ Route::get('email/verify', 'Auth\VerificationController@show')
 
 Route::middleware(['verified', 'auth:airlock'])->group(function () {
     Route::get('user', 'v1\UserController@self')
-        ->name('users.self');
+        ->name('user.self');
+    Route::post('user/add-payment-method', 'v1\UserController@addPaymentMethod')
+        ->name('user.addPaymentMethod');
+    Route::post('user/create-subscription', 'v1\UserController@createSubscription')
+        ->name('user.createSubscription');
+    Route::post('user/delete-payment-method',
+        'v1\UserController@deletePaymentMethod')
+        ->name('user.deletePaymentMethod');
+    Route::get('user/invoices', 'v1\UserController@invoices')
+        ->name('user.invoices');
+    Route::get('user/invoices/{invoice}', 'v1\UserController@downloadInvoice')
+        ->name('user.downloadInvoice');
+    Route::get('user/payment-methods', 'v1\UserController@paymentMethods')
+        ->name('user.paymentMethods');
+    Route::get('user/setup-intent', 'v1\UserController@setupIntent')
+        ->name('user.setupIntent');
 });
 

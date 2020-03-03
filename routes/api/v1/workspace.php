@@ -38,6 +38,12 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:indexMembers,workspace'
         );
+    Route::get('workspaces/{workspace}/balance',
+        'v1\WorkspaceController@balance')
+        ->name('workspaces.balance')
+        ->middleware(
+            'can:edit,workspace'
+        );
     Route::post('workspaces/{workspace}/transfer/{newOwner}', 'v1\WorkspaceController@transferOwnership')
         ->name('workspaces.transferOwnership')
         ->middleware(

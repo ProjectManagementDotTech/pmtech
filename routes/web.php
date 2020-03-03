@@ -51,9 +51,9 @@ use Illuminate\Support\Facades\Cache;
         'user' => $user
     ]);
 });*/
-Route::get('/emails/payments/first_time', function() {
-    $user = \App\User::find('2559e162-1dca-4c48-b3a0-0723937e01b1');
-    $workspace = $user->ownedWorkspaces()->where('name', 'Default')->first();
+/*Route::get('/emails/payments/first_time', function() {
+    $user = \App\Repositories\UserRepository::byEmail('php.guus@gmail.com');
+    $workspace = $user->ownedWorkspaces()->where('name', 'Private projects')->first();
     $subscriptionFee = ($workspace->users()->count() - 5) * 4.99;
     if($subscriptionFee < 0) {
         $subscriptionFee = 0.0;
@@ -64,8 +64,8 @@ Route::get('/emails/payments/first_time', function() {
     }
     $buttons = [
         [
-            'href' => $appUrl . 'user/' . $workspace->owner_user_id .
-                '/settings/payment',
+            'href' => $appUrl . 'workspaces/' . $workspace->id . '/users/' .
+                $workspace->owner_user_id . '/settings/billing/payment',
             'text' => 'Setup payment method'
         ]
     ];
@@ -73,9 +73,9 @@ Route::get('/emails/payments/first_time', function() {
     return view('emails.payments.first_time')->with(
         compact('buttons', 'subscriptionFee', 'workspace')
     );
-});
+});*/
 
-Route::get('/invitation-mailable', function (\App\Repositories\InvitationRepository $invitationRepository) {
+/*Route::get('/invitation-mailable', function (\App\Repositories\InvitationRepository $invitationRepository) {
     $invitation = $invitationRepository->byEmail('guus.leeuw@itpassion.com');
     $buttons = [
         [
@@ -89,7 +89,7 @@ Route::get('/invitation-mailable', function (\App\Repositories\InvitationReposit
         'buttons' => $buttons,
         'invitation' => $invitation
     ]);
-});
+});*/
 
 Route::post('errors', 'v1\ErrorController@store')->name('errors.store');
 Route::post('register', 'Auth\RegisterController@register');

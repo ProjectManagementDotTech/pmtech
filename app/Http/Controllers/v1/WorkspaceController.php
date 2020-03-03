@@ -56,6 +56,38 @@ class WorkspaceController extends Controller
     }
 
     /**
+     * The balance currently on the workspace subscription.
+     *
+     * @param Workspace $workspace
+     * @return float|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|int
+     */
+    public function balance(Workspace $workspace)
+    {
+        $user = Auth::user();
+        if($subscription = $user->subscription($workspace->id)) {
+            if($subscription->stripe_status != 'active') {
+                return [
+                    'balance' => $workspace->subscriptionFee(),
+                ];
+            } else {
+                return 0;
+            }
+//        } elseif($user->subscriptions()->count() > 0) {
+//            return response([
+//                'message' => 'Project-Management.tech does currently not ' .
+//                    'support subscriptions to multiple workspaces. Please ' .
+//                    'transfer this workspace to a user who currently has no ' .
+//                    'subscriptions, and use that person\'s PMTech account to ' .
+//                    'pay for the subscription to this workspace.'
+//            ], 422);
+        } else {
+            return [
+                'initial_charge' => $workspace->subscriptionFee()
+            ];
+        }
+    }
+
+    /**
      * Create a new workspace.
      *
      * @param CreateWorkspace $request
