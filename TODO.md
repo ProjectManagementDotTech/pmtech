@@ -16,8 +16,6 @@
 #To do (v2020.2)
 ###Edit workspace settings
 ###Workspace members
-1. When an email address registers again, but was not verified, send the whole
-verification email again (also create a cache entry).
 1. When an email address registers again, and it was verified before, the
 request should send an *Unauthorized.* response.
 1. Allow user to request another activiation link
@@ -81,6 +79,8 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Add FlashMessage component of some variety to show info, warning, succes and
+global error messages.
 1. Create simple analytics where we store only the user agent and screen size
 information in the database.
 1. Allow user to set for which events an email should be sent.
@@ -183,6 +183,8 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
+1. When an email address registers again, but was not verified, send the whole
+verification email again (also create a cache entry).
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
