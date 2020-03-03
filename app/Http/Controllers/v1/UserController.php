@@ -176,12 +176,12 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if($user->stripe_id) {
-            try {
-                $defaultPaymentMethodId = $user
-                    ->defaultPaymentMethod()
+            $defaultPaymentMethod = $user->defaultPaymentMethod();
+            if($defaultPaymentMethod) {
+                $defaultPaymentMethodId = $defaultPaymentMethod
                     ->asStripePaymentMethod()
                     ->id;
-            } catch(\Exception $e) {
+            } else {
                 $defaultPaymentMethodId = '';
             }
 
