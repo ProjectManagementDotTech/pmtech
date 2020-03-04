@@ -1,47 +1,36 @@
 <template>
-    <modal-dialog-box ok-button-text="Add project"
-                      :ok-button-disabled="addProjectButtonDisabled"
+    <modal-dialog-box ok-button-text="Add client"
+                      :ok-button-disabled="addClientButtonDisabled"
                       :show-cancel-button="true" @cancel="onCancel"
-                      @ok="onAddProject">
-        <template slot="header">Add new project</template>
+                      @ok="onAddClient">
+        <template slot="header">Add new client</template>
         <validation-observer class="needs-validation" novalidate
                              ref="validationObserver" tag="form"
                              v-slot="{ invalid }">
             <div class="px-2">
-                <pmtech-input label="Project name" name="name" rules="required"
+                <pmtech-input label="Client name" name="name" rules="required"
                               v-model="name" />
-                <div class="w-full flex items-center">
-                    <label class="mr-6" for="color">Project color</label>
-                    <compact v-model="colors" />
-                </div>
             </div>
         </validation-observer>
     </modal-dialog-box>
 </template>
 
 <script>
-    import { Compact } from "vue-color";
-    import { Swatches } from "vue-color";
     import ModalDialogBox from "../../shared/ModalDialogBox";
     import PmtechInput from "../../shared/input/PmtechInput";
 
     export default {
         components: {
-            Compact,
             ModalDialogBox,
-            PmtechInput,
-            Swatches
+            PmtechInput
         },
         data() {
             return {
-                colors: {
-                    hex: "#194d33"
-                },
                 name: ""
             };
         },
         methods: {
-            addProjectButtonDisabled() {
+            addClientButtonDisabled() {
                 let result = this.name == "";
                 if(!result && this.$refs.validationObserver !== undefined) {
                     return this.$refs.validationObserver.invalid;
@@ -49,30 +38,27 @@
                     return result;
                 }
             },
-            onAddProject() {
+            onAddClient() {
                 if(this.$route.params !== undefined) {
                     let data = {
-                        color: this.colors.hex.substr(1),
                         name: this.name
                     };
                     this.$axios.post("/api/v1/workspaces/" +
-                        this.$route.params.workspaceId + "/projects", data)
+                        this.$route.params.workspaceId + "/clients", data)
                         .then(() => {
-                            this.$eventBus.$emit("update-project-index");
+                            this.$eventBus.$emit("update-client-index");
                             this.$store.commit("flashMessage/push", {
-                                text: "The project '" + this.name + "' was " +
+                                text: "The client '" + this.name + "' was " +
                                     "created successfully.",
                                 timeout: 3000,
-                                title: "Project created!",
+                                title: "client created!",
                                 type: "success"
                             });
                             this.$eventBus.$emit("close-modal");
                         })
                         .catch(error => {
-
                         })
                         .finally(() => {
-
                         });
                 }
             },
@@ -80,7 +66,7 @@
                 this.$eventBus.$emit("close-modal");
             }
         },
-        name: "AddProject"
+        name: "AddClient"
     }
 </script>
 

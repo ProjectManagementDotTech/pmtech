@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Repositories\Interfaces\InvitationRepository as
-    InvitationRepositoryInterface;
+use App\Repositories\ClientRepository;
+use App\Repositories\Contracts\ClientRepository as ClientRepositoryContract;
+use App\Repositories\Contracts\InvitationRepository as
+    InvitationRepositoryContract;
 use App\Repositories\InvitationRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,8 +18,10 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            InvitationRepositoryInterface::class, InvitationRepository::class
+        $this->app->singleton(ClientRepositoryContract::class,
+            ClientRepository::class);
+        $this->app->singleton(InvitationRepositoryContract::class,
+            InvitationRepository::class
         );
     }
 

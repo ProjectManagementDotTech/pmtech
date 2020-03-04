@@ -15,13 +15,9 @@
 
 #To do (v2020.2)
 ###Edit workspace settings
-###Workspace members
-1. When an email address registers again, and it was verified before, the
-request should send an *Unauthorized.* response.
 1. Allow user to request another activiation link
+###Workspace members
 ###Clients
-1. Add Client model / migration / controller
-1. **BR000015** - Client name must unique inside a workspace
 1. Projects can be associated with a client
 1. Timesheet report can be drilled down by Client
 1. Add project allows user to pick a client
@@ -79,6 +75,12 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Allow Client Overview to be sorted by name.
+1. When inviting a user to a workspace, make sure that user can see all projects
+and record time against project tasks.
+1. Make sure that logged in users are properly logged out when a 419 status
+comes back from the API.
+1. Add Brute Force protection around registration route as well.
 1. Add FlashMessage component of some variety to show info, warning, succes and
 global error messages.
 1. Create simple analytics where we store only the user agent and screen size
@@ -199,6 +201,7 @@ task or simply in the workspace
 1. **BR000014** - If a user deletes / archives his / her last owned workspace,
 warn the user specifically that that is the last owned workspace. The user can
 always create a new workspace any time (s)he wants.
+1. **BR000015** - Client name must unique inside a workspace
 1. **BR000016** - `TimesheetEntry`.`started_at` must be before
 `TimesheetEntry`.`ended_at`
 1. **BR000017** - Two timesheet entries for the same user (regardless of
@@ -321,6 +324,10 @@ www.project-management.tech implementation
 1. When the workspace has more than 5 members the owner needs to pay
 1. When an email address registers again, but was not verified, send the whole
 verification email again (also create a cache entry).
+1. When an email address registers again, and it was verified before, the
+request should send an *Unauthorized.* response.
+1. Add Client model / migration / controller / repository
+1. Allow user to add client in SPA
 
 #Details
 ##BR000001

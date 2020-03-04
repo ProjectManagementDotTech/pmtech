@@ -39,6 +39,16 @@ class Workspace extends Model
     //region Public Relationships
 
     /**
+     * The clients that belong to this workspace.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+
+    /**
      * The user who owns this workspace.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

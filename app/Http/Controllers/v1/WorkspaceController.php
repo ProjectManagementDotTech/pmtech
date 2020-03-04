@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\CreateClientRequest;
 use App\Http\Requests\v1\CreateProject;
 use App\Http\Requests\v1\CreateWorkspace;
 use App\Http\Requests\v1\InvitationRequest;
 use App\Mail\Invitation;
-use App\Repositories\InvitationRepository;
+use App\Repositories\Contracts\ClientRepository;
+use App\Repositories\Contracts\InvitationRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
@@ -28,7 +30,10 @@ class WorkspaceController extends Controller
      *
      * @param InvitationRepository $invitationRepository
      */
-    public function __construct(InvitationRepository $invitationRepository) {
+    public function __construct(ClientRepository $clientRepository,
+        InvitationRepository $invitationRepository)
+    {
+        $this->clientRepository = $clientRepository;
         $this->invitationRepository = $invitationRepository;
     }
 
@@ -72,14 +77,6 @@ class WorkspaceController extends Controller
             } else {
                 return 0;
             }
-//        } elseif($user->subscriptions()->count() > 0) {
-//            return response([
-//                'message' => 'Project-Management.tech does currently not ' .
-//                    'support subscriptions to multiple workspaces. Please ' .
-//                    'transfer this workspace to a user who currently has no ' .
-//                    'subscriptions, and use that person\'s PMTech account to ' .
-//                    'pay for the subscription to this workspace.'
-//            ], 422);
         } else {
             return [
                 'initial_charge' => $workspace->subscriptionFee()
@@ -112,7 +109,26 @@ class WorkspaceController extends Controller
     }
 
     /**
-     * Create a new project, based on the given input, in the given workspace.
+     * Create a new client in $workspace.
+     *
+     * @param CreateClient $request
+     * @param Workspace $workspace
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function createClient(CreateClientRequest $request, Workspace $workspace)
+    {
+        $data = $request->validated();
+        $data['workspace_id'] = $workspace->id;
+
+        $client = $this->clientRepository->create($data);
+
+        return response('', 201, [
+            'Location' => route('clients.show', ['client' => $client->id])
+        ]);
+    }
+
+    /**
+     * Create a new project in $workspace.
      *
      * @param Request $request
      * @param Workspace $workspace
@@ -185,6 +201,22 @@ class WorkspaceController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Return paginated list of clients that belong to $workspace.
+     *
+     * @param Workspace $workspace
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function indexClients(Request $request, Workspace $workspace)
+    {
+        if($request->input('per_page', NULL) == NULL) {
+            return $workspace->clients()->orderBy('name', 'asc')->get();
+        } else {
+            return $workspace->clients()->orderBy('name', 'asc')->paginate();
+        }
+
     }
 
     /**
@@ -307,6 +339,11 @@ class WorkspaceController extends Controller
     //endregion
 
     //region Protected Attributes
+
+    /**
+     * @var ClientRepository
+     */
+    protected $clientRepository;
 
     /**
      * @var InvitationRepository

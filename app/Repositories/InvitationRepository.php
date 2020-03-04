@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Invitation;
-use App\Repositories\Interfaces\InvitationRepository as
+use App\Repositories\Contracts\InvitationRepository as
     InvitationRepositoryInterface;
 use App\Workspace;
 use Illuminate\Database\Eloquent\Collection;

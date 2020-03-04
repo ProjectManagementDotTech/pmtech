@@ -1,6 +1,6 @@
 <template>
-    <header class="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
-        <div class="flex items-center justify-between px-4 py-3 sm:px-0 sm:py-0">
+    <header class="bg-gray-900 md:flex md:justify-between md:items-center md:px-4 md:py-3">
+        <div class="flex items-center justify-between px-4 py-3 md:px-0 md:py-0">
             <div>
                 <template v-if="currentUser != undefined">
                     <img class="h-8" src="/images/logo.png" alt="Project-Management.tech">
@@ -11,7 +11,7 @@
                     </router-link>
                 </template>
             </div>
-            <div class="sm:hidden">
+            <div class="md:hidden">
                 <button class="block text-gray-500 hover:text-white focus:text-white focus:outline-none"
                         type="button" @click="isOpen = !isOpen">
                     <i v-if="!isOpen" class="fas fa-bars text-xl"></i>
@@ -19,17 +19,29 @@
                 </button>
             </div>
         </div>
-        <div :class="isOpen ? 'block' : 'hidden'" class="sm:block">
+        <div :class="isOpen ? 'block' : 'hidden'" class="md:block">
             <template v-if="currentUser != undefined">
-                <div class="px-2 pt-2 sm:flex sm:pt-0">
-                    <project-dropdown-nav-item class="hidden sm:block" />
-                    <timesheet-dropdown-nav-item class="hidden sm:block" />
-                    <workspace-dropdown-nav-item class="hidden sm:block" />
-                    <person-dropdown-nav-item class="hidden sm:block" />
+                <div class="px-2 pt-2 md:flex md:pt-0">
+                    <client-dropdown-nav-item class="hidden md:block" />
+                    <project-dropdown-nav-item class="hidden md:block" />
+                    <timesheet-dropdown-nav-item class="hidden md:block" />
+                    <workspace-dropdown-nav-item class="hidden md:block" />
+                    <person-dropdown-nav-item class="hidden md:block" />
                 </div>
-                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                <div class="pb-4 md:pb-0 border-t border-gray-800 mt-1 md:hidden">
                     <div class="px-2">
-                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 md:ml-2 md:mt-0 z-40">
+                            Clients
+                        </div>
+                        <div class="mt-2 pl-2">
+                            <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddClient">Add</a>
+                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/clients'" @click.native="isOpen = false">Overview</router-link>
+                        </div>
+                    </div>
+                </div>
+                <div class="pb-4 md:pb-0 border-t border-gray-800 mt-1 md:hidden">
+                    <div class="px-2">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 md:ml-2 md:mt-0 z-40">
                             Projects
                         </div>
                         <div class="mt-2 pl-2">
@@ -38,9 +50,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                <div class="pb-4 md:pb-0 border-t border-gray-800 mt-1 md:hidden">
                     <div class="px-2">
-                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 md:ml-2 md:mt-0 z-40">
                             Timesheet
                         </div>
                         <div class="mt-2 pl-2">
@@ -49,9 +61,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                <div class="pb-4 md:pb-0 border-t border-gray-800 mt-1 md:hidden">
                     <div class="px-2">
-                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 md:ml-2 md:mt-0 z-40">
                             Workspaces
                         </div>
                         <div class="mt-2 pl-2">
@@ -65,9 +77,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="pb-4 sm:pb-0 border-t border-gray-800 mt-1 sm:hidden">
+                <div class="pb-4 md:pb-0 border-t border-gray-800 mt-1 md:hidden">
                     <div class="px-2">
-                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 sm:ml-2 sm:mt-0 z-40">
+                        <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 md:ml-2 md:mt-0 z-40">
                             {{ currentUser.name }}
                         </div>
                         <div class="mt-2 pl-2">
@@ -121,6 +133,7 @@
 
 <script>
     import { mapGetters } from "vuex";
+    import ClientDropdownNavItem from "./navgiation/ClientDropdownNavItem";
     import PersonDropdownNavItem from "./navgiation/PersonDropdownNavItem";
     import ProjectDropdownNavItem from "./navgiation/ProjectDropdownNavItem";
     import TimesheetDropdownNavItem
@@ -130,6 +143,7 @@
 
     export default {
         components: {
+            ClientDropdownNavItem,
             ProjectDropdownNavItem,
             PersonDropdownNavItem,
             TimesheetDropdownNavItem,
@@ -148,6 +162,10 @@
             };
         },
         methods: {
+            onClickAddClient() {
+                this.isOpen = false;
+                this.$eventBus.$emit("add-client");
+            },
             onClickAddProject() {
                 this.isOpen = false;
                 this.$eventBus.$emit("add-project");
