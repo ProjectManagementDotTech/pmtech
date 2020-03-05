@@ -13,6 +13,16 @@ class Client extends Model
     //region Public Relationships
 
     /**
+     * The projects that belong to this client.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    /**
      * The workspace that this client belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

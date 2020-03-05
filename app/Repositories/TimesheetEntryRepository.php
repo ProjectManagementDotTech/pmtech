@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\TimesheetEntry;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class TimesheetEntryRepository
@@ -140,7 +141,13 @@ class TimesheetEntryRepository
     {
         $result = TimesheetEntry::query();
         foreach($filterData as $key => $value) {
-            if($key == 'ended_at') {
+            if($key == 'client_id') {
+                if($value !== NULL) {
+                    $result = $result->whereIn('project_id', function ($query) use ($value) {
+                        $query->select('id')->from('projects')->where('client_id', $value);
+                    });
+                }
+            } else if($key == 'ended_at') {
                 if($value) {
                     $result = $result->where($key, '<=', $value);
                 } else {

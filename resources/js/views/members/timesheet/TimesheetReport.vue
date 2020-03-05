@@ -46,6 +46,9 @@
             ...mapGetters(["currentUser"]),
             queryParamsFromFilter() {
                 let result = "?";
+                if(this.filter.client !== undefined) {
+                    result += "client_id=" + this.filter.client.id + "&";
+                }
                 if(this.filter.endDate !== undefined) {
                     result += "end_date=" + this.filter.endDate.format("YYYY-MM-DD") + "&"
                 }
@@ -65,6 +68,7 @@
         data() {
             return {
                 filter: {
+                    client: undefined,
                     endDate: undefined,
                     selectedProject: undefined,
                     selectedTask: undefined,

@@ -15,6 +15,16 @@ class Project extends Model
     //region Public Relationships
 
     /**
+     * The client to which this project belongs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    /**
      * The tasks that belong to this project.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
