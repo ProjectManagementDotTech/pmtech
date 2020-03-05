@@ -47,6 +47,8 @@
                         this.$route.params.workspaceId + "/clients", data)
                         .then(() => {
                             this.$eventBus.$emit("update-client-index");
+                            this.$store.dispatch("clients/fetchAll",
+                                this.$route.params.workspaceId);
                             this.$store.commit("flashMessage/push", {
                                 text: "The client '" + this.name + "' was " +
                                     "created successfully.",
