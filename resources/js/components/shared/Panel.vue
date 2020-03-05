@@ -1,7 +1,7 @@
 <template>
-    <div class="w-2/3 mx-auto my-4 overflow-hidden rounded-lg shadow-lg"
+    <div class="w-2/3 mx-auto my-4 rounded-lg shadow-lg"
          :class="borderClass">
-        <header class="px-4 py-2" :class="headerClass">
+        <header class="px-4 py-2 rounded-t-lg" :class="headerClass">
             <slot name="header"></slot>
         </header>
         <main class="px-4 py-2">

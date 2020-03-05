@@ -4,7 +4,7 @@ export default {
     actions: {
         clearWorkspaceData: {
             handler({ commit }) {
-                // commit("set", []);
+                commit("set", []);
             },
             root: true
         },
@@ -22,7 +22,7 @@ export default {
         },
         workspaceChanged: {
             handler({ dispatch }, workspaceId) {
-                // return dispatch("fetchAll", workspaceId)
+                return dispatch("fetchAll", workspaceId)
             },
             root: true
         },

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CreateClientRequest;
-use App\Http\Requests\v1\CreateProject;
+use App\Http\Requests\v1\StoreProjectRequest;
 use App\Http\Requests\v1\CreateWorkspace;
 use App\Http\Requests\v1\InvitationRequest;
 use App\Mail\Invitation;
@@ -135,7 +135,7 @@ class WorkspaceController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    public function createProject(CreateProject $request, Workspace $workspace)
+    public function createProject(StoreProjectRequest $request, Workspace $workspace)
     {
         $data = [
             'color' => $request->color,

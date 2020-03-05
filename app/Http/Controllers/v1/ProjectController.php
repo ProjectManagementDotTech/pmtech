@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\StoreProjectRequest;
 use App\Project;
+use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
 use Illuminate\Http\Request;
 
@@ -51,6 +53,20 @@ class ProjectController extends Controller
         } else {
             return $tasks->get();
         }
+    }
+
+    /**
+     * Update $project according to $request.
+     *
+     * @param StoreProjectRequest $request
+     * @param Project $project
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function update(StoreProjectRequest $request, Project $project)
+    {
+        ProjectRepository::update($project, $request->validated());
+
+        return response('', 204);
     }
 
     //endregion

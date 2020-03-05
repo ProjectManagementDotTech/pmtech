@@ -18,7 +18,6 @@
 1. Allow user to request another activiation link
 ###Workspace members
 ###Clients
-1. Projects can be associated with a client
 1. Timesheet report can be drilled down by Client
 1. Add project allows user to pick a client
 ###DateTimePicker
@@ -328,6 +327,7 @@ verification email again (also create a cache entry).
 request should send an *Unauthorized.* response.
 1. Add Client model / migration / controller / repository
 1. Allow user to add client in SPA
+1. Projects can be associated with a client
 
 #Details
 ##BR000001

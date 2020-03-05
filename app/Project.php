@@ -71,7 +71,7 @@ class Project extends Model
      * @inheritDoc
      */
     protected $fillable = [
-        'color', 'id', 'name', 'workspace_id'
+        'client_id', 'color', 'id', 'name', 'workspace_id'
     ];
 
     /**
@@ -90,7 +90,7 @@ class Project extends Model
      * @inheritDoc
      */
     protected $visible = [
-        'color', 'id', 'name',
+        'client_id', 'color', 'id', 'name',
     ];
 
     //endregion

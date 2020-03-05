@@ -12,6 +12,7 @@ import Logout from "./views/members/Logout";
 import PricingAndPlans from "./views/public/PricingAndPlans";
 import ProjectDashboard from "./views/members/projects/ProjectDashboard";
 import ProjectHome from "./views/members/projects/ProjectHome";
+import ProjectSettings from "./views/members/projects/ProjectSettings";
 import Register from "./views/public/Register";
 import Test from "./views/members/Test";
 import TimesheetEditor from "./views/members/timesheet/TimesheetEditor";
@@ -160,6 +161,13 @@ export default {
                                 isMemberPage: true
                             },
                             path: ""
+                        },
+                        {
+                            component: ProjectSettings,
+                            meta: {
+                                isMemberPage: true
+                            },
+                            path: "settings"
                         }
                     ],
                     component: ProjectHome,

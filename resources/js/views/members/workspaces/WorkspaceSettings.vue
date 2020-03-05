@@ -9,8 +9,8 @@
             <invite-workspace-member />
         </panel>
         <panel class="mt-4" type="danger" :has-footer="false">
-            <template slot="header">Danger zone</template>
             <transfer-workspace-ownership />
+            <template slot="header">Danger zone</template>
             <archive-workspace />
             <delete-workspace class="mt-4" />
         </panel>

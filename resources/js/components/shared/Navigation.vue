@@ -47,6 +47,12 @@
                         <div class="mt-2 pl-2">
                             <a class="hover:text-white mt-2 px-2 py-1 block text-gray-400" @click="onClickAddProject">Add</a>
                             <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId" @click.native="isOpen = false">Overview</router-link>
+                            <div v-if="$store.getters['projects/byId'](projectId)" class="border-t border-gray-700">
+                                <div class="cursor-default px-2 py-1 text-gray-700 text-xs uppercase">
+                                    {{ $store.getters["projects/byId"](projectId).name }}
+                                </div>
+                                <router-link class="block px-4 py-2 hover:text-white focus:text-white focus:outline-none text-gray-400" :to="'/workspaces/' + workspaceId + '/projects/' + projectId + '/settings'" @click.native="isOpen = false">Settings</router-link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,10 +160,14 @@
         },
         created() {
             this.workspaceId = this.$route.params.workspaceId;
+            this.projectId = this.$route.params.projectId;
+            this.clientId = this.$route.params.clientId;
         },
         data() {
             return {
+                clientId: "",
                 isOpen: false,
+                projectId: "",
                 workspaceId: ""
             };
         },
@@ -178,6 +188,12 @@
         name: "Navigation",
         watch: {
             $route(to, from) {
+                if(to.params.clientId != from.params.clientId) {
+                    this.clientId = to.params.clientId;
+                }
+                if(to.params.projectId != from.params.projectId) {
+                    this.projectId = to.params.projectId;
+                }
                 if(to.params.workspaceId != from.params.workspaceId) {
                     this.workspaceId = to.params.workspaceId;
                 }
