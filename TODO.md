@@ -19,7 +19,6 @@
 ###Workspace members
 ###Clients
 ###DateTimePicker
-1. Support i18n in terms of month and day names
 1. Support Clicking Year to show a list of 10 decades (based on the current
 Year). Each decade can be clicked to pick a specific year in that decade
 1. Support Clicking Month to show a list of months that can be picked
@@ -72,6 +71,7 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Support setting moment locale based on Laravel / browser locale.
 1. Allow Client Overview to be sorted by name.
 1. When inviting a user to a workspace, make sure that user can see all projects
 and record time against project tasks.
@@ -328,6 +328,7 @@ request should send an *Unauthorized.* response.
 1. Projects can be associated with a client
 1. Add project allows user to pick a client
 1. Timesheet report can be drilled down by Client
+1. Support i18n in terms of month and day names
 
 #Details
 ##BR000001
