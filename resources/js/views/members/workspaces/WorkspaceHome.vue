@@ -4,14 +4,18 @@
         <add-client v-if="addClientVisible" />
         <add-project v-if="addProjectVisible" />
         <add-workspace v-if="addWorkspaceVisible" />
+        <new-version-loader v-if="isNewVersionAvailable" />
     </div>
 </template>
 
 <script>
+    import { mapGetters } from "vuex";
     import AddClient from "../../../components/members/clients/AddClient";
     import AddProject from "../../../components/members/projects/AddProject";
     import AddWorkspace
         from "../../../components/members/workspaces/AddWorkspace";
+    import NewVersionLoader
+        from "../../../components/members/general/NewVersionLoader";
 
     export default {
         beforeDestroy() {
@@ -22,9 +26,13 @@
             this.$eventBus.$off("close-modal", this.closeModal);
         },
         components: {
+            NewVersionLoader,
             AddClient,
             AddProject,
             AddWorkspace
+        },
+        computed: {
+            ...mapGetters([ "isNewVersionAvailable" ])
         },
         created() {
             this.$eventBus.$on("add-client", this.onAddClient);

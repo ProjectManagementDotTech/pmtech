@@ -89,6 +89,26 @@ const i18n = new VueI18n({
     silentFallbackWarn: true
 });
 
+let previousHtml = null;
+Vue.axios.get("/check-for-upgrade")
+    .then(response => {
+        previousHtml = response.data;
+    });
+function checkForNewVersion() {
+    Vue.axios.get("/check-for-upgrade")
+        .then(response => {
+            let currentHtml = response.data;
+            if(previousHtml !== null) {
+                if(currentHtml !== previousHtml) {
+                    store.commit("newVersionAvailable");
+                }
+            } else {
+                previousHtml = currentHtml;
+            }
+        });
+}
+window.versionCheckerInterval = window.setInterval(checkForNewVersion, 10000);
+
 import App from "./views/App";
 
 const app = new Vue({

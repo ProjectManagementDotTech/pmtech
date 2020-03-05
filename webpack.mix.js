@@ -30,4 +30,5 @@ mix.i18n()
     .options({
         processCssUrls: false,
         postCss: [ tailwindcss("./tailwind.config.js")],
-    });
+    })
+    .version();
