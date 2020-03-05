@@ -19,7 +19,6 @@
 ###Workspace members
 ###Clients
 1. Timesheet report can be drilled down by Client
-1. Add project allows user to pick a client
 ###DateTimePicker
 1. Support i18n in terms of month and day names
 1. Support Clicking Year to show a list of 10 decades (based on the current
@@ -328,6 +327,7 @@ request should send an *Unauthorized.* response.
 1. Add Client model / migration / controller / repository
 1. Allow user to add client in SPA
 1. Projects can be associated with a client
+1. Add project allows user to pick a client
 
 #Details
 ##BR000001

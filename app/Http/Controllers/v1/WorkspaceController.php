@@ -137,11 +137,9 @@ class WorkspaceController extends Controller
      */
     public function createProject(StoreProjectRequest $request, Workspace $workspace)
     {
-        $data = [
-            'color' => $request->color,
-            'name' => $request->name,
-            'workspace_id' => $workspace->id,
-        ];
+        $data = $request->validated();
+        $data['workspace_id'] = $workspace->id;
+
         $project = ProjectRepository::create($data);
         $project->users()->attach(Auth::user()->id);
 

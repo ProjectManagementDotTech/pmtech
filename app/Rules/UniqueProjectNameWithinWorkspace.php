@@ -16,6 +16,7 @@ class UniqueProjectNameWithinWorkspace implements Rule
      */
     public function passes($attribute, $value)
     {
+        $project = NULL;
         $workspace = request()->route('workspace');
         if(!$workspace) {
             $project = request()->route('project');
