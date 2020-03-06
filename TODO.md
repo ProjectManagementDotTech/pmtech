@@ -19,9 +19,6 @@
 ###Workspace members
 ###Clients
 ###DateTimePicker
-1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
-`props` and a new, merged, `config` in `data` which is passed on to
-subcomponents)
 ###FilteringDropdownControl
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
@@ -29,7 +26,6 @@ subcomponents)
 ###General
 1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
 Implement silent keep-alive or increase lifetime of session / Airlock cookie.
-1. Make sure the workspace can be switched in small screens as well.
 ###Navigation
 1. Allow user to switch workspaces in xs / sm screens
 ###Projects
@@ -329,6 +325,9 @@ Year). Each decade can be clicked to pick a specific year in that decade
 1. Support Clicking Hour to show a list of all hours that can be picked
 1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
 minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
+1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
+`props` and a new, merged, `config` in `data` which is passed on to
+subcomponents)
 
 #Details
 ##BR000001

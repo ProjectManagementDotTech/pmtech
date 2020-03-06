@@ -2,10 +2,12 @@
     <div>
         <div class="flex w-full" :class="{ 'mb-1': displayShortcutButtons }">
             <div class="w-1/2">
-                <date-time-picker :value="startDate" @input="onUpdateStartDate" />
+                <date-time-picker :user-config="{ format: 'DD MMM YYYY', pickTime: false }"
+                                  :value="startDate" @input="onUpdateStartDate" />
             </div>
             <div class="w-1/2">
-                <date-time-picker :value="endDate" @input="onUpdateEndDate" />
+                <date-time-picker :user-config="{ format: 'DD MMM YYYY', pickTime: false }"
+                                  :value="endDate" @input="onUpdateEndDate" />
             </div>
         </div>
         <template v-if="displayShortcutButtons">

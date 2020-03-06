@@ -66,6 +66,7 @@
         created() {
             document.addEventListener("keydown", this.onKeyDown);
             this.uuid = this.$utils.uuid();
+            this.createConfigObject();
         },
         data() {
             return {
@@ -74,7 +75,14 @@
                     Date: "date-picker",
                     Timer: "time-picker"
                 },
+                config: {},
                 content: this.value,
+                defaultConfig: {
+                    format: "DD MMM YYYY HH:mm:ss",
+                    futureDatesAllowed: true,
+                    pickDate: true,
+                    pickTime: true
+                },
                 goldenCopy: this.value,
                 isOpen: false,
                 pickerComponent: "Date",
@@ -82,6 +90,14 @@
             };
         },
         methods: {
+            createConfigObject() {
+                this.config = JSON.parse(JSON.stringify(this.defaultConfig));
+                let keys = Object.keys(this.userConfig);
+                for(let i = 0; i < keys.length; i++) {
+                    let key = keys[i];
+                    this.config[key] = this.userConfig[key];
+                }
+            },
             onClickBackdrop() {
                 this.isOpen = false;
                 this.$emit("blur");
@@ -144,13 +160,8 @@
         },
         name: "DateTimePicker",
         props: {
-            config: {
-                default: function () { return {
-                    format: "DD MMM YYYY HH:mm:ss",
-                    futureDatesAllowed: true,
-                    pickDate: true,
-                    pickTime: true
-                }}
+            userConfig: {
+                required: false,
             },
             value: {
                 required: true
