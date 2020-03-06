@@ -1,12 +1,12 @@
 <template>
-    <div class="flex items-center px-2 w-full">
+    <div class="flex items-center px-2 py-2 w-full">
         <div class="w-full">
-            <div class="flex w-full" v-for="(yearRow, rKey) in years"
+            <div class="flex w-full" v-for="(monthRow, rKey) in months"
                  :key="rKey">
-                <div class="w-1/3" v-for="(year, dKey) in yearRow"
-                     :class="specialYearClass(year)" :key="dKey"
-                     @click="onClickYear(year)">
-                    <span v-if="year != ''">{{ year }}</span>
+                <div class="w-1/3" v-for="(month, dKey) in monthRow"
+                     :class="specialMonthClass(month.m)" :key="dKey"
+                     @click="onClickMonth(month.m)">
+                    <span v-if="month.mmmm != ''">{{ month.mmmm }}</span>
                 </div>
             </div>
         </div>
@@ -16,43 +16,43 @@
 <script>
     export default {
         methods: {
-            onClickYear(year) {
+            onClickMonth(month) {
                 let newDate = this.$moment();
                 newDate.date(this.value.date());
-                newDate.month(this.value.month());
-                newDate.year(year);
+                newDate.month(month);
+                newDate.year(this.value.year());
                 newDate.hour(this.value.hour());
                 newDate.minute(this.value.minute());
                 newDate.second(this.value.second());
 
                 this.$emit("input", newDate);
             },
-            specialYearClass(year) {
+            specialMonthClass(month) {
                 let result = "";
 
-                if(year !== "") {
-                    let valueYear = this.value.year();
+                if(month >= 0 && month <= 11) {
+                    let valueMonth = this.value.month();
                     let now = this.$moment();
                     if(this.config.futureDatesAllowed) {
-                        result += "year ";
+                        result += "month ";
                     } else {
                         let compareDate = this.$moment();
-                        compareDate.year(year);
+                        compareDate.month(month + 1).startOf("month");
                         if(now.isAfter(compareDate)) {
-                            result += "year ";
+                            result += "month ";
                         } else {
                             result += "non-clickable-year ";
                         }
                     }
 
-                    let nowYear = now.year();
-                    if(nowYear == year) {
-                        result += "this-year ";
+                    let nowMonth = now.month();
+                    if(nowMonth == month) {
+                        result += "this-month ";
                     }
 
                     let userDate = this.$moment(this.value, this.config.format);
-                    let userYear = userDate.year();
-                    if(userYear == year) {
+                    let userMonth = userDate.month();
+                    if(userMonth == month) {
                         result += "selected ";
                     }
 
@@ -62,43 +62,43 @@
                 return result;
             }
         },
-        name: "YearPicker",
+        name: "MonthPicker",
         props: {
             config: {
                 required: true,
                 type: Object
             },
-            value: {
-                required: true
-            },
-            years: {
+            months: {
                 required: true,
                 type: Array
+            },
+            value: {
+                required: true
             }
         }
     }
 </script>
 
 <style scoped>
-    .year {
+    .month {
         @apply cursor-pointer text-center;
     }
-    .year.this-year.selected:hover {
+    .month.this-month.selected:hover {
         @apply border-gray-600;
     }
-    .year.selected {
+    .month.selected {
         @apply bg-indigo-400 rounded text-white;
     }
-    .year.this-year {
+    .month.this-month {
         @apply border-b-2 border-dotted border-gray-600;
     }
-    .year.this-year.selected {
+    .month.this-month.selected {
         @apply border-white;
     }
-    .year span {
+    .month span {
         @apply inline-block text-center;
     }
-    .year:hover, .year.selected:hover {
+    .month:hover, .month.selected:hover {
         @apply bg-gold-100 text-gray-800;
     }
 </style>

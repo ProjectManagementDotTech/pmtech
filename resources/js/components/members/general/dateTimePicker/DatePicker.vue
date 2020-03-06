@@ -5,7 +5,9 @@
                 <button class="focus:outline-none" @click="decreaseMonth">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div v-html="value ? value.format('MMMM') : ''" />
+                <button class="focus:outline-none" @click="onClickMonth">
+                    {{ value ? value.format("MMMM") : "" }}
+                </button>
                 <button class="focus:outline-none" @click="increaseMonth">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -27,7 +29,7 @@
                 <keep-alive>
                     <component v-bind:is="visibleComponent" v-bind:value="value"
                                :config="config" :decades="decades"
-                               :weeks="weeks" :years="years"
+                               :months="months" :weeks="weeks" :years="years"
                                @decade-picked="onDecadePicked"
                                @input="onInput"
                                @shift-decades="onShiftDecades" />
@@ -40,17 +42,20 @@
 <script>
     import DayPicker from "./DayPicker";
     import DecadePicker from "./DecadePicker";
+    import MonthPicker from "./MonthPicker";
     import YearPicker from "./YearPicker";
 
     export default {
         components: {
             DayPicker,
             DecadePicker,
+            MonthPicker,
             YearPicker
         },
         data() {
             return {
                 decades: [],
+                months: [],
                 visibleComponent: "day-picker",
                 weeks: [],
                 years: [],
@@ -72,6 +77,13 @@
             increaseYear() {
                 let newValue = this.$moment(this.value).add(1, "years");
                 this.$emit("input", newValue);
+            },
+            onClickMonth() {
+                if(this.visibleComponent == "day-picker") {
+                    this.visibleComponent = "month-picker";
+                } else {
+                    this.visibleComponent = "day-picker";
+                }
             },
             onClickYear() {
                 if(this.visibleComponent == "day-picker") {
@@ -129,6 +141,24 @@
                 }
                 this.decades = JSON.parse(JSON.stringify(decades));
             },
+            updateMonthsArray() {
+                let startDate = this.$moment(this.value).startOf("year");
+                let months = [];
+                let row = [];
+                for(let i = 0; i < 12; i += 3) {
+                    for(let j = 0; j < 3; j++) {
+                        row.push({
+                            m: i + j,
+                            mmmm: startDate.format("MMMM")
+                        });
+                        startDate.add(1, "month");
+                    }
+                    months.push(JSON.parse(JSON.stringify(row)));
+                    row = [];
+                }
+
+                this.months = JSON.parse(JSON.stringify(months));
+            },
             updateWeeksArray() {
                 let startDate = this.$moment(this.value).startOf("month");
                 let daysInMonth = startDate.daysInMonth();
@@ -183,6 +213,7 @@
         },
         mounted() {
             this.updateArrays();
+            this.updateMonthsArray();
         },
         name: "DatePicker",
         props: {
