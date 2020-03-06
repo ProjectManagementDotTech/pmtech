@@ -107,7 +107,16 @@ function checkForNewVersion() {
             }
         });
 }
-window.versionCheckerInterval = window.setInterval(checkForNewVersion, 10000);
+let timeoutSeconds = 0;
+if(process.env.NODE_ENV == "development") {
+    timeoutSeconds = 3;
+} else if(process.env.NODE_ENV == "preprod") {
+    timeoutSeconds = 60;
+} else {
+    timeoutSeconds = 3600;
+}
+
+window.versionCheckerInterval = window.setInterval(checkForNewVersion, timeoutSeconds * 1000);
 
 import App from "./views/App";
 

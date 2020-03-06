@@ -19,8 +19,6 @@
 ###Workspace members
 ###Clients
 ###DateTimePicker
-1. Support Clicking Year to show a list of 10 decades (based on the current
-Year). Each decade can be clicked to pick a specific year in that decade
 1. Support Clicking Month to show a list of months that can be picked
 1. Support Clicking Hour to show a list of all hours that can be picked
 1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
@@ -329,6 +327,8 @@ request should send an *Unauthorized.* response.
 1. Add project allows user to pick a client
 1. Timesheet report can be drilled down by Client
 1. Support i18n in terms of month and day names
+1. Support Clicking Year to show a list of 10 decades (based on the current
+Year). Each decade can be clicked to pick a specific year in that decade
 
 #Details
 ##BR000001
