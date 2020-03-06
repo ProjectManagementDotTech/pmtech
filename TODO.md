@@ -19,9 +19,6 @@
 ###Workspace members
 ###Clients
 ###DateTimePicker
-1. Support Clicking Hour to show a list of all hours that can be picked
-1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
-minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
 1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
 `props` and a new, merged, `config` in `data` which is passed on to
 subcomponents)
@@ -329,6 +326,9 @@ request should send an *Unauthorized.* response.
 1. Support Clicking Year to show a list of 10 decades (based on the current
 Year). Each decade can be clicked to pick a specific year in that decade
 1. Support Clicking Month to show a list of months that can be picked
+1. Support Clicking Hour to show a list of all hours that can be picked
+1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
+minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
 
 #Details
 ##BR000001
