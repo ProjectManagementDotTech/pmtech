@@ -88,13 +88,26 @@
                         <div class="hover:bg-gray-800 block mt-1 rounded px-2 py-1 text-white font-semibold focus:outline-none focus:bg-gray-800 md:ml-2 md:mt-0 z-40">
                             {{ currentUser.name }}
                         </div>
-                        <div class="mt-2 pl-2">
-                            <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings'" @click.native="isOpen = false">Settings</router-link>
+                        <div class="border-t border-gray-700">
+                            <div class="cursor-default px-2 py-1 text-gray-700 text-xs uppercase">
+                                Switch workspace
+                            </div>
+                            <router-link class="block px-4 py-2 hover:text-white focus:text-white focus:outline-none text-gray-400"
+                                         v-for="workspace in $store.getters['workspaces/all']"
+                                         :key="workspace.id"
+                                         :to="'/workspaces/' + workspace.id" @click.native="isOpen = false">
+                                {{ workspace.name }}
+                            </router-link>
                         </div>
-                        <div class="mt-2 pl-4">
+                        <div class="border-t border-gray-700">
+                            <div class="cursor-default px-2 py-1 text-gray-700 text-xs uppercase">
+                                Settings
+                            </div>
+                        </div>
+                        <div class="mt-2 pl-2">
                             <router-link class="hover:text-white px-2 py-1 block text-gray-400" :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings/billing'" @click.native="isOpen = false">Billing</router-link>
                         </div>
-                        <div class="mt-2 pl-6">
+                        <div class="mt-2 pl-4">
                             <router-link class="hover:text-white px-2 py-1 block text-gray-400"
                                          :to="'/workspaces/' + workspaceId + '/users/' + currentUser.id + '/settings/billing/invoices'"
                                          @click.native="isOpen = false">

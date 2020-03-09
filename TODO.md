@@ -22,7 +22,6 @@
 ###FilteringDropdownControl
 ###General
 ###Navigation
-1. Allow user to switch workspaces in xs / sm screens
 ###Projects
 1. Add `abbreviation` and `start_date` attributes to project Model
 ###Timesheets
@@ -56,6 +55,9 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Mark task as 100% or completed
+1. Close project
+1. Make sure the ComboControl filtering matches case-insensitively a regex, rather than just the start
 1. Support setting moment locale based on Laravel / browser locale.
 1. Allow Client Overview to be sorted by name.
 1. When inviting a user to a workspace, make sure that user can see all projects
@@ -328,6 +330,7 @@ subcomponents)
 `highlightedEntryId` based on those hover events
 1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
 Implement silent keep-alive or increase lifetime of session / Airlock cookie.
+1. Allow user to switch workspaces in xs / sm screens
 
 #Details
 ##BR000001
