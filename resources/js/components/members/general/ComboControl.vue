@@ -33,13 +33,14 @@
                     </div>
                 </div>
                 <ul :class="{ 'h-24': filteredEntries.length > 3, 'overflow-y-scroll': filteredEntries.length > 3 }">
-                    <li class="bg-white even:bg-gray-100 hover:bg-gold-100 block p-1 w-full"
+                    <li class="bg-white even:bg-gray-100 block p-1 w-full"
                         v-for="entry in filteredEntries"
                         :id="uuid + '-' + entry[entryIdAttribute]"
                         :key="entry[entryIdAttribute]"
                         :value="entry[entryIdAttribute]"
                         :class="(value !== undefined && value !== null) ? (entry[entryIdAttribute] == value[entryIdAttribute] ? 'dropdown-item-selected' : '') : ''"
-                        @click="onUpdateSelection(entry)">
+                        @click="onUpdateSelection(entry)"
+                        @mouseover="onMouseOver(entry)">
                         {{ entry[entryTitleAttribute] }}
                     </li>
                 </ul>
@@ -165,6 +166,29 @@
                 el = document.getElementById(this.highlightedElementId);
                 el.classList.add("dropdown-item-active");
                 el.scrollIntoView(false);
+            },
+            onMouseOver(anEntry) {
+                console.log("onMouseOver - highlightedElementIdx (at " +
+                    "the start): " + this.highlightedElementIdx);
+                this.highlightedElementId = this.uuid + "-" +
+                    this.filteredEntries[this.highlightedElementIdx]
+                        [this.entryIdAttribute];
+                let el = document.getElementById(this.highlightedElementId);
+                el.classList.remove("dropdown-item-active");
+                this.highlightedElementIdx = this.filteredEntries.findIndex(
+                    e => {
+                        return e[this.entryIdAttribute] === anEntry[this.entryIdAttribute]
+                    });
+                if(this.highlightedElementIdx == -1) {
+                    console.error("Cannot find element that's hovered over " +
+                        "in the filtered array...");
+                } else {
+                    this.highlightedElementId = this.uuid + "-" +
+                        this.filteredEntries[this.highlightedElementIdx]
+                            [this.entryIdAttribute];
+                    el = document.getElementById(this.highlightedElementId);
+                    el.classList.add("dropdown-item-active");
+                }
             },
             onUpdateSelection(selectedEntry) {
                 console.dir(selectedEntry);

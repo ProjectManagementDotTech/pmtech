@@ -20,8 +20,6 @@
 ###Clients
 ###DateTimePicker
 ###FilteringDropdownControl
-1. Support native hover events to recalculate `highlightedEntryIdx` and
-`highlightedEntryId` based on those hover events
 ###General
 1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
 Implement silent keep-alive or increase lifetime of session / Airlock cookie.
@@ -328,6 +326,8 @@ minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
 `props` and a new, merged, `config` in `data` which is passed on to
 subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
+1. Support native hover events to recalculate `highlightedEntryIdx` and
+`highlightedEntryId` based on those hover events
 
 #Details
 ##BR000001
