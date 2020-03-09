@@ -5,10 +5,9 @@
                 <client-selection-control v-model="filter.client" />
             </div>
             <div class="w-6/12 md:w-2/12">
-                <filtering-dropdown-control :value="filter.selectedProject"
-                                            :entries="clientProjects"
-                                            @blur="onBlur"
-                                            @input="onInputProject" />
+                <combo-control :entries="clientProjects"
+                               :value="filter.selectedProject" @blur="onBlur"
+                               @input="onInputProject" />
             </div>
             <div class="w-6/12 md:w-2/12">
                 <existing-task-input-control :project="filter.selectedProject"
@@ -34,8 +33,8 @@
 </template>
 
 <script>
+    import ComboControl from "../general/ComboControl";
     import ExistingTaskInputControl from "../tasks/ExistingTaskInputControl";
-    import FilteringDropdownControl from "../general/FilteringDropdownControl";
     import Vue from "vue";
     import DateRangePicker from "../general/DateRangePicker";
     import ClientSelectionControl from "../clients/ClientSelectionControl";
@@ -43,9 +42,9 @@
     export default {
         components: {
             ClientSelectionControl,
+            ComboControl,
             DateRangePicker,
             ExistingTaskInputControl,
-            FilteringDropdownControl
         },
         computed: {
             clientProjects() {

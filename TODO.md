@@ -20,7 +20,6 @@
 ###Clients
 ###DateTimePicker
 ###FilteringDropdownControl
-1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
 ###General
@@ -328,6 +327,7 @@ minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
 1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
 `props` and a new, merged, `config` in `data` which is passed on to
 subcomponents)
+1. Rename `FilteringDropdownControl` to `ComboControl`
 
 #Details
 ##BR000001

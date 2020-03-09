@@ -245,7 +245,7 @@
         mounted() {
             this.topLevelElement = document.getElementById(this.uuid);
         },
-        name: "FilteringDropdownControl",
+        name: "ComboControl",
         props: {
             entries: {
                 required: true,
@@ -269,17 +269,7 @@
             value: {
                 required: true
             }
-        },
-        // watch: {
-        //     value: {
-        //         deep: true,
-        //         handler(newVal, oldValue) {
-        //             if(newVal !== undefined) {
-        //                 this.selection = newVal;
-        //             }
-        //         }
-        //     }
-        // }
+        }
     }
 </script>
 

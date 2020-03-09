@@ -11,10 +11,9 @@
                     "Transfer".
                 </div>
                 <div class="w-full sm:1/4 lg:w-1/3">
-                    <filtering-dropdown-control :value="newOwnerMember"
-                                                :entries="workspaceMembers"
-                                                @blur="onBlur"
-                                                @input="onInputNewOwnerMember" />
+                    <combo-control :entries="workspaceMembers"
+                                   :value="newOwnerMember" @blur="onBlur"
+                                   @input="onInputNewOwnerMember" />
                 </div>
                 <div class="text-right w-full sm:w-1/4 lg:w-1/6">
                     <button class="bg-red-500 hover:bg-red-700 border-2 border-red-700 hover:border-red-900 font-weight-bold p-2 rounded text-gray-200"
@@ -28,12 +27,12 @@
 </template>
 
 <script>
-    import FilteringDropdownControl from "../general/FilteringDropdownControl";
+    import ComboControl from "../general/ComboControl";
     import Vue from "vue";
 
     export default {
         components: {
-            FilteringDropdownControl
+            ComboControl
         },
         created() {
             this.$axios.get("/api/v1/workspaces/" +

@@ -1,19 +1,20 @@
 <template>
     <div>
         <div v-show="false">{{ displayValue }}</div>
-        <filtering-dropdown-control :value="value.task" :entries="taskList"
-                                    :no-selection-text="project == null ? 'Please select a project first' : 'Please select'"
-                                    @blur="onBlur" @input="onInputNewTask" />
+        <combo-control :entries="taskList"
+                       :no-selection-text="project == null ? 'Please select a project first' : 'Please select'"
+                       :value="value.task" @blur="onBlur"
+                       @input="onInputNewTask" />
     </div>
 </template>
 
 <script>
-    import FilteringDropdownControl from "../general/FilteringDropdownControl";
+    import ComboControl from "../general/ComboControl";
     import Vue from "vue";
 
     export default {
         components: {
-            FilteringDropdownControl
+            ComboControl
         },
         computed: {
             displayValue() {

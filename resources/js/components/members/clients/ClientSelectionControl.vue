@@ -1,15 +1,14 @@
 <template>
-    <filtering-dropdown-control :value="value"
-                                :entries="$store.getters['clients/all']"
-                                @blur="onBlur" @input="onInput" />
+    <combo-control :entries="$store.getters['clients/all']" :value="value"
+                   @blur="onBlur" @input="onInput" />
 </template>
 
 <script>
-    import FilteringDropdownControl from "../general/FilteringDropdownControl";
+    import ComboControl from "../general/ComboControl";
 
     export default {
         components: {
-            FilteringDropdownControl
+            ComboControl
         },
         methods: {
             onBlur() {

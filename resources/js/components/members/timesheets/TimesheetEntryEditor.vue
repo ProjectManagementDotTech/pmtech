@@ -1,10 +1,9 @@
 <template>
     <div class="items-center flex flex-wrap timesheet-entry-editor w-full">
         <div class="w-6/12 md:w-3/12">
-            <filtering-dropdown-control :value="editorTimesheetEntry.project"
-                                        :entries="$store.getters['projects/all']"
-                                        @blur="onBlur"
-                                        @input="onInputNewProject" />
+            <combo-control :entries="$store.getters['projects/all']"
+                           :value="editorTimesheetEntry.project"
+                           @blur="onBlur" @input="onInputNewProject" />
         </div>
         <div class="w-6/12 md:w-3/12">
             <existing-task-input-control @input="(newValue) => { editorTimesheetEntry = newValue; }"
@@ -33,8 +32,8 @@
 </template>
 
 <script>
+    import ComboControl from "../general/ComboControl";
     import ExistingTaskInputControl from "../tasks/ExistingTaskInputControl";
-    import FilteringDropdownControl from "../general/FilteringDropdownControl";
     import TimesheetEntryManualSaveButton from
             "./TimesheetEntryManualSaveButton";
     import TimesheetEntryStartButton from "./TimesheetEntryStartButton";
@@ -45,8 +44,8 @@
             this.$eventBus.$off("reload-running-timer", this.loadRunningTimer)
         },
         components: {
+            ComboControl,
             ExistingTaskInputControl,
-            FilteringDropdownControl,
             TimesheetEntryManualSaveButton,
             TimesheetEntryStartButton
         },
