@@ -21,8 +21,6 @@
 ###DateTimePicker
 ###FilteringDropdownControl
 ###General
-1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
-Implement silent keep-alive or increase lifetime of session / Airlock cookie.
 ###Navigation
 1. Allow user to switch workspaces in xs / sm screens
 ###Projects
@@ -328,6 +326,8 @@ subcomponents)
 1. Rename `FilteringDropdownControl` to `ComboControl`
 1. Support native hover events to recalculate `highlightedEntryIdx` and
 `highlightedEntryId` based on those hover events
+1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
+Implement silent keep-alive or increase lifetime of session / Airlock cookie.
 
 #Details
 ##BR000001

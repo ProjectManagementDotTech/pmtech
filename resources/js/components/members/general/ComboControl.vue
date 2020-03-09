@@ -168,8 +168,6 @@
                 el.scrollIntoView(false);
             },
             onMouseOver(anEntry) {
-                console.log("onMouseOver - highlightedElementIdx (at " +
-                    "the start): " + this.highlightedElementIdx);
                 this.highlightedElementId = this.uuid + "-" +
                     this.filteredEntries[this.highlightedElementIdx]
                         [this.entryIdAttribute];

@@ -75,6 +75,11 @@ export default function(Vue) {
             window.router.push("/unknown-error");
         }
     });
+
+    window.connectionInterval = window.setInterval(() => {
+        Vue.axios.get("/api/v1/user");
+    }, 3600000);
+
     Object.defineProperties(Vue.prototype, {
         $axios: {
             get() {
