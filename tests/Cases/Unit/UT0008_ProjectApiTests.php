@@ -24,12 +24,11 @@ class UT0008_ProjectApiTests extends TestCase
         $user = UserRepository::byEmail('user0001@test.com');
         $this->assertNotNull($user);
         $workspace = Workspace::where('name', 'Test0001')->first();
-        $token = $this->login('user0001@test.com', 'Welcome123');
+        $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
             '/projects', [
+                'abbreviation' => 'UT8',
                 'name' => 'UT0008-0001'
-        ], [
-            'Authorization' => $token['type'] . ' ' . $token['token']
         ]);
         $response->assertStatus(201)->assertHeader('Location');
         Event::assertDispatched(WorkspaceUpdated::class,

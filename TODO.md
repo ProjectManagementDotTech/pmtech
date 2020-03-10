@@ -23,7 +23,6 @@
 ###General
 ###Navigation
 ###Projects
-1. Add `abbreviation` and `start_date` attributes to project Model
 ###Timesheets
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
@@ -331,6 +330,7 @@ subcomponents)
 1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
 Implement silent keep-alive or increase lifetime of session / Airlock cookie.
 1. Allow user to switch workspaces in xs / sm screens
+1. Add `abbreviation` and `start_date` attributes to project Model
 
 #Details
 ##BR000001

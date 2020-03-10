@@ -46,7 +46,7 @@
                 let result = this.emailAddress == "";
                 debugger;
                 if(!result && this.$refs.validationObserver !== undefined) {
-                    return this.$refs.validationObserver.invalid;
+                    return this.$refs.validationObserver.flags.invalid;
                 } else {
                     return result;
                 }

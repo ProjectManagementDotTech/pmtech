@@ -81,6 +81,21 @@ class ProjectRepository
     }
 
     /**
+     * Get the project identified by $abbreviation in $workspace.
+     *
+     * @param string $abbreviation
+     * @param Workspace $workspace
+     * @return Project|null
+     */
+    static public function byAbbreviation(string $abbreviation, Workspace $workspace):
+        ?Project
+    {
+        return Project::where('workspace_id', $workspace->id)
+            ->where('abbreviation', $abbreviation)
+            ->first();
+    }
+
+    /**
      * Get the project identified by the given $name in the given $workspace.
      *
      * @param string $name
@@ -89,8 +104,7 @@ class ProjectRepository
      */
     static public function byName(string $name, Workspace $workspace): ?Project
     {
-        return Project::query()
-            ->where('workspace_id', $workspace->id)
+        return Project::where('workspace_id', $workspace->id)
             ->where('name', $name)
             ->first();
     }

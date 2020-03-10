@@ -1,20 +1,30 @@
 <template>
     <div>
-        <validation-observer class="needs-validation" novalidate
+        <validation-observer class="needs-validation"
                              ref="validationObserver" tag="div"
                              v-slot="{ invalid }">
             <div class="px-2">
                 <pmtech-input label="Project name" name="name" rules="required"
                               v-model="name" />
+                <pmtech-input label="Project abbreviation" name="abbreviation"
+                              rules="required|max:5" v-model="abbreviation" />
                 <div class="flex items-center mb-4 w-full">
                     <label class="mr-6 w-1/4" for="color">Project color</label>
                     <compact id="color" v-model="color" />
                 </div>
-                <div class="flex items-center w-full">
+                <div class="flex items-center mb-4 w-full">
                     <label class="mr-6 w-1/4">Client</label>
                     <div class="w-3/4">
                         <client-selection-control class="w-3/4"
                                                   v-model="client" />
+                    </div>
+                </div>
+                <div class="flex items-center w-full">
+                    <label class="mr-6 w-1/4">Start date</label>
+                    <div class="w-3/4">
+                        <date-time-picker class="w-3/4"
+                                          :user-config="{ format: 'DD MMM YYYY', pickTime: false }"
+                                          :value="startDate" @input="onUpdateStartDate" />
                     </div>
                 </div>
             </div>
@@ -30,6 +40,7 @@
 
 <script>
     import { Compact } from "vue-color";
+    import DateTimePicker from "../general/DateTimePicker";
     import PmtechInput from "../../shared/input/PmtechInput";
     import ClientSelectionControl from "../clients/ClientSelectionControl";
 
@@ -37,6 +48,7 @@
         components: {
             ClientSelectionControl,
             Compact,
+            DateTimePicker,
             PmtechInput
         },
         computed: {
@@ -51,11 +63,13 @@
                     this.client.id == currentProject.client_id &&
                     this.color.hex.substr(1) == currentProject.color &&
                     (this.name == "" ||
-                        this.name == currentProject.name);
-                console.log("EditProject::updateButtonDisabled == " + result);
+                        this.name == currentProject.name) &&
+                    this.abbreviation == currentProject.abbreviation &&
+                    this.startDate.format("YYYY-MM-DD") ==
+                        this.$moment(currentProject.start_date).format("YYYY-MM-DD");
 
                 if(!result && this.$refs.validationObserver !== undefined) {
-                    return this.$refs.validationObserver.invalid;
+                    return this.$refs.validationObserver.flags.invalid;
                 } else {
                     return result;
                 }
@@ -66,19 +80,23 @@
         },
         data() {
             return {
+                abbreviation: "",
                 client: {
                     id: ""
                 },
                 color: "",
-                name: ""
+                name: "",
+                startDate: this.$moment()
             };
         },
         methods: {
             onClickUpdateProject() {
                 this.$axios.put("/api/v1/projects/" + this.$route.params.projectId, {
+                    abbreviation: this.abbreviation,
                     client_id: this.client.id,
                     color: this.color.hex.substr(1),
-                    name: this.name
+                    name: this.name,
+                    start_date: this.startDate.format("DD/MM/YYYY")
                 })
                     .then(() => {
                         /*
@@ -98,17 +116,26 @@
                         );
                     });
             },
+            onUpdateStartDate(newValue) {
+                this.startDate = newValue;
+            },
             updateDataFromRouteInformation() {
                 let currentProject = this.$store.getters["projects/byId"](
                     this.$route.params.projectId
                 );
                 if(currentProject) {
+                    this.abbreviation = currentProject.abbreviation;
                     this.client = this.$store.getters["clients/byId"](
                         currentProject.client_id);
                     this.color = {
                         hex: "#" + currentProject.color
                     };
                     this.name = currentProject.name;
+                    if(currentProject.start_date != null) {
+                        this.startDate = this.$moment(currentProject.start_date);
+                    } else {
+                        this.startDate = this.$moment();
+                    }
                 }
             }
         },

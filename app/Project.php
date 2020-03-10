@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,6 +11,18 @@ class Project extends Model
     use SoftDeletes;
 
     //region Public Access
+
+    /**
+     * Store `start_date` which is expected to have the format `d/m/Y`.
+     *
+     * @param $value
+     */
+    public function setStartDateAttribute($value)
+    {
+        $valueDate = Carbon::createFromFormat('d/m/Y', $value);
+        $this->attributes['start_date'] = $valueDate->format('Y-m-d');
+    }
+
     //endregion
 
     //region Public Relationships
@@ -66,6 +79,21 @@ class Project extends Model
 
     //endregion
 
+    /**
+     * Get the `start_date` attribute.
+     *
+     * @param $value
+     * @return Carbon
+     */
+    public function getStartDateAttribute($value)
+    {
+        if($value) {
+            return Carbon::createFromFormat('Y-m-d', $value);
+        } else {
+            return $value;
+        }
+    }
+
     //region Public Status Reports
 
     /**
@@ -81,14 +109,15 @@ class Project extends Model
      * @inheritDoc
      */
     protected $fillable = [
-        'client_id', 'color', 'id', 'name', 'workspace_id'
+        'abbreviation', 'client_id', 'color', 'id', 'name', 'start_date',
+        'workspace_id'
     ];
 
     /**
      * @inheritDoc
      */
     protected $hidden = [
-        'workspace_id',
+        'created_at', 'deleted_at', 'workspace_id', 'updated_at'
     ];
 
     /**
@@ -100,7 +129,7 @@ class Project extends Model
      * @inheritDoc
      */
     protected $visible = [
-        'client_id', 'color', 'id', 'name',
+        'abbreviation', 'client_id', 'color', 'id', 'name', 'start_date'
     ];
 
     //endregion
