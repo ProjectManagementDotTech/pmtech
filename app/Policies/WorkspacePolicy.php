@@ -74,6 +74,18 @@ class WorkspacePolicy
     }
 
     /**
+     * Can $user remove members from $workspace?
+     *
+     * @param User $user
+     * @param Workspace $workspace
+     * @return bool
+     */
+    public function removeMember(User $user, Workspace $workspace)
+    {
+        return $workspace->owner_user_id == $user->id;
+    }
+
+    /**
      * Can $user transfer ownership of $workspace to $newOwner?
      *
      * @param User $user

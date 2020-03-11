@@ -117,7 +117,7 @@ class Workspace extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'deleted_at', 'owner_user_id', 'updated_at'
+        'created_at', 'deleted_at', 'updated_at'
     ];
 
     /**
@@ -129,7 +129,7 @@ class Workspace extends Model
      * @inheritDoc
      */
     protected $visible = [
-        'id', 'name'
+        'id', 'name', 'owner_user_id'
     ];
 
     //endregion

@@ -38,6 +38,12 @@ Route::middleware(['verified', 'auth:airlock'])->group(function () {
         ->middleware(
             'can:indexMembers,workspace'
         );
+    Route::delete('workspaces/{workspace}/members/{member}',
+        'v1\WorkspaceController@removeMember')
+        ->name('workspaces.removeMember')
+        ->middleware(
+            'can:removeMember,workspace'
+        );
     Route::get('workspaces/{workspace}/balance',
         'v1\WorkspaceController@balance')
         ->name('workspaces.balance')

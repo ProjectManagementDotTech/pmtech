@@ -56,11 +56,9 @@ completed tasks).
 projects (even historic timesheet entries cannot be started against closed
 projects).
 1. Support setting moment locale based on Laravel / browser locale.
-1. Allow Client Overview to be sorted by name.
-1. When inviting a user to a workspace, make sure that user can see all projects
-and record time against project tasks.
-1. Make sure that logged in users are properly logged out when a 419 status
-comes back from the API.
+1. When user accepted invitation to join or was added to a workspace, the
+workspace owner should be notified that the user now needs access to projects
+in order to collaborate with other project members.
 1. Add Brute Force protection around registration route as well.
 1. Add FlashMessage component of some variety to show info, warning, succes and
 global error messages.
@@ -71,7 +69,6 @@ information in the database.
 information for each user / subscriber. This can be used to determine the amount
 of users in a workspace and to determine whether or not VAT is to be applied to
 the billable amount.
-1. Remove members from workspace
 1. UserRepository should not create Settings object. That has to be done in a
 UserObserver class.
 1. Make timesheet report graphs responsive (including ticks on X axis)
@@ -334,6 +331,7 @@ the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
 1. Make sure the ComboControl filtering matches case-insensitively a regex,
 rather than just the start
+1. Remove members from workspace
 
 #Details
 ##BR000001

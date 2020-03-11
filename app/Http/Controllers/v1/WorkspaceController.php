@@ -276,6 +276,23 @@ class WorkspaceController extends Controller
         }
     }
 
+    public function removeMember(Workspace $workspace, User $member)
+    {
+        if($member->id !== $workspace->owner_user_id) {
+            $member->detachFromWorkspace($workspace);
+            return response('', 204);
+        } else {
+            return response([
+                'message' => 'The given data was incorrect.',
+                'errors' => [
+                    'member' => [
+                        'Cannot remove the owner of the workspace.'
+                    ]
+                ]
+            ], 422);
+        }
+    }
+
     /**
      * Show the workspace.
      *

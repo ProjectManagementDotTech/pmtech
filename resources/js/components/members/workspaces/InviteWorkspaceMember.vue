@@ -29,6 +29,13 @@
                 <div class="w-11/12">
                     {{ workspaceMember.name }}
                 </div>
+                <div class="w-1/12">
+                    <button v-if="workspaceMember.id != $store.getters['workspaces/byId']($route.params.workspaceId).owner_user_id"
+                            class="focus:outline-none"
+                            @click="onClickRemoveUser(workspaceMember.id)">
+                        <i class="fas fa-user-minus text-red-500"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,6 +92,20 @@
                         this.emailAddress = "";
                     })
                     .catch(error => {
+
+                    });
+            },
+            onClickRemoveUser(memberId) {
+                this.$axios.delete("/api/v1/workspaces/" + this.$route.params.workspaceId + "/members/" + memberId)
+                    .then(() => {
+                        let memberIdx = this.workspaceMembers.findIndex(
+                            m => m.id == memberId);
+                        this.workspaceMembers.splice(memberIdx, 1);
+                    })
+                    .catch(error => {
+
+                    })
+                    .finally(() => {
 
                     });
             }
