@@ -24,9 +24,6 @@
 ###Navigation
 ###Projects
 ###Timesheets
-1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
-the user has a timesheet entry started **and** is not visiting the timesheet
-editor.
 
 #To do (v2020.3)
 ### Tasks
@@ -331,6 +328,9 @@ subcomponents)
 Implement silent keep-alive or increase lifetime of session / Airlock cookie.
 1. Allow user to switch workspaces in xs / sm screens
 1. Add `abbreviation` and `start_date` attributes to project Model
+1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
+the user has a timesheet entry started **and** is not visiting the timesheet
+editor.
 
 #Details
 ##BR000001

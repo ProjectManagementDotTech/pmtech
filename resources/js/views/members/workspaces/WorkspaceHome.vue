@@ -5,6 +5,7 @@
         <add-project v-if="addProjectVisible" />
         <add-workspace v-if="addWorkspaceVisible" />
         <new-version-loader v-if="isNewVersionAvailable" />
+        <tiny-timesheet-entry-editor v-if="notOnTimesheetEntryEditorRoute" />
     </div>
 </template>
 
@@ -16,6 +17,8 @@
         from "../../../components/members/workspaces/AddWorkspace";
     import NewVersionLoader
         from "../../../components/members/general/NewVersionLoader";
+    import TinyTimesheetEntryEditor
+        from "../../../components/members/timesheets/TinyTimesheetEntryEditor";
 
     export default {
         beforeDestroy() {
@@ -26,13 +29,18 @@
             this.$eventBus.$off("close-modal", this.closeModal);
         },
         components: {
+            TinyTimesheetEntryEditor,
             NewVersionLoader,
             AddClient,
             AddProject,
             AddWorkspace
         },
         computed: {
-            ...mapGetters([ "isNewVersionAvailable" ])
+            ...mapGetters([ "isNewVersionAvailable" ]),
+            notOnTimesheetEntryEditorRoute() {
+                return this.$route.fullPath !== "/workspaces/" +
+                    this.$route.params.workspaceId + "/timesheet";
+            }
         },
         created() {
             this.$eventBus.$on("add-client", this.onAddClient);
