@@ -60,7 +60,8 @@
                 } else {
                     return this.entries.filter(e => {
                         let title = e[this.entryTitleAttribute];
-                        return title.startsWith(this.filter);
+                        let regExp = new RegExp(this.filter, "i");
+                        return regExp.exec(title) != null;
                     })
                 }
             },

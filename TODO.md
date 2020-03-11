@@ -27,23 +27,21 @@
 
 #To do (v2020.3)
 ### Tasks
-1. Archive Task in SPA
-1. Delete Task in SPA
-1. Sort tasks by name in SPA
-1. Add dropdown menu "Tasks" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. Add `percent_completion` to `Task`
-1. Send TaskUpdated event when task was updated
 1. Add `nesting_level` and `parent_task_id` to Task model
 1. Add actual `duration`, `ended_at`, `started_at` and `work` to Task model
 1. Add planned `duration`, `ended_at`, `started_at` and `work` to Task model
-1. Reorder tasks
+1. ForceDelete Task in SPA only if task has no timesheet entries
+1. Add toolbar with task and project related buttons just above the Gantt Chart 
+1. Reorder tasks (via buttons in toolbar)
+1. Send TaskUpdated event when task was updated
 ### Projects
 1. Add `price` attribute for projects
+1. Add `reduction_percentage` to Project
 1. When adding price to project, show estimate based on project tasks and
 profit_margin.
 1. Allow project member to overwrite `cost` from workspace member
 1. Allow project to overwrite `profit_margin` from workspace
-1. Add `reduction_percentage` to Project
 ### Workspace
 1. Add `cost` per workspace member
 1. Add `profit_margin` to workspace
@@ -51,9 +49,12 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
-1. Mark task as 100% or completed
-1. Close project
-1. Make sure the ComboControl filtering matches case-insensitively a regex, rather than just the start
+1. Mark task as 100% or completed. This stops timesheet entries being created
+against those tasks (even historic timesheet entries cannot be started against
+completed tasks).
+1. Close project. This stops timesheet entries being created against those
+projects (even historic timesheet entries cannot be started against closed
+projects).
 1. Support setting moment locale based on Laravel / browser locale.
 1. Allow Client Overview to be sorted by name.
 1. When inviting a user to a workspace, make sure that user can see all projects
@@ -331,6 +332,8 @@ Implement silent keep-alive or increase lifetime of session / Airlock cookie.
 1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
 the user has a timesheet entry started **and** is not visiting the timesheet
 editor.
+1. Make sure the ComboControl filtering matches case-insensitively a regex,
+rather than just the start
 
 #Details
 ##BR000001
