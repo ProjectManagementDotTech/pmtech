@@ -66,8 +66,6 @@ global error messages.
 information for each user / subscriber. This can be used to determine the amount
 of users in a workspace and to determine whether or not VAT is to be applied to
 the billable amount.
-1. UserRepository should not create Settings object. That has to be done in a
-UserObserver class.
 1. Make timesheet report graphs responsive (including ticks on X axis)
 1. Complete WorkspacePolicy with reference to all Business Requirements
 1. Bruteforce POST login protection - Make sure that users cannot fail login
@@ -332,6 +330,8 @@ rather than just the start
 information in the database.
 1. Implement SettingsRepository and use it in SettingsController
 1. Write tests around SettingsRepository and SettingsController
+1. UserRepository should not create Settings object. That has to be done in a
+UserObserver class.
 
 #Details
 ##BR000001

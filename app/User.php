@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Mail\AccountActivation;
+use IgnitionNbs\LaravelUuidModel\UuidModel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,7 +13,7 @@ use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Billable, Notifiable, SoftDeletes;
+    use Billable, Notifiable, SoftDeletes, UuidModel;
 
     //region Public Access
 
@@ -106,11 +107,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     //region Public Status Report
 
-    /**
-     * @inheritDoc
-     */
-    public $incrementing = FALSE;
-
     //endregion
 
     //region Protected Attributes
@@ -126,7 +122,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @inheritDoc
      */
     protected $fillable = [
-        'email', 'email_verified_at', 'id', 'name', 'password',
+        'email', 'email_verified_at', 'name', 'password',
     ];
 
     /**
@@ -136,11 +132,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'created_at', 'deleted_at', 'email_verified_at', 'password',
         'remember_token', 'updated_at',
     ];
-
-    /**
-     * @inheritDoc
-     */
-    protected $keyType = 'string';
 
     /**
      * @inheritDoc

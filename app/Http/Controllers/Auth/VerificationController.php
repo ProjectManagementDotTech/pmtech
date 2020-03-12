@@ -92,7 +92,6 @@ class VerificationController extends Controller
                     'owner_user_id' => $user->id,
                     'name' => 'Default'
                 ]);
-                $this->settingsRepository->create(['user_id' => $user->id]);
 
                 return redirect('/login');
             }

@@ -19,13 +19,7 @@ class UserRepository
      */
     static public function create(array $data): User
     {
-        $data['id'] = Uuid::uuid4()->toString();
-        $user = User::create($data);
-
-        $settingsRepository = new SettingsRepository();
-        $settingsRepository->create(['user_id' => $user->id]);
-
-        return $user;
+        return User::create($data);
     }
 
     /**
