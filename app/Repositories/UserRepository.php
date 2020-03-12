@@ -21,7 +21,9 @@ class UserRepository
     {
         $data['id'] = Uuid::uuid4()->toString();
         $user = User::create($data);
-        SettingsRepository::create($user);
+
+        $settingsRepository = new SettingsRepository();
+        $settingsRepository->create(['user_id' => $user->id]);
 
         return $user;
     }

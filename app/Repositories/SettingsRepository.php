@@ -2,24 +2,21 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Contracts\SettingsRepository as
+    SettingsRepositoryInterface;
 use App\Settings;
-use App\User;
+use Illuminate\Database\Eloquent\Model;
 
-class SettingsRepository
+class SettingsRepository implements SettingsRepositoryInterface
 {
-    //region Static Public Status Report
+    //region Public Status Report
 
     /**
-     * Create new settings for the given $user.
-     *
-     * @param User $user
-     * @return Settings
+     * @inheritDoc
      */
-    static public function create(User $user): Settings
+    public function create(array $attributes = []): Model
     {
-        return Settings::create([
-            'user_id' => $user->id
-        ]);
+        return Settings::create($attributes);
     }
 
     //endregion

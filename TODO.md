@@ -59,8 +59,7 @@ projects).
 1. When user accepted invitation to join or was added to a workspace, the
 workspace owner should be notified that the user now needs access to projects
 in order to collaborate with other project members.
-1. Add Brute Force protection around registration route as well.
-1. Add FlashMessage component of some variety to show info, warning, succes and
+1. Add FlashMessage component of some variety to show info, warning, success and
 global error messages.
 1. Allow user to set for which events an email should be sent.
 1. Add full member profile in order to understand email domain and country
@@ -73,14 +72,13 @@ UserObserver class.
 1. Complete WorkspacePolicy with reference to all Business Requirements
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
+1. Add Brute Force protection around registration route as well.
 1. Complete CRUD actions in UserRepository - And write corresponding test cases
 1. Remove an account completely with an option to download all data and files
 for all projects etc. that would have been stored in the any of the owned
 workspaces.
 1. Complement User tests with the Settings stuff
 1. Delete settings when User model is deleted
-1. Implement SettingsRepository and use it in SettingsController
-1. Write tests around SettingsRepository and SettingsController
 1. Write WorkspaceController actions
 1. Create routes for workspace things - CRUD actions for API
 1. Write tests around ProjectRepository
@@ -332,6 +330,8 @@ rather than just the start
 1. Remove members from workspace
 1. Create simple analytics where we store only the user agent and screen size
 information in the database.
+1. Implement SettingsRepository and use it in SettingsController
+1. Write tests around SettingsRepository and SettingsController
 
 #Details
 ##BR000001

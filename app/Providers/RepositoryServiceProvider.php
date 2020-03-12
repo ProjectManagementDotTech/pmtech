@@ -9,7 +9,10 @@ use App\Repositories\Contracts\AnalyticsRepository as
 use App\Repositories\Contracts\ClientRepository as ClientRepositoryContract;
 use App\Repositories\Contracts\InvitationRepository as
     InvitationRepositoryContract;
+use App\Repositories\Contracts\SettingsRepository as
+    SettingsRepositoryInterface;
 use App\Repositories\InvitationRepository;
+use App\Repositories\SettingsRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -26,8 +29,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ClientRepositoryContract::class,
             ClientRepository::class);
         $this->app->singleton(InvitationRepositoryContract::class,
-            InvitationRepository::class
-        );
+            InvitationRepository::class);
+        $this->app->singleton(SettingsRepositoryInterface::class,
+            SettingsRepository::class);
     }
 
     /**
