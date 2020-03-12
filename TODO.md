@@ -62,8 +62,6 @@ in order to collaborate with other project members.
 1. Add Brute Force protection around registration route as well.
 1. Add FlashMessage component of some variety to show info, warning, succes and
 global error messages.
-1. Create simple analytics where we store only the user agent and screen size
-information in the database.
 1. Allow user to set for which events an email should be sent.
 1. Add full member profile in order to understand email domain and country
 information for each user / subscriber. This can be used to determine the amount
@@ -332,6 +330,8 @@ editor.
 1. Make sure the ComboControl filtering matches case-insensitively a regex,
 rather than just the start
 1. Remove members from workspace
+1. Create simple analytics where we store only the user agent and screen size
+information in the database.
 
 #Details
 ##BR000001

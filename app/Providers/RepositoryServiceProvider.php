@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\AnalyticsRepository;
 use App\Repositories\ClientRepository;
+use App\Repositories\Contracts\AnalyticsRepository as
+    AnalyticsRepositoryContract;
 use App\Repositories\Contracts\ClientRepository as ClientRepositoryContract;
 use App\Repositories\Contracts\InvitationRepository as
     InvitationRepositoryContract;
@@ -18,6 +21,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(AnalyticsRepositoryContract::class,
+            AnalyticsRepository::class);
         $this->app->singleton(ClientRepositoryContract::class,
             ClientRepository::class);
         $this->app->singleton(InvitationRepositoryContract::class,
