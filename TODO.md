@@ -97,7 +97,6 @@ records
 committers
 1. Currency per workspace and apply xe exchange rate between project and
 workspace defined in the workspace yet
-1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. Unit test NotificationRepository
 1. Write Notification routes and Controller methods
 1. Unit test Notification API
@@ -105,7 +104,6 @@ workspace defined in the workspace yet
 1. Write NotificationRepository
 1. Project Dashboard to list all tasks' main details (name) and total hours
 recorded against each task
-1. Order projects in the index by their `name` by default
 1. Project and Workspace `id` cannot be updated through their respective
 repositories
 1. `WorkspaceRepository::get` should be allowed to return NULL
@@ -125,10 +123,6 @@ Allen for interacting with the exchangeratesapi.io API.".
 1. GanttChart should only update API if the task was truly altered
 1. Replace App.vue `loading` with a full modal div that shows whenever there are
 Axios requests in progress for longer than 2 seconds
-1. Implement 401 interceptor to ask for the user's password, login, and then
-submit the intercepted request again
-1. Rewrite repositories to implement a common interface and derive from a
-common parent class
 1. `GridTable` to support `sortable` flag in field definition and sorting by
 multiple `sortable` fields
 1. `GridTable` to support notion of visible and hidden columns. Right click
@@ -332,6 +326,8 @@ information in the database.
 1. Write tests around SettingsRepository and SettingsController
 1. UserRepository should not create Settings object. That has to be done in a
 UserObserver class.
+1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
+1. Order projects in the index by their `name` by default
 
 #Details
 ##BR000001

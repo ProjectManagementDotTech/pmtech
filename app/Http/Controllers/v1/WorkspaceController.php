@@ -226,13 +226,16 @@ class WorkspaceController extends Controller
      */
     public function indexProjects(Request $request, Workspace $workspace)
     {
-        /*
-         * TODO Allow orderBy
-         */
+        $orderBy = $request->input('sort', 'name|asc');
+        if($orderBy == '') {
+            $orderBy = 'name|asc';
+        }
+        $orderByParts = explode('|', $orderBy);
 
         $result = Auth::user()
             ->projects()
-            ->where('workspace_id', $workspace->id);
+            ->where('workspace_id', $workspace->id)
+            ->orderBy($orderByParts[0], $orderByParts[1]);
 
         if($request->per_page && $request->page) {
             return $result->paginate($request->per_page);
