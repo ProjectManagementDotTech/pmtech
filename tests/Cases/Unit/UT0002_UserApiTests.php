@@ -86,6 +86,9 @@ class UT0002_UserApiTests extends TestCase
         $this->assertDatabaseHas('cache', [
             'key' => 'project_managementtech_cacheuser0004@test.com'
         ]);
+        $this->assertDatabaseMissing('settings', [
+            'user_id' => $user->id
+        ]);
     }
 
     /** @test */
@@ -116,6 +119,9 @@ class UT0002_UserApiTests extends TestCase
         $response = $this->get('/email/verify/' . $user->id . '/' .
             $cacheValue);
         $response->assertStatus(302);
+        $this->assertDatabaseHas('settings', [
+            'user_id' => $user->id
+        ]);
     }
 
     /** @test */

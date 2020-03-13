@@ -23,10 +23,18 @@ class UserObserver
     /**
      * $user was stored in the database. Create a Settings model for $user.
      * @param User $user
+     * @return bool
      */
-    public function created(User $user)
+    public function updating(User $user)
     {
-        $this->settingsRepository->create(['user_id' => $user->id]);
+        if(
+            $user->email_verified_at !== NULL &&
+            $user->getOriginal('email_verified_at') == NULL
+        ) {
+            $this->settingsRepository->create(['user_id' => $user->id]);
+        }
+
+        return TRUE;
     }
 
     //endregion

@@ -49,6 +49,7 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Upgrade to Laravel 7.
 1. Mark task as 100% or completed. This stops timesheet entries being created
 against those tasks (even historic timesheet entries cannot be started against
 completed tasks).
@@ -91,7 +92,6 @@ records
 1. Add hourly cost to workspace or project members
 1. Add type to project - hourly, fixed, retainer
 1. Add E-Tag support
-1. Add test that Settings are created when account was verified
 1. Update window title with `title` from routes in the afterEach guard
 1. Global "loading" div with incrementLoading and decrementLoading vuex
 committers
@@ -328,6 +328,7 @@ UserObserver class.
 1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. Order projects in the index by their `name` by default
 1. Allow project index to be ordered by name, progress, etc.
+1. Add test that Settings are created when account was verified
 
 #Details
 ##BR000001
