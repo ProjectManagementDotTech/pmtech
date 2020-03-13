@@ -114,7 +114,6 @@ details in a different currency (payable and submitted invoices). Use the
 package mentioned in Laravel News "Laravel Exchange Rates is a package by Ash
 Allen for interacting with the exchangeratesapi.io API.".  
 1. Allow task to be work-driven
-1. Allow project index to be ordered by name, progress, etc.
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
 1. Listen to private broadcast channel for each task in Vuex
@@ -328,6 +327,7 @@ information in the database.
 UserObserver class.
 1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. Order projects in the index by their `name` by default
+1. Allow project index to be ordered by name, progress, etc.
 
 #Details
 ##BR000001

@@ -58,14 +58,17 @@
                     },
                     {
                         name: "abbreviation",
+                        sortField: "abbreviation",
                         title: "Abbreviation"
                     },
                     {
                         name: "__slot:name",
+                        sortField: "name",
                         title: "Project name"
                     },
                     {
                         name: "__slot:start_date",
+                        sortField: "start_date",
                         title: "Start date"
                     }
                 ],
