@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Cases\Feature;
 
 use App\Mail\AccountActivation;
 use App\User;

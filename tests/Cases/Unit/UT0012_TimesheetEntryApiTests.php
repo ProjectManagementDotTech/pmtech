@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Cases\Unit;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Cases\Unit;
 
 use App\Repositories\UserRepository;
 use Illuminate\Support\Str;

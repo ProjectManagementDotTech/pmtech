@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Cases\Unit;
 
 use App\Repositories\TaskRepository;
 use App\Repositories\TimesheetEntryRepository;
