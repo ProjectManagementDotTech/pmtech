@@ -7,6 +7,7 @@ Route::get('email/verify', 'Auth\VerificationController@show')
 
 Route::middleware(['verified', 'auth:airlock'])->group(function () {
     Route::get('user', 'v1\UserController@self')
+        ->middleware('cache.headers:etag')
         ->name('user.self');
     Route::post('user/add-payment-method', 'v1\UserController@addPaymentMethod')
         ->name('user.addPaymentMethod');

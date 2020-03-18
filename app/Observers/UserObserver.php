@@ -11,6 +11,11 @@ class UserObserver
 {
     //region Public Construction
 
+    /**
+     * UserObserver constructor.
+     *
+     * @param SettingsRepositoryInterface $settingsRepository
+     */
     public function __construct(SettingsRepositoryInterface $settingsRepository)
     {
         $this->settingsRepository = $settingsRepository;
@@ -18,7 +23,7 @@ class UserObserver
 
     //endregion
 
-    //region Public Access
+    //region Public Status Report
 
     /**
      * $user was stored in the database. Create a Settings model for $user.

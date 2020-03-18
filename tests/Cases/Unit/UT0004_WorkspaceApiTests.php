@@ -26,7 +26,7 @@ class UT0004_WorkspaceApiTests extends TestCase
         $response = $this->get('/api/v1/workspaces');
         $response->assertStatus(200)->assertJsonCount(1)->assertJsonFragment([
             'name' => 'Test0001'
-        ]);
+        ])->assertHeader('etag');
     }
 
     /** @test */
@@ -64,8 +64,12 @@ class UT0004_WorkspaceApiTests extends TestCase
         $workspace = WorkspaceRepository::filter([
             'name' => 'UT0004-0001'
         ])[0];
+        $response = $this->get('/api/v1/workspaces/' . $workspace->id);
+        $etag = $response->headers->get('etag');
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
-            '/archive');
+            '/archive', [], [
+                'If-Match' => $etag
+        ]);
         $response->assertStatus(205)->assertHeader('Location',
             route('workspaces.show', [
                 'workspace' => Auth::user()->workspaces[0]->id
@@ -116,7 +120,9 @@ class UT0004_WorkspaceApiTests extends TestCase
         $workspace = WorkspaceRepository::filter([
             'name' => 'UT0004-0002'
         ])[0];
-        $response = $this->delete('/api/v1/workspaces/' . $workspace->id);
+        $response = $this->delete('/api/v1/workspaces/' . $workspace->id, [], [
+            'If-Match' => $workspace->eTag()
+        ]);
         $response->assertStatus(205)->assertHeader('Location',
             route('workspaces.show', [
                 'workspace' => Auth::user()->workspaces[0]->id
@@ -155,6 +161,8 @@ class UT0004_WorkspaceApiTests extends TestCase
         ])[0];
         $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
             'name' => 'UT0004-0003'
+        ], [
+            'If-Match' => $workspace->eTag()
         ]);
         $response->assertStatus(204)->assertNoContent();
         $this->assertDatabaseHas('workspaces', [
@@ -178,6 +186,8 @@ class UT0004_WorkspaceApiTests extends TestCase
         ])[0];
         $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
             'name' => 'Test0001'
+        ], [
+            'If-Match' => $workspace->eTag()
         ]);
         $response->assertStatus(422)->assertJson([
             'message' => 'The given data was invalid.',

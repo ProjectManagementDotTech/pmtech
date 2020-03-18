@@ -52,9 +52,11 @@
         },
         methods: {
             onClickUpdateWorkspace() {
+                let eTag = this.$store.getters["workspaces/eTag"](
+                    this.$route.params.workspaceId);
                 this.$axios.put("/api/v1/workspaces/" + this.$route.params.workspaceId, {
                     name: this.workspaceName
-                })
+                }, { headers: { "If-Match": eTag } })
                     .then(() => {
                         this.$store.dispatch("workspaces/fetchAll")
                     })

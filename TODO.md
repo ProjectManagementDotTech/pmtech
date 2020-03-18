@@ -91,7 +91,6 @@ workspaces.
 records
 1. Add hourly cost to workspace or project members
 1. Add type to project - hourly, fixed, retainer
-1. Add E-Tag support
 1. Update window title with `title` from routes in the afterEach guard
 1. Global "loading" div with incrementLoading and decrementLoading vuex
 committers
@@ -329,6 +328,10 @@ UserObserver class.
 1. Order projects in the index by their `name` by default
 1. Allow project index to be ordered by name, progress, etc.
 1. Add test that Settings are created when account was verified
+1. Add E-Tag support
+   1. In middleware to verify against put requests
+   1. In middleware to add to the response headers
+   1. In models being updated out of the Vuex Store
 
 #Details
 ##BR000001
@@ -340,4 +343,53 @@ the last visited Vue view, and if none, we need to check the list of workspaces
 to go to the *one* workspace, if not -> we simply go to the first workspace
 in the list.
 ##Send WorkspaceUpdated notification via Pusher
-Only send the id of the affected Workspace. Load the workspace from the API. If it is the current workspace, also dispatch "workspaceChanged".
+Only send the id of the affected Workspace. Load the workspace from the API. If
+it is the current workspace, also dispatch "workspaceChanged".
+##ETag support
+Supporting ETags on API endpoints is fairly straightforward: grab the response
+from the request pipeline, and calculate some kind of strong hash (eg. `sha1`).
+Compare that value against the value of the request header If-None-Match and
+send appropriate back to the API caller. This is what Laravel's built-in
+Cache-Control (via `cache.headers` middleware) supports.
+
+However, if one wants to store a number of Laravel Models in a Vuex store for
+easy access and retrieval without the need to keep going back to the API to
+retrieve these models a number of times, we need some mechanism to retrieve an
+ETag for each individual model in that index.
+
+There's two ways to go about it:
+1. Only send IDs as index response, and let the SPA fire off a number of GET 
+   requests as necessary to retrieve each Model's ETag.
+2. Calculate ETag hash values on individual objects.
+
+Option 1. has the potential to violate Laravel's throttle middleware, and thus
+each of those subsequent GET requests would need to be fired off at a rate of
+one request per second. This is not practicle in large-ish applications.
+
+Option 2. can be implemented in various ways. I've looked at:
+1. jsonSerialization overload
+2. Response Facade extension
+3. API Middleware
+
+Option 1. would work in terms of generating the ETag for each individual object,
+it would be called any time the API wants a serialized view of the model. This
+would open a potentially catastrophic amount of hash calculation that may slow 
+the API right down. Also, it is not entirely clear how an index API call would
+provide back all the individual ETags.
+
+Option 2. would work as well, and is, in fact, proposed by @fideloper, see
+https://fideloper.com/laravel4-etag-conditional-get.
+
+Option 3. is a direct result of that article because I started looking into the
+$response object as a whole, and saw, much to my surprise, that we have a member
+`original`  in the Response instance that we can get to by calling
+`$response->getOriginalContent()`. For GET requests, then, where the response
+has an Eloquent Collection, we can calculate ETags for each Model in that
+collection, just before the response is sent to the API consumer.
+We can put the Model's ID in combination with the ETag in the response headers,
+and we can list multiple combinations like that by using the semicolon to
+separate entities. All we have to do now, when we commit an index response to
+Vuex, is parse the ETag header, and store the ETag with the individual object in
+Vuex. Thus we can use that ETag value next time the SPA uses the DELETE, GET or
+PUT method on the given model. We can then also implement a response interceptor
+that verifies for 304 responses or for 412 in case of mid-air collisions.

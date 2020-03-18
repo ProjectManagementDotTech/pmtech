@@ -65,8 +65,12 @@
                 this.confirmationShown = false;
             },
             onOk() {
+                let eTag = this.$store.getters["workspaces/eTag"](
+                    this.$route.params.workspaceId);
                 this.$axios.post("/api/v1/workspaces/" +
-                    this.$route.params.workspaceId + "/archive")
+                    this.$route.params.workspaceId + "/archive", {}, {
+                    headers: { "If-Match": eTag }
+                })
                     .then(response => {
                         this.$store.dispatch("workspaces/fetchAll")
                             .then(() => {

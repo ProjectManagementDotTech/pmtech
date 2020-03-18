@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Mail\AccountActivation;
+use App\Traits\Models\SupportsETags;
 use IgnitionNbs\LaravelUuidModel\UuidModel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +14,7 @@ use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Billable, Notifiable, SoftDeletes, UuidModel;
+    use Billable, Notifiable, SoftDeletes, SupportsETags, UuidModel;
 
     //region Public Access
 

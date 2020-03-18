@@ -3,13 +3,14 @@
 namespace App;
 
 use App\Mail\Payment\FirstTime;
+use App\Traits\Models\SupportsETags;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Mail;
 
 class Workspace extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, SupportsETags;
 
     //region Public Access
 

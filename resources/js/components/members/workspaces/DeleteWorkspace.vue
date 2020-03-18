@@ -64,8 +64,12 @@
                 this.confirmationShown = true;
             },
             onOk() {
+                let eTag = this.$store.getters["workspaces/eTag"](
+                    this.$route.params.workspaceId);
                 this.$axios.delete("/api/v1/workspaces/" +
-                    this.$route.params.workspaceId)
+                    this.$route.params.workspaceId, {}, {
+                    headers: { "If-Match": eTag }
+                })
                     .then(response => {
                         this.$store.dispatch("workspaces/fetchAll")
                             .then(() => {

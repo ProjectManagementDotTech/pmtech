@@ -12,7 +12,10 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.get("/api/v1/workspaces")
                     .then(response => {
-                        commit("set", response.data);
+                        commit("set", {
+                            data: response.data,
+                            etags: response.headers.etag
+                        });
                         Vue.utils.setupLaravelEcho()
                             .then(() => {
                                 response.data.forEach(workspace => {
@@ -43,7 +46,10 @@ export default {
             Vue.axios.get("/api/v1/workspaces/" + workspaceId)
                 .then(response => {
                     dispatch("workspaceChanged", workspaceId, { root: true });
-                    commit("updateWorkspace", response.data);
+                    commit("updateWorkspace", {
+                        newWorkspace: response.data,
+                        etag: response.headers.etag
+                    });
                 })
                 .catch(error => {
                     /*
@@ -78,21 +84,34 @@ export default {
                 return workspace.name;
             else
                 return "N/A";
+        },
+        eTag: (state) => (id) => {
+            return state.etags[id];
         }
     },
     mutations: {
         set(state, payload) {
-            state.workspaces = payload;
+            state.workspaces = payload.data;
+            let eTagString = payload.etags.replace(/"/g, "");
+            let eTagArray = eTagString.split(";");
+            for(let i = 0; i < eTagArray.length; i++) {
+                let eTagParts = eTagArray[i].split(":");
+                state.etags[eTagParts[0]] = eTagParts[1];
+            }
         },
-        updateWorkspace(state, newWorkspace) {
-            let workspace = state.workspaces.find(w => w.id == newWorkspace.id);
+        updateWorkspace(state, payload) {
+            let workspace = state.workspaces.find(
+                w => w.id == payload.newWorkspace.id
+            );
             if(workspace) {
                 Vue.set(workspace, "name", newWorkspace.name);
             }
+            state.etags[payload.newWorkspace.id] = payload.etag;
         }
     },
     namespaced: true,
     state: {
+        etags: {},
         workspaces: []
     },
 };

@@ -58,7 +58,8 @@ class UT0002_UserApiTests extends TestCase
             ->assertJson([
                 'email' => 'user0001@test.com',
                 'name' => 'Test User 0001'
-            ]);
+            ])
+            ->assertHeader('ETag');
     }
 
     /** @test */
