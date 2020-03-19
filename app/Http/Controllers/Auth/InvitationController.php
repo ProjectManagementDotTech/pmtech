@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreDetailsRequest;
 use App\Repositories\InvitationRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -17,9 +17,11 @@ class InvitationController extends Controller
     /**
      * InvitationController constructor.
      */
-    public function __construct(InvitationRepository $invitationRepository)
+    public function __construct(InvitationRepository $invitationRepository,
+        UserRepository $userRepository)
     {
         $this->invitationRepository = $invitationRepository;
+        $this->userRepository = $userRepository;
 
         $this->middleware('guest');
         $this->middleware('throttle:6,1');
@@ -63,7 +65,7 @@ class InvitationController extends Controller
         if($valid === TRUE) {
             $invitation = $this->invitationRepository
                 ->byNonce($invitationNonce);
-            $user = UserRepository::create([
+            $user = $this->userRepository->create([
                 'email' => $invitation->email,
                 'email_verified_at' => Carbon::now(),
                 'name' => $request->name,
@@ -83,9 +85,18 @@ class InvitationController extends Controller
     //region Protected Attributes
 
     /**
+     * The invitation repository.
+     *
      * @var InvitationRepository
      */
     protected $invitationRepository;
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepository
+     */
+    protected $userRepository;
 
     //endregion
 
@@ -98,7 +109,8 @@ class InvitationController extends Controller
      * @param string $cacheNoce
      * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    protected function validateNonces(string $invitationNonce, string $cacheNonce)
+    protected function validateNonces(string $invitationNonce,
+        string $cacheNonce)
     {
         $invitation = $this->invitationRepository->byNonce($invitationNonce);
         if($invitation) {

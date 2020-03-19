@@ -15,6 +15,12 @@ use Tests\Shared\TestCase;
 
 class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->userRepository = new UserRepository();
+    }
+
     /** @test */
     public function setupWorkspace()
     {
@@ -34,7 +40,7 @@ class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
 
         Mail::fake();
 
-        UserRepository::create([
+        $this->userRepository->create([
             'email' => 'user0003@test.com',
             'email_verified_at' => Carbon::now(),
             'name' => 'Unit Test User 0003',
@@ -88,7 +94,7 @@ class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
 
         Mail::fake();
 
-        UserRepository::create([
+        $this->userRepository->create([
             'email' => 'user0006@test.com',
             'email_verified_at' => Carbon::now(),
             'name' => 'Unit Test User 0006',
@@ -140,4 +146,6 @@ class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
             $ownerUser->invoices()[0]->total()
         );
     }
+
+    protected $userRepository;
 }

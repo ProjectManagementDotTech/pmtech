@@ -2,58 +2,45 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Contracts\UserRepository as UserRepositoryInterface;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\Model;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
-    //region Static Public Status Report
+    //region Public Status Report
 
     /**
-     * Create a new User based on the given data.
-     *
-     * @param array $data
-     * @return User
-     * @throws \Exception
+     * @inheritDoc
      */
-    static public function create(array $data): User
+    public function create(array $attributes = []): Model
     {
-        return User::create($data);
+        return User::create($attributes);
     }
 
     /**
-     * The user matching the given $email address.
-     *
-     * @param string $email
-     * @return User|null
+     * @inheritDoc
      */
-    static public function byEmail(string $email): ?User
-    {
-        return User::where('email', $email)->first();
-    }
-
-    /**
-     * Get the user identified by $id.
-     *
-     * @param string $id
-     * @return User|null
-     */
-    static public function find(string $id): ?User
+    public function find($id): ?Model
     {
         return User::find($id);
     }
 
     /**
-     * Return all users who are verified.
-     *
-     * @return array
+     * @inheritDoc
      */
-    static public function verifiedUsers(): Collection
+    public function findByEmail(string $email): ?User
     {
-        return User::query()
-            ->whereNotNull('email_verified_at')
-            ->get();
+        return User::where('email', $email)->first();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function verified(): Collection
+    {
+        return User::whereNotNull('email_verified_at')->get();
     }
 
     //endregion

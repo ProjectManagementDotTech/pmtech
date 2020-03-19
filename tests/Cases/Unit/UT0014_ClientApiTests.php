@@ -9,13 +9,19 @@ use Tests\Shared\TestCase;
 
 class UT0014_ClientApiTests extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->userRepository = new UserRepository();
+    }
+
     /** @test */
     public function createClient()
     {
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
 
@@ -35,7 +41,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
 
@@ -58,7 +64,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'Test0001')
             ->first();
 
@@ -80,7 +86,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
 
@@ -93,4 +99,6 @@ class UT0014_ClientApiTests extends TestCase
         ]);
 
     }
+
+    protected $userRepository;
 }

@@ -13,4 +13,12 @@ interface Repository
      * @return mixed
      */
     public function create(array $attributes = []): Model;
+
+    /**
+     * Find the model with primary key $id.
+     *
+     * @param $id
+     * @return Model|null
+     */
+    public function find($id): ?Model;
 }

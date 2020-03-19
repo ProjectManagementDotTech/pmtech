@@ -11,8 +11,10 @@ use App\Repositories\Contracts\InvitationRepository as
     InvitationRepositoryContract;
 use App\Repositories\Contracts\SettingsRepository as
     SettingsRepositoryInterface;
+use App\Repositories\Contracts\UserRepository as UserRepositoryInterface;
 use App\Repositories\InvitationRepository;
 use App\Repositories\SettingsRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -32,6 +34,8 @@ class RepositoryServiceProvider extends ServiceProvider
             InvitationRepository::class);
         $this->app->singleton(SettingsRepositoryInterface::class,
             SettingsRepository::class);
+        $this->app->singleton(UserRepositoryInterface::class,
+            UserRepository::class);
     }
 
     /**

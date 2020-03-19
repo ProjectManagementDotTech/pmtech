@@ -12,6 +12,12 @@ use Tests\Shared\TestCase;
 class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->userRepository = new UserRepository();
+    }
+
     /** @test */
     public function createTimesheetEntryAgainstWorkspace()
     {
@@ -20,7 +26,7 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
         $workspace = WorkspaceRepository::filter([
             'name' => 'Test0001'
         ])[0];
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
             'workspace_id' => $workspace->id,
@@ -41,7 +47,7 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         Log::info(__METHOD__);
 
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $workspace = WorkspaceRepository::filter([
             'name' => 'Test0001'
         ])[0];
@@ -68,7 +74,7 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         Log::info(__METHOD__);
 
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $workspace = WorkspaceRepository::filter([
             'name' => 'Test0001'
         ])[0];
@@ -91,4 +97,6 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
 
         sleep(3);
     }
+
+    protected $userRepository;
 }

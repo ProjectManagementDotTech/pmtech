@@ -21,7 +21,8 @@ class UT0008_ProjectApiTests extends TestCase
             WorkspaceUpdated::class
         ]);
 
-        $user = UserRepository::byEmail('user0001@test.com');
+        $userRepository = new UserRepository();
+        $user = $userRepository->findByEmail('user0001@test.com');
         $this->assertNotNull($user);
         $workspace = Workspace::where('name', 'Test0001')->first();
         $this->login('user0001@test.com', 'Welcome123');

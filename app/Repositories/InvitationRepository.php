@@ -42,4 +42,12 @@ class InvitationRepository implements InvitationRepositoryInterface
     {
         return Invitation::where('workspace_id', $workspace->id)->get();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function find($id): ?Model
+    {
+        return Invitation::find($id);
+    }
 }

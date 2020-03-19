@@ -20,4 +20,12 @@ class SettingsRepository implements SettingsRepositoryInterface
     }
 
     //endregion
+
+    /**
+     * @inheritDoc
+     */
+    public function find($id): ?Model
+    {
+        return Settings::find($id);
+    }
 }

@@ -49,6 +49,13 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Intercept 412 responses and fetch the desired object first rejecting the
+original alteration request with a generic message: "Object was externally
+modified, so your changes could not be applied. The modifications were loaded
+from the API, and should be visible."
+1. Make sure WorkspaceUpdated events are send (via Pusher) to web clients
+listening on the Workspace private channel. Make sure to have this covered in
+test cases.
 1. Upgrade to Laravel 7.
 1. Mark task as 100% or completed. This stops timesheet entries being created
 against those tasks (even historic timesheet entries cannot be started against
@@ -72,7 +79,6 @@ the billable amount.
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
 1. Add Brute Force protection around registration route as well.
-1. Complete CRUD actions in UserRepository - And write corresponding test cases
 1. Remove an account completely with an option to download all data and files
 for all projects etc. that would have been stored in the any of the owned
 workspaces.
@@ -332,6 +338,7 @@ UserObserver class.
    1. In middleware to verify against put requests
    1. In middleware to add to the response headers
    1. In models being updated out of the Vuex Store
+1. Complete CRUD actions in UserRepository - And write corresponding test cases
 
 #Details
 ##BR000001

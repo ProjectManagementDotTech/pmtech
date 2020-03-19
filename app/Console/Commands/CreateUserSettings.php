@@ -4,17 +4,18 @@ namespace App\Console\Commands;
 
 use App\Repositories\Contracts\SettingsRepository as
     SettingsRepositoryInterface;
-use App\Repositories\SettingsRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\UserRepository as UserRepositoryInterface;
 use Illuminate\Console\Command;
 
 class CreateUserSettings extends Command
 {
     //region Public Construction
 
-    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    public function __construct(SettingsRepositoryInterface $settingsRepository,
+        UserRepositoryInterface $userRepository)
     {
         $this->settingsRepository = $settingsRepository;
+        $this->userRepository = $userRepository;
 
         parent::__construct();
     }
@@ -30,7 +31,7 @@ class CreateUserSettings extends Command
      */
     public function handle()
     {
-        $users = UserRepository::verifiedUsers();
+        $users = $this->userRepository->verified();
 
         $this->output->progressStart(count($users));
         foreach($users as $user) {
@@ -53,10 +54,12 @@ class CreateUserSettings extends Command
      * @var string
      */
     protected $description = 'Create a Settings model for each verified user ' .
-    'if that user does not have Settings yet';
+        'if that user does not have Settings yet';
 
     /**
-     * @var SettingsRepository
+     * The settings repository.
+     *
+     * @var SettingsRepositoryInterface
      */
     protected $settingsRepository;
 
@@ -66,6 +69,13 @@ class CreateUserSettings extends Command
      * @var string
      */
     protected $signature = 'user:create-settings';
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepositoryInterface
+     */
+    protected $userRepository;
 
     //endregion
 }

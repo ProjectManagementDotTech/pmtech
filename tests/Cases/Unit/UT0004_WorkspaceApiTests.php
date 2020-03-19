@@ -10,6 +10,12 @@ use Tests\Shared\TestCase;
 
 class UT0004_WorkspaceApiTests extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->userRepository = new UserRepository();
+    }
+
     /** @test */
     public function listWorkspacesBeforeLogin()
     {
@@ -43,7 +49,7 @@ class UT0004_WorkspaceApiTests extends TestCase
         $this->assertDatabaseHas('workspaces', [
             'name' => 'UT0004-0001'
         ]);
-        $user = UserRepository::byEmail('user0001@test.com');
+        $user = $this->userRepository->findByEmail('user0001@test.com');
         $this->assertNotNull($user);
         $workspace = $user->ownedWorkspaces()
             ->where('name', 'UT0004-0001')
@@ -90,7 +96,7 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0004@test.com');
+        $user = $this->userRepository->findByEmail('user0004@test.com');
         $workspace = $user->workspaces[0];
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
             '/archive');
@@ -139,7 +145,7 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0004@test.com');
+        $user = $this->userRepository->findByEmail('user0004@test.com');
         $workspace = $user->workspaces[0];
         $response = $this->delete('/api/v1/workspaces/' . $workspace->id);
         $response->assertStatus(403)->assertJsonFragment([
@@ -209,7 +215,7 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = UserRepository::byEmail('user0004@test.com');
+        $user = $this->userRepository->findByEmail('user0004@test.com');
         $workspace = $user->workspaces[0];
         $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
             'name' => 'UT0004-0004'
@@ -234,4 +240,6 @@ class UT0004_WorkspaceApiTests extends TestCase
             '/members');
         $response->assertStatus(200)->assertJsonCount(1);
     }
+
+    protected $userRepository;
 }

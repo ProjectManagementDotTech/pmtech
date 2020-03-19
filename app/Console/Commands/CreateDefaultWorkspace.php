@@ -2,26 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\UserRepository as UserRepositoryInterface;
 use App\Repositories\WorkspaceRepository;
 use Illuminate\Console\Command;
 
 class CreateDefaultWorkspace extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'workspace:create-default';
+    //region Public Construction
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a default workspace for verified users ' .
-        'that have no owned workspace(s)';
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+
+        parent::__construct();
+    }
+
+    //endregion
+
+    //region Public Access
 
     /**
      * Execute the console command.
@@ -31,7 +29,7 @@ class CreateDefaultWorkspace extends Command
      */
     public function handle()
     {
-        $users = UserRepository::verifiedUsers();
+        $users = $this->userRepository->verified();
 
         $this->output->progressStart(count($users));
         foreach($users as $user) {
@@ -46,4 +44,32 @@ class CreateDefaultWorkspace extends Command
 
         $this->output->progressFinish();
     }
+
+    //endregion
+
+    //region Protected Attributes
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a default workspace for verified users ' .
+    'that have no owned workspace(s)';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'workspace:create-default';
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    //endregion
 }

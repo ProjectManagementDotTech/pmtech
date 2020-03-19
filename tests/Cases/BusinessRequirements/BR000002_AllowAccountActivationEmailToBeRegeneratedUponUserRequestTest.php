@@ -12,6 +12,13 @@ use Tests\Shared\TestCase;
 class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest
     extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+
+        $this->userRepository = new UserRepository();
+    }
+
     /** @test */
     public function regenerateAccountActivationEmail()
     {
@@ -34,7 +41,7 @@ class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest
 
         $response->assertStatus(201);
         $secondCacheValue = Cache::store('database')->get('br000002@test.com');
-        $user = UserRepository::byEmail('br000002@test.com');
+        $user = $this->userRepository->findByEmail('br000002@test.com');
         $this->assertNotEquals($secondCacheValue, $firstCacheValue);
         Mail::assertSent(AccountActivation::class,
             function ($mail) use ($user) {
@@ -54,4 +61,9 @@ class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest
 
         $response->assertStatus(422);
     }
+
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
 }

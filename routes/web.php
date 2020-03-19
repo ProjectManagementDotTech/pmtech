@@ -52,7 +52,8 @@ use Illuminate\Support\Facades\Cache;
     ]);
 });*/
 /*Route::get('/emails/payments/first_time', function() {
-    $user = \App\Repositories\UserRepository::byEmail('php.guus@gmail.com');
+    $userRepository = new \App\Repositories\UserRepository();
+    $user = $userRepository->findByEmail('php.guus@gmail.com');
     $workspace = $user->ownedWorkspaces()->where('name', 'Private projects')->first();
     $subscriptionFee = ($workspace->users()->count() - 5) * 4.99;
     if($subscriptionFee < 0) {

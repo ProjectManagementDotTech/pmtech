@@ -30,5 +30,13 @@ class ClientRepository implements ClientRepositoryContract
             ->first();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function find($id): ?Model
+    {
+        return Client::find($id);
+    }
+
     //endregion
 }

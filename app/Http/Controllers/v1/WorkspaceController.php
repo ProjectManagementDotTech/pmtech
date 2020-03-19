@@ -10,8 +10,8 @@ use App\Http\Requests\v1\InvitationRequest;
 use App\Mail\Invitation;
 use App\Repositories\Contracts\ClientRepository;
 use App\Repositories\Contracts\InvitationRepository;
+use App\Repositories\Contracts\UserRepository;
 use App\Repositories\ProjectRepository;
-use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
 use App\User;
 use App\Workspace;
@@ -31,10 +31,12 @@ class WorkspaceController extends Controller
      * @param InvitationRepository $invitationRepository
      */
     public function __construct(ClientRepository $clientRepository,
-        InvitationRepository $invitationRepository)
+        InvitationRepository $invitationRepository,
+        UserRepository $userRepository)
     {
         $this->clientRepository = $clientRepository;
         $this->invitationRepository = $invitationRepository;
+        $this->userRepository = $userRepository;
     }
 
     //endregion
@@ -255,7 +257,7 @@ class WorkspaceController extends Controller
      */
     public function invite(InvitationRequest $request, Workspace $workspace)
     {
-        $user = UserRepository::byEmail($request->email);
+        $user = $this->userRepository->findByEmail($request->email);
         if(!$user) {
             /*
              * This is a completely new user, and thus, we have to go through
@@ -359,14 +361,25 @@ class WorkspaceController extends Controller
     //region Protected Attributes
 
     /**
+     * The client repository.
+     *
      * @var ClientRepository
      */
     protected $clientRepository;
 
     /**
+     * The invitation repository
+     *
      * @var InvitationRepository
      */
     protected $invitationRepository;
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepository
+     */
+    protected $userRepository;
 
     //endregion
 }

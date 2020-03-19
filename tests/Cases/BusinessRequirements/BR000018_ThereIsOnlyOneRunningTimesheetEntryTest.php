@@ -16,7 +16,8 @@ class BR000018_ThereIsOnlyOneRunningTimesheetEntryTest extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = UserRepository::byEmail('user0001@test.com');
+        $userRepository = new UserRepository();
+        $user = $userRepository->findByEmail('user0001@test.com');
         $workspace = WorkspaceRepository::filter([
             'name' => 'Test0001'
         ])[0];

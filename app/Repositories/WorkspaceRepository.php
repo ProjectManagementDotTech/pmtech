@@ -86,7 +86,8 @@ class WorkspaceRepository
      */
     static public function create(array $data): ?Workspace
     {
-        $user = UserRepository::find($data['owner_user_id']);
+        $userRepository = new UserRepository();
+        $user = $userRepository->find($data['owner_user_id']);
         if($user !== NULL) {
             $data['id'] = Uuid::uuid4()->toString();
             $workspace = Workspace::create($data);

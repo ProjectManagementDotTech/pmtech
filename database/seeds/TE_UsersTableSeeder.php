@@ -14,7 +14,8 @@ class TE_UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        UserRepository::create([
+        $userRepository = new UserRepository();
+        $userRepository->create([
             'name' => 'Test User 0001',
             'email' => 'user0001@test.com',
             'email_verified_at' => Carbon::now(),
