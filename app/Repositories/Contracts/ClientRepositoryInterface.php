@@ -5,7 +5,7 @@ namespace App\Repositories\Contracts;
 use App\Client;
 use App\Workspace;
 
-interface ClientRepository extends Repository
+interface ClientRepositoryInterface extends RepositoryInterface
 {
     /**
      * Find a client with $name inside $workspace.

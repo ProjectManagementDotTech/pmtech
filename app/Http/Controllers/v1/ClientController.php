@@ -4,7 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Client;
 use App\Http\Controllers\Controller;
-use App\Repositories\Contracts\ClientRepository;
+use App\Repositories\Contracts\ClientRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -14,9 +14,9 @@ class ClientController extends Controller
     /**
      * ClientController constructor.
      *
-     * @param ClientRepository $clientRepository
+     * @param ClientRepositoryInterface $clientRepository
      */
-    public function __construct(ClientRepository $clientRepository)
+    public function __construct(ClientRepositoryInterface $clientRepository)
     {
         $this->clientRepository = $clientRepository;
     }

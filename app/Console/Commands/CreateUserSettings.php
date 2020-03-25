@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\Contracts\SettingsRepository as
-    SettingsRepositoryInterface;
-use App\Repositories\Contracts\UserRepository as UserRepositoryInterface;
+use App\Repositories\Contracts\SettingsRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Console\Command;
 
 class CreateUserSettings extends Command

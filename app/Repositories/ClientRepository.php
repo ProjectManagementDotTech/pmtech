@@ -3,21 +3,34 @@
 namespace App\Repositories;
 
 use App\Client;
-use App\Repositories\Contracts\ClientRepository as ClientRepositoryContract;
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\ClientRepositoryInterface;
 use App\Workspace;
 use Illuminate\Database\Eloquent\Model;
 
 class ClientRepository implements ClientRepositoryContract
 {
-    //region Status Report
+    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel,
+        UpdatesModel;
+
+    //region Public Construction
 
     /**
-     * @inheritDoc
+     * ClientRepository constructor.
      */
-    public function create(array $attributes = []): Model
+    public function __construct()
     {
-        return Client::create($attributes);
+        $this->modelClass = Client::class;
+        $this->usesSoftDeletes = TRUE;
     }
+
+    //endregion
+
+    //region Status Report
 
     /**
      * @inheritDoc
@@ -28,14 +41,6 @@ class ClientRepository implements ClientRepositoryContract
         return Client::where('name', $name)
             ->where('workspace_id', $workspace->id)
             ->first();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function find($id): ?Model
-    {
-        return Client::find($id);
     }
 
     //endregion

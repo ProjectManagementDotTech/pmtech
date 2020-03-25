@@ -2,8 +2,7 @@
 
 namespace App\Observers;
 
-use App\Repositories\Contracts\SettingsRepository as
-    SettingsRepositoryInterface;
+use App\Repositories\Contracts\SettingsRepositoryInterface;
 use App\Repositories\SettingsRepository;
 use App\User;
 

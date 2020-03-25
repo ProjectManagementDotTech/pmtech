@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
+use App\Repositories\Contracts\TaskRepositoryInterface;
 use App\Repositories\ProjectRepository;
-use App\Repositories\TaskRepository;
 use App\TimesheetEntry;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -11,6 +11,20 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class TimesheetEntryPolicy
 {
     use HandlesAuthorization;
+
+    //region Public Construction
+
+    /**
+     * TimesheetEntryPolicy constructor.
+     *
+     * @param TaskRepositoryInterface $taskRepository
+     */
+    public function __construct(TaskRepositoryInterface $taskRepository)
+    {
+        $this->taskRepository = $taskRepository;
+    }
+
+    //endregion
 
     //region Public Status Report
 
@@ -26,7 +40,7 @@ class TimesheetEntryPolicy
 
         /* BR000006 */
         if(isset($requestInput['task_id'])) {
-            $task = TaskRepository::find($requestInput['task_id']);
+            $task = $this->taskRepository->find($requestInput['task_id']);
             if($task) {
                 if(
                     !$user->projects()
@@ -84,6 +98,17 @@ class TimesheetEntryPolicy
     {
         return $user->id === $timesheetEntry->user_id;
     }
+
+    //endregion
+
+    //region Protected Attributes
+
+    /**
+     * The task repository.
+     *
+     * @var TaskRepositoryInterface
+     */
+    protected $taskRepository;
 
     //endregion
 }

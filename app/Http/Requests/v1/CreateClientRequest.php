@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Repositories\Contracts\ClientRepository;
+use App\Repositories\Contracts\ClientRepositoryInterface;
 use App\Rules\UniqueClientNameWithinWorkspace;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +23,7 @@ class CreateClientRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(ClientRepository $clientRepository)
+    public function rules(ClientRepositoryInterface $clientRepository)
     {
         return [
             'name' => [

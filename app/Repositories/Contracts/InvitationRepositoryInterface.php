@@ -6,23 +6,25 @@ use App\Invitation;
 use App\Workspace;
 use Illuminate\Database\Eloquent\Collection;
 
-interface InvitationRepository extends Repository
+interface InvitationRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * Find the invitation matching the given email address.
-     *
-     * @param string $emailAddress
-     * @return Invitation|null
-     */
-    public function byEmail(string $emailAddress): ?Invitation;
+    //region Public Status Report
 
     /**
-     * Find the invitation matching the given nonce.
+     * Find the invitation matching $emailAddress.
      *
      * @param string $emailAddress
      * @return Invitation|null
      */
-    public function byNonce(string $nonce): ?Invitation;
+    public function findByEmail(string $emailAddress): ?Invitation;
+
+    /**
+     * Find the invitation matching $nonce.
+     *
+     * @param string $emailAddress
+     * @return Invitation|null
+     */
+    public function findByNonce(string $nonce): ?Invitation;
 
     /**
      * Find all invitations for $workspace.
@@ -30,5 +32,7 @@ interface InvitationRepository extends Repository
      * @param Workspace $workspace
      * @return Collection
      */
-    public function byWorkspace(Workspace $workspace): Collection;
+    public function findByWorkspace(Workspace $workspace): Collection;
+
+    //endregion
 }

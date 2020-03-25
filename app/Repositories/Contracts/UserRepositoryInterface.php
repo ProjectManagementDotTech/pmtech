@@ -5,7 +5,7 @@ namespace App\Repositories\Contracts;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 
-interface UserRepository extends Repository
+interface UserRepositoryInterface extends RepositoryInterface
 {
     /**
      * Find the User model that has $emailAddress.

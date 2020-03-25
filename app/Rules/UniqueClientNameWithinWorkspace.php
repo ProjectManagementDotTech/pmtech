@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Repositories\Contracts\ClientRepository;
+use App\Repositories\Contracts\ClientRepositoryInterface;
 use Illuminate\Contracts\Validation\Rule;
 
 class UniqueClientNameWithinWorkspace implements Rule
@@ -14,7 +14,7 @@ class UniqueClientNameWithinWorkspace implements Rule
      *
      * @return void
      */
-    public function __construct(ClientRepository $clientRepository)
+    public function __construct(ClientRepositoryInterface $clientRepository)
     {
         $this->clientRepository = $clientRepository;
     }
@@ -54,7 +54,7 @@ class UniqueClientNameWithinWorkspace implements Rule
     //region Protected Attributes
 
     /**
-     * @var ClientRepository
+     * @var ClientRepositoryInterface
      */
     protected $clientRepository;
 

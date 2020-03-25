@@ -8,9 +8,9 @@ use App\Http\Requests\v1\StoreProjectRequest;
 use App\Http\Requests\v1\CreateWorkspace;
 use App\Http\Requests\v1\InvitationRequest;
 use App\Mail\Invitation;
-use App\Repositories\Contracts\ClientRepository;
-use App\Repositories\Contracts\InvitationRepository;
-use App\Repositories\Contracts\UserRepository;
+use App\Repositories\Contracts\ClientRepositoryInterface;
+use App\Repositories\Contracts\InvitationRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\WorkspaceRepository;
 use App\User;
@@ -28,11 +28,11 @@ class WorkspaceController extends Controller
     /**
      * WorkspaceController constructor.
      *
-     * @param InvitationRepository $invitationRepository
+     * @param InvitationRepositoryInterface $invitationRepository
      */
-    public function __construct(ClientRepository $clientRepository,
-        InvitationRepository $invitationRepository,
-        UserRepository $userRepository)
+    public function __construct(ClientRepositoryInterface $clientRepository,
+								InvitationRepositoryInterface $invitationRepository,
+								UserRepositoryInterface $userRepository)
     {
         $this->clientRepository = $clientRepository;
         $this->invitationRepository = $invitationRepository;
@@ -187,7 +187,7 @@ class WorkspaceController extends Controller
      */
     public function indexMembers(Workspace $workspace)
     {
-        $invitations = $this->invitationRepository->byWorkspace($workspace);
+        $invitations = $this->invitationRepository->findByWorkspace($workspace);
         $result = [];
         foreach($invitations as $invitation) {
             $result[] = [
@@ -363,21 +363,21 @@ class WorkspaceController extends Controller
     /**
      * The client repository.
      *
-     * @var ClientRepository
+     * @var ClientRepositoryInterface
      */
     protected $clientRepository;
 
     /**
      * The invitation repository
      *
-     * @var InvitationRepository
+     * @var InvitationRepositoryInterface
      */
     protected $invitationRepository;
 
     /**
      * The user repository.
      *
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     protected $userRepository;
 

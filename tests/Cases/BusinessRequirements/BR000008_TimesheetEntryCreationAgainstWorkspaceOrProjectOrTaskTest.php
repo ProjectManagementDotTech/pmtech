@@ -79,7 +79,8 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
             'name' => 'Test0001'
         ])[0];
         $project = ProjectRepository::byName('UT0008-0001', $workspace);
-        $task = TaskRepository::byName('UT0010-0001', $project);
+        $taskRepository = new TaskRepository();
+        $task = $taskRepository->findByName('UT0010-0001', $project)[0];
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
             'task_id' => $task->id,

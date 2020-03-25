@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreDetailsRequest;
 use App\Repositories\InvitationRepository;
-use App\Repositories\Contracts\UserRepository;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +18,7 @@ class InvitationController extends Controller
      * InvitationController constructor.
      */
     public function __construct(InvitationRepository $invitationRepository,
-        UserRepository $userRepository)
+								UserRepositoryInterface $userRepository)
     {
         $this->invitationRepository = $invitationRepository;
         $this->userRepository = $userRepository;
@@ -64,7 +64,7 @@ class InvitationController extends Controller
         $valid = $this->validateNonces($invitationNonce, $cacheNonce);
         if($valid === TRUE) {
             $invitation = $this->invitationRepository
-                ->byNonce($invitationNonce);
+                ->findByNonce($invitationNonce);
             $user = $this->userRepository->create([
                 'email' => $invitation->email,
                 'email_verified_at' => Carbon::now(),
@@ -94,7 +94,7 @@ class InvitationController extends Controller
     /**
      * The user repository.
      *
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     protected $userRepository;
 
@@ -112,7 +112,7 @@ class InvitationController extends Controller
     protected function validateNonces(string $invitationNonce,
         string $cacheNonce)
     {
-        $invitation = $this->invitationRepository->byNonce($invitationNonce);
+        $invitation = $this->invitationRepository->findByNonce($invitationNonce);
         if($invitation) {
             $cacheValue = Cache::store('database')->pull($invitation->email);
             if($cacheValue == $cacheNonce) {

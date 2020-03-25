@@ -49,6 +49,17 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Repository `findBy` methods need to distinguish between find first and find
+all.
+1. Break-up Project-Management.tech into several packages:
+   + Core: Have the basic interface definitions, and things like tailwind
+   + Iso: Iso related information, services and tables.
+   + Project: Deal with all project related stuff
+   + Public-Web: Have the public facing parts of the website
+   + Task: Deal with all task related stuff
+   + Timesheet: Deal with all timesheet related stuff
+   + UI: Deal with general UI things
+   + Workspace: Deal with all workspace related stuff
 1. Intercept 412 responses and fetch the desired object first rejecting the
 original alteration request with a generic message: "Object was externally
 modified, so your changes could not be applied. The modifications were loaded
@@ -143,7 +154,7 @@ happen when there are timesheet entries against a task.
 happen when there are timesheet entries against a project.
 1. **BR000010** - Users with the role "Line Manager" or "Project Manager" can
 approve submitted timesheets
-1. **BR000011** - Approved timesheet entries can only be archived by users with
+1. **BR000011** - Approved timesheet entries can only be archived by users  with
 the role "Programme Manager" or "Portfolio Manager"
 1. **BR000012** - Lock timesheet entries after submitting so that they cannot be
 edited by the user, but only approved / rejected by the respective Manager users
@@ -155,6 +166,7 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
+1. Allow task to be work-driven
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\Contracts\UserRepository as UserRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\WorkspaceRepository;
 use Illuminate\Console\Command;
 

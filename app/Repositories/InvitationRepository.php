@@ -3,26 +3,37 @@
 namespace App\Repositories;
 
 use App\Invitation;
-use App\Repositories\Contracts\InvitationRepository as
-    InvitationRepositoryInterface;
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\InvitationRepositoryInterface;
 use App\Workspace;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 
 class InvitationRepository implements InvitationRepositoryInterface
 {
+    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel,
+        UpdatesModel;
+
+    //region Public Construction
+
     /**
-     * @inheritDoc
+     * InvitationRepository constructor.
      */
-    public function create(array $attributes = []): Model
+    public function __construct()
     {
-        return Invitation::create($attributes);
+        $this->modelClass = Invitation::class;
+        $this->usesSoftDeletes = FALSE;
     }
+
+    //endregion
 
     /**
      * @inheritDoc
      */
-    public function byEmail(string $emailAddress): ?Invitation
+    public function findByEmail(string $emailAddress): ?Invitation
     {
         return Invitation::where('email', $emailAddress)->first();
     }
@@ -30,7 +41,7 @@ class InvitationRepository implements InvitationRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function byNonce(string $nonce): ?Invitation
+    public function findByNonce(string $nonce): ?Invitation
     {
         return Invitation::where('nonce', $nonce)->first();
     }
@@ -38,16 +49,8 @@ class InvitationRepository implements InvitationRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function byWorkspace(Workspace $workspace): Collection
+    public function findByWorkspace(Workspace $workspace): Collection
     {
         return Invitation::where('workspace_id', $workspace->id)->get();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function find($id): ?Model
-    {
-        return Invitation::find($id);
     }
 }

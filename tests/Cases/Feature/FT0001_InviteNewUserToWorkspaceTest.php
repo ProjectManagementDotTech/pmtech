@@ -45,7 +45,7 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
         Log::info(__METHOD__);
 
         $invitationRepository = new InvitationRepository();
-        $invitation = $invitationRepository->byEmail('user0002@test.com');
+        $invitation = $invitationRepository->findByEmail('user0002@test.com');
         $cacheValue = Cache::store('database')->get('user0002@test.com');
         $response = $this->get('/invitation/accept/' . $invitation->nonce .
             '/' . $cacheValue);

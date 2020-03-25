@@ -4,9 +4,8 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreAnalyticsRequest;
-use App\Repositories\Contracts\AnalyticsRepository as AnalyticsRepositoryInterface;
+use App\Repositories\Contracts\AnalyticsRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AnalyticsController extends Controller
 {

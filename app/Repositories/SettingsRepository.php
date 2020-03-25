@@ -2,30 +2,29 @@
 
 namespace App\Repositories;
 
-use App\Repositories\Contracts\SettingsRepository as
-    SettingsRepositoryInterface;
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\SettingsRepositoryInterface;
 use App\Settings;
-use Illuminate\Database\Eloquent\Model;
 
 class SettingsRepository implements SettingsRepositoryInterface
 {
-    //region Public Status Report
+    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel,
+        UpdatesModel;
+
+    //region Public Construction
 
     /**
-     * @inheritDoc
+     * SettingsRepository constructor.
      */
-    public function create(array $attributes = []): Model
+    public function __construct()
     {
-        return Settings::create($attributes);
+        $this->modelClass = Settings::class;
+        $this->usesSoftDeletes = TRUE;
     }
 
     //endregion
-
-    /**
-     * @inheritDoc
-     */
-    public function find($id): ?Model
-    {
-        return Settings::find($id);
-    }
 }

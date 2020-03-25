@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
-        "ignition-nbs/laravel-uuid-model": "^1.0",
+        "ignition-nbs/laravel-uuid-model": "^2.0",
         "laravel/airlock": "0.2.0",
         "laravel/cashier": "^10.6",
         "laravel/framework": "^6.2",

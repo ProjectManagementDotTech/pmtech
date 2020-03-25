@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Repositories\Contracts\SettingsRepository as
+use App\Repositories\Contracts\SettingsRepositoryInterface as
     SettingsRepositoryInterface;
 use App\Repositories\SettingsRepository;
 use App\Repositories\WorkspaceRepository;
