@@ -1,10 +1,17 @@
 <template>
-    <input class="p-1" :id="uuid" :value="thisValue" @blur="onBlur"
-           @keyup.enter="onBlur" />
+    <input class="p-1" :class="selectedClass" :id="uuid" :value="thisValue"
+           @blur="onBlur" @click="$emit('click')" @keyup.enter="onBlur" />
 </template>
 
 <script>
     export default {
+        computed: {
+            selectedClass() {
+                if(this.$attrs.selected == true) {
+                    return "bg-indigo-400 text-white";
+                }
+            }
+        },
         created() {
             this.uuid = this.$utils.uuid();
         },

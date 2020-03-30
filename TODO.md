@@ -8,7 +8,8 @@
 * Primary color: indigo-500
 * Secondary color: gray-500
 * Danger color: red-500
-* Info color: blue-100
+* Info background color: blue-100
+* Info icon color: blue-500
 * Warning color: yellow-500
 * Success color: green-100
 * OK color: green-500
@@ -49,6 +50,7 @@ profit_margin.
 #To do (v2021.1)
 
 #To do (unassigned to release)
+1. Make `PmtechInput` a global component
 1. Repository `findBy` methods need to distinguish between find first and find
 all.
 1. Break-up Project-Management.tech into several packages:
@@ -143,8 +145,6 @@ multiple `sortable` fields
 1. `GridTable` to support notion of visible and hidden columns. Right click
 shows a popup menu where one can select to make hidden columns visible; also one
 can make visible columns hidden
-1. `GridTable` to support clicking on row headers to select entire row. Multiple
-selections are possible through use of Shift-Click and Ctrl-Click
 1. `GridTable` needs `GridPercentageEditor`
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
@@ -166,7 +166,6 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
-1. Allow task to be work-driven
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -351,6 +350,9 @@ UserObserver class.
    1. In middleware to add to the response headers
    1. In models being updated out of the Vuex Store
 1. Complete CRUD actions in UserRepository - And write corresponding test cases
+1. `GridTable` to support clicking on row headers to select entire row. Multiple
+selections are possible through use of Shift-Click and Ctrl-Click
+1. Allow task to be work-driven
 
 #Details
 ##BR000001

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\StoreTaskRequest;
 use App\Task;
 use Illuminate\Http\Request;
 
@@ -21,16 +22,9 @@ class TaskController extends Controller
         return $task;
     }
 
-    public function update(Task $task, Request $request)
+    public function update(StoreTaskRequest $request, Task $task)
     {
-        if(($newName = $request->input('name', NULL)) !== NULL) {
-            $task->name = $newName;
-        }
-        if(($newWbs = $request->input('wbs', NULL)) !== NULL) {
-            $task->wbs = $newWbs;
-        }
-
-        $task->save();
+        $task->fill($request->validated())->save();
 
         return response('', 204);
     }

@@ -113,7 +113,7 @@ class WorkspaceController extends Controller
     /**
      * Create a new client in $workspace.
      *
-     * @param CreateClient $request
+     * @param CreateClientRequest $request
      * @param Workspace $workspace
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */

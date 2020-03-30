@@ -12,8 +12,11 @@
 
 <script>
     import PmtechInput from "../../shared/input/PmtechInput";
+
     export default {
-        components: {PmtechInput},
+        components: {
+            PmtechInput
+        },
         data() {
             return {
                 name: ""

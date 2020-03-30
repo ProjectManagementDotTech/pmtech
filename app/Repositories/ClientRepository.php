@@ -10,9 +10,8 @@ use App\Repositories\Concerns\FindsModel;
 use App\Repositories\Concerns\UpdatesModel;
 use App\Repositories\Contracts\ClientRepositoryInterface;
 use App\Workspace;
-use Illuminate\Database\Eloquent\Model;
 
-class ClientRepository implements ClientRepositoryContract
+class ClientRepository implements ClientRepositoryInterface
 {
     use ConstructsRepository, CreatesModel, DeletesModel, FindsModel,
         UpdatesModel;
