@@ -1,6 +1,6 @@
 <template>
-    <input class="p-1" type="text" :class="selectedClass" :id="uuid"
-           :value="thisValue" @blur="onBlur" @input="onBlur"
+    <input class="p-1" min="0" max="100" type="number" :class="selectedClass"
+           :id="uuid" :value="thisValue" @blur="onBlur" @input="onBlur"
            @click="$emit('click')" @keyup.enter="onBlur" />
 </template>
 
@@ -30,7 +30,7 @@
                 document.getElementById(this.uuid).value = "";
             }
         },
-        name: "GridTextEditor",
+        name: "GridPercentageEditor",
         props: ["value"],
         watch: {
             value(newValue) {

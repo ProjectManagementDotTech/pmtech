@@ -29,11 +29,14 @@
 #To do (v2020.3)
 ### Tasks
 1. Add `percent_completion` to `Task`
+1. Add Completion field to GanttChart's GridTable
+1. Add Completion field to TaskProperties (if all tasks are at 100%, show a
+checked checkbox, otherwise show a number input min 0 max 100). If not all tasks
+have the same percent_completion value, do not allow editing of this field.
 1. Add `nesting_level` and `parent_task_id` to Task model
 1. Add actual `duration`, `ended_at`, `started_at` and `work` to Task model
 1. Add planned `duration`, `ended_at`, `started_at` and `work` to Task model
 1. ForceDelete Task in SPA only if task has no timesheet entries
-1. Add toolbar with task and project related buttons just above the Gantt Chart 
 1. Reorder tasks (via buttons in toolbar)
 1. Send TaskUpdated event when task was updated
 ### Projects
@@ -111,8 +114,6 @@ records
 1. Add hourly cost to workspace or project members
 1. Add type to project - hourly, fixed, retainer
 1. Update window title with `title` from routes in the afterEach guard
-1. Global "loading" div with incrementLoading and decrementLoading vuex
-committers
 1. Currency per workspace and apply xe exchange rate between project and
 workspace defined in the workspace yet
 1. Unit test NotificationRepository
@@ -131,12 +132,13 @@ repositories
 details in a different currency (payable and submitted invoices). Use the
 package mentioned in Laravel News "Laravel Exchange Rates is a package by Ash
 Allen for interacting with the exchangeratesapi.io API.".  
-1. Allow task to be work-driven
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
 1. Listen to private broadcast channel for each task in Vuex
 1. Protect tasks with e-tags (so that multiple clients can view tasks...)
 1. GanttChart should only update API if the task was truly altered
+1. Global "loading" div with incrementLoading and decrementLoading vuex
+committers
 1. Replace App.vue `loading` with a full modal div that shows whenever there are
 Axios requests in progress for longer than 2 seconds
 1. `GridTable` to support `sortable` flag in field definition and sorting by
@@ -144,7 +146,6 @@ multiple `sortable` fields
 1. `GridTable` to support notion of visible and hidden columns. Right click
 shows a popup menu where one can select to make hidden columns visible; also one
 can make visible columns hidden
-1. `GridTable` needs `GridPercentageEditor`
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot
@@ -351,8 +352,10 @@ UserObserver class.
 1. Complete CRUD actions in UserRepository - And write corresponding test cases
 1. `GridTable` to support clicking on row headers to select entire row. Multiple
 selections are possible through use of Shift-Click and Ctrl-Click
+1. Add toolbar with task and project related buttons just above the Gantt Chart 
 1. Allow task to be work-driven
 1. GridTextEditor needs to send input updates more frequently than onBlur
+1. `GridTable` needs `GridPercentageEditor`
 
 #Details
 ##BR000001
