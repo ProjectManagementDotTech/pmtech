@@ -18,7 +18,7 @@
         </div>
         <div class="flex w-full">
             <div class="font-semibold w-1/3">Started at:</div>
-            <div class="w-2/3">{{ $moment(editorTimesheetEntry.started_at).format("DD MMM YYYY HH:mm:ss") }}</div>
+            <div class="w-2/3">{{ $moment.utc(editorTimesheetEntry.started_at).local().format("DD MMM YYYY HH:mm:ss") }}</div>
         </div>
         <div class="flex w-full">
             <div class="font-semibold w-1/3">Duration:</div>

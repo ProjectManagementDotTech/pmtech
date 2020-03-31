@@ -97,10 +97,14 @@
             },
             timesheetEntryStartedAt() {
                 if(typeof this.timesheetEntry.started_at == "string") {
-                    return this.$moment(this.timesheetEntry.started_at,
-                        "YYYY-MM-DD HH:mm:ss").format("DD MMM YYYY HH:mm:ss");
+                    return this.$moment
+                        .utc(this.timesheetEntry.started_at,
+                            "YYYY-MM-DD HH:mm:ss")
+                        .local()
+                        .format("DD MMM YYYY HH:mm:ss");
                 } else {
                     return this.timesheetEntry.started_at
+                        .local()
                         .format("DD MMM YYYY HH:mm:ss");
                 }
             }

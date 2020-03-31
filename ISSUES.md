@@ -22,3 +22,4 @@ daily index
 * "TypeError: el is null" in FilteringDropdownControl.vue onInput
 * Navigation component uses the same key twice in some area. Look for v-for
 loops with a key...
+* Summer time is not respected in `TimesheetEntryEditor`

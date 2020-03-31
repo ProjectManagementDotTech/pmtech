@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
         <input class="relative block border border-gray-200 focus:outline-none focus:border-indigo-400 p-1 rounded w-full"
-               type="text" :value="content" :class="{ 'z-40': isOpen }"
+               type="text" :value="contentForDisplay" :class="{ 'z-40': isOpen }"
                :id="uuid" @focus="onFocus" @input="onInput" />
         <button v-if="isOpen"
                 class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default w-"
@@ -61,6 +61,12 @@
                         return "left";
                     }
                 }
+            },
+            contentForDisplay() {
+                return this.$moment
+                    .utc(this.content, this.config.format)
+                    .local().
+                    format(this.config.format);
             }
         },
         created() {
