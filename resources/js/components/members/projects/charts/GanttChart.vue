@@ -42,17 +42,33 @@
                     wbs: "",
                 },
                 selectedRows: [],
-                showTaskProperties: false
+                showTaskProperties: false,
+                updateTaskTimeoutHandle: undefined
             };
         },
         methods: {
             onInput(newTaskObject) {
-                if (newTaskObject.name != "") {
-                    if (newTaskObject.id !== undefined && newTaskObject.id !== "") {
-                        console.dir(newTaskObject);
-                        this.$axios.put("/api/v1/tasks/" + newTaskObject.id,
-                            newTaskObject);
-                        this.$store.commit("tasks/update", newTaskObject);
+                if(newTaskObject.name != "") {
+                    if(
+                        newTaskObject.id !== undefined &&
+                        newTaskObject.id !== ""
+                    ) {
+                        if(this.updateTaskTimeoutHandle !== undefined) {
+                            window.clearTimeout(this.updateTaskTimeoutHandle);
+                        }
+                        /*
+                         * Delay sending the update for 1 second, so that if the
+                         * user is making multiple changes in quick succession,
+                         * we only send the update to the API after the user
+                         * stopped typing for a second. This makes sure that we
+                         * do not run over the standard Laravel API Rate Limit.
+                         * --glj
+                         */
+                        this.updateTaskTimeoutHandle = window.setTimeout(() => {
+                            this.$axios.put("/api/v1/tasks/" + newTaskObject.id,
+                                newTaskObject);
+                            this.$store.commit("tasks/update", newTaskObject);
+                        }, 1000);
                     } else {
                         this.$axios.post("/api/v1/projects/" +
                             this.$route.params.projectId + "/tasks",

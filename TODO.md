@@ -136,7 +136,6 @@ Allen for interacting with the exchangeratesapi.io API.".
 1. Listen to private broadcast channel for each project in Vuex
 1. Listen to private broadcast channel for each task in Vuex
 1. Protect tasks with e-tags (so that multiple clients can view tasks...)
-1. GridTextEditor needs to send input updates more frequently than onBlur
 1. GanttChart should only update API if the task was truly altered
 1. Replace App.vue `loading` with a full modal div that shows whenever there are
 Axios requests in progress for longer than 2 seconds
@@ -353,6 +352,7 @@ UserObserver class.
 1. `GridTable` to support clicking on row headers to select entire row. Multiple
 selections are possible through use of Shift-Click and Ctrl-Click
 1. Allow task to be work-driven
+1. GridTextEditor needs to send input updates more frequently than onBlur
 
 #Details
 ##BR000001

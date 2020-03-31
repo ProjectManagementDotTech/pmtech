@@ -1,6 +1,7 @@
 <template>
     <input class="p-1" :class="selectedClass" :id="uuid" :value="thisValue"
-           @blur="onBlur" @click="$emit('click')" @keyup.enter="onBlur" />
+           @blur="onBlur" @input="onBlur" @click="$emit('click')"
+           @keyup.enter="onBlur" />
 </template>
 
 <script>
