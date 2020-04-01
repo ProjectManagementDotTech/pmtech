@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Traits\Models\SupportsETags;
 use IgnitionNbs\LaravelUuidModel\UuidModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use SoftDeletes, UuidModel;
+    use SoftDeletes, SupportsETags, UuidModel;
 
     //region Public Access
 

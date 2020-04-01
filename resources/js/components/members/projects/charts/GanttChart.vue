@@ -65,9 +65,19 @@
                          * --glj
                          */
                         this.updateTaskTimeoutHandle = window.setTimeout(() => {
+                            let eTag = this.$store.getters["tasks/eTag"](
+                                newTaskObject.id);
                             this.$axios.put("/api/v1/tasks/" + newTaskObject.id,
-                                newTaskObject);
-                            this.$store.commit("tasks/update", newTaskObject);
+                                newTaskObject, {
+                                    headers: { "If-Match": eTag }
+                            })
+                                .then(response => {
+                                    this.$store.commit("tasks/update", {
+                                        data: newTaskObject,
+                                        etag: response.headers.etag
+                                    });
+                                });
+
                         }, 1000);
                     } else {
                         this.$axios.post("/api/v1/projects/" +

@@ -53,13 +53,29 @@
             onOk() {
                 let promises = [];
                 for(let i = 0; i < this.tasks.length; i++) {
+                    let eTag = this.$store.getters["tasks/eTag"](
+                        this.tasks[i].id);
                     promises.push(
                         this.$axios.put("/api/v1/tasks/" + this.tasks[i].id,
-                            this.tasks[i])
+                            this.tasks[i], { headers: { "If-Match": eTag }})
                     );
                 }
                 Promise.all(promises)
-                    .then(() => {
+                    .then(responses => {
+                        for(let i = 0; i < responses.length; i++) {
+                            let response = responses[i];
+                            let eTag = response.headers.etag;
+                            let taskId = response.config.url.substr(
+                                response.config.url.lastIndexOf("/") + 1);
+                            let task = this.tasks.find(t => t.id === taskId);
+                            if(task) {
+                                this.$store.commit("tasks/update", {
+                                    data: task,
+                                    etag: eTag
+                                });
+                            }
+                            debugger;
+                        }
                         this.$emit("close");
                     })
                     .catch(error => {

@@ -51,6 +51,7 @@ class UT0010_TaskApiTests extends TestCase
             ->assertJsonFragment([
                 'name' => 'UT0010-0001'
             ])
-            ->assertJsonCount(1);
+            ->assertJsonCount(1)
+            ->assertHeader('ETag');
     }
 }

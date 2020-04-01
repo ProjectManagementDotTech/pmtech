@@ -25,8 +25,11 @@ class TaskController extends Controller
     public function update(StoreTaskRequest $request, Task $task)
     {
         $task->fill($request->validated())->save();
+        $task->refresh();
 
-        return response('', 204);
+        return response('', 204, [
+            'ETag' => $task->eTag()
+        ]);
     }
 
     //endregion

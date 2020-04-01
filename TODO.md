@@ -135,7 +135,6 @@ Allen for interacting with the exchangeratesapi.io API.".
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
 1. Listen to private broadcast channel for each task in Vuex
-1. Protect tasks with e-tags (so that multiple clients can view tasks...)
 1. GanttChart should only update API if the task was truly altered
 1. Global "loading" div with incrementLoading and decrementLoading vuex
 committers
@@ -356,6 +355,7 @@ selections are possible through use of Shift-Click and Ctrl-Click
 1. Allow task to be work-driven
 1. GridTextEditor needs to send input updates more frequently than onBlur
 1. `GridTable` needs `GridPercentageEditor`
+1. Protect tasks with e-tags (so that multiple clients can view tasks...)
 
 #Details
 ##BR000001
@@ -406,7 +406,7 @@ https://fideloper.com/laravel4-etag-conditional-get.
 
 Option 3. is a direct result of that article because I started looking into the
 $response object as a whole, and saw, much to my surprise, that we have a member
-`original`  in the Response instance that we can get to by calling
+`original` in the Response instance that we can get to by calling
 `$response->getOriginalContent()`. For GET requests, then, where the response
 has an Eloquent Collection, we can calculate ETags for each Model in that
 collection, just before the response is sent to the API consumer.

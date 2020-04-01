@@ -12,7 +12,10 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.get("/api/v1/projects/" + projectId + "/tasks")
                     .then(response => {
-                        commit("set", response.data);
+                        commit("set", {
+                            data: response.data,
+                            etags: response.headers.etag
+                        });
                         resolve();
                     })
                     .catch(error => {
@@ -33,6 +36,9 @@ export default {
         },
         byId: (state) => (id) => {
             return state.tasks.find(t => t.id == id);
+        },
+        eTag: (state) => (id) => {
+            return state.etags[id];
         }
     },
     mutations: {
@@ -43,18 +49,27 @@ export default {
             }
         },
         set(state, payload) {
-            state.tasks = payload;
-        },
-        update(state, aTask) {
-            let knownTask = state.tasks.find(t => t.id == aTask.id);
-            if(knownTask) {
-                Vue.set(knownTask, "name", aTask.name);
-                Vue.set(knownTask, "wbs", aTask.wbs);
+            state.tasks = payload.data;
+            let eTagString = payload.etags.replace(/"/g, "");
+            let eTagArray = eTagString.split(";");
+            for(let i = 0; i < eTagArray.length; i++) {
+                let eTagParts = eTagArray[i].split(":");
+                state.etags[eTagParts[0]] = eTagParts[1];
             }
+        },
+        update(state, payload) {
+            let knownTask = state.tasks.find(t => t.id == payload.data.id);
+            if(knownTask) {
+                Vue.set(knownTask, "name", payload.data.name);
+                Vue.set(knownTask, "wbs", payload.data.wbs);
+                Vue.set(knownTask, "work_driven", payload.data.work_driven);
+            }
+            state.etags[payload.data.id] = payload.etag;
         }
     },
     namespaced: true,
     state: {
+        etags: {},
         tasks: []
     }
 };
