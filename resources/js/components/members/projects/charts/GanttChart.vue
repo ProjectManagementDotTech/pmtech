@@ -70,14 +70,7 @@
                             this.$axios.put("/api/v1/tasks/" + newTaskObject.id,
                                 newTaskObject, {
                                     headers: { "If-Match": eTag }
-                            })
-                                .then(response => {
-                                    this.$store.commit("tasks/update", {
-                                        data: newTaskObject,
-                                        etag: response.headers.etag
-                                    });
-                                });
-
+                            });
                         }, 1000);
                     } else {
                         this.$axios.post("/api/v1/projects/" +

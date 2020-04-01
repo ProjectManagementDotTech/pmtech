@@ -36,7 +36,7 @@ class TaskRepository implements TaskRepositoryInterface
 
     //endregion
 
-    //region Static Public Access
+    //region Public Access
 
     /*
      * TODO Make sure there are no un-archived timesheet entries against
@@ -55,13 +55,11 @@ class TaskRepository implements TaskRepositoryInterface
         unset($attributes['project_id']);
 
         $this->traitUpdate($model, $attributes);
-
-//        event(new TaskUpdated($model));
     }
 
     //endregion
 
-    //region Static Public Status Report
+    //region Public Status Report
 
     /**
      * @inheritDoc

@@ -2,14 +2,14 @@
 
 namespace App\Events;
 
-use App\Workspace;
+use App\Task;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WorkspaceUpdated implements ShouldBroadcast
+class TaskUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -18,14 +18,14 @@ class WorkspaceUpdated implements ShouldBroadcast
     /**
      * WorkspaceUpdated constructor.
      *
-     * @param $workspace
+     * @param $task
      */
-    public function __construct($workspace)
+    public function __construct($task)
     {
-        if(is_object($workspace) && get_class($workspace) == Workspace::class) {
-            $this->workspaceId = $workspace->id;
+        if(is_object($task) && get_class($task) == Task::class) {
+            $this->taskId = $task->id;
         } else {
-            $this->workspaceId = $workspace;
+            $this->taskId = $task;
         }
     }
 
@@ -49,9 +49,9 @@ class WorkspaceUpdated implements ShouldBroadcast
     public $tries = 5;
 
     /**
-     * @var mixed
+     * @var string
      */
-    public $workspaceId;
+    public $taskId;
 
     /**
      * Get the channels the event should broadcast on.
@@ -60,7 +60,7 @@ class WorkspaceUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.Workspace.' . $this->workspaceId);
+        return new PrivateChannel('App.Task.' . $this->taskId);
     }
 
     //endregion

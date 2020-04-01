@@ -61,21 +61,20 @@
                     );
                 }
                 Promise.all(promises)
-                    .then(responses => {
-                        for(let i = 0; i < responses.length; i++) {
-                            let response = responses[i];
-                            let eTag = response.headers.etag;
-                            let taskId = response.config.url.substr(
-                                response.config.url.lastIndexOf("/") + 1);
-                            let task = this.tasks.find(t => t.id === taskId);
-                            if(task) {
-                                this.$store.commit("tasks/update", {
-                                    data: task,
-                                    etag: eTag
-                                });
-                            }
-                            debugger;
-                        }
+                    .then(()/*responses*/ => {
+                        // for(let i = 0; i < responses.length; i++) {
+                        //     let response = responses[i];
+                        //     let eTag = response.headers.etag;
+                        //     let taskId = response.config.url.substr(
+                        //         response.config.url.lastIndexOf("/") + 1);
+                        //     let task = this.tasks.find(t => t.id === taskId);
+                        //     if(task) {
+                        //         this.$store.commit("tasks/update", {
+                        //             data: task,
+                        //             etag: eTag
+                        //         });
+                        //     }
+                        // }
                         this.$emit("close");
                     })
                     .catch(error => {

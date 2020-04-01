@@ -356,6 +356,7 @@ selections are possible through use of Shift-Click and Ctrl-Click
 1. GridTextEditor needs to send input updates more frequently than onBlur
 1. `GridTable` needs `GridPercentageEditor`
 1. Protect tasks with e-tags (so that multiple clients can view tasks...)
+1. Listen to private broadcast channel for each task in Vuex
 
 #Details
 ##BR000001
