@@ -18,8 +18,7 @@ class TaskRepository implements TaskRepositoryInterface
     use ConstructsRepository, CreatesModel {
         create as traitCreate;
     }
-    use DeletesModel, FindsModel;
-    use UpdatesModel {
+    use DeletesModel, FindsModel, UpdatesModel {
         update as traitUpdate;
     }
 
@@ -49,9 +48,8 @@ class TaskRepository implements TaskRepositoryInterface
     public function update(Model $model, array $attributes = [])
     {
         /*
-         * We cannot move tasks between projects and we cannot set a new ID.
+         * We cannot move tasks between projects.
          */
-        unset($attributes['id']);
         unset($attributes['project_id']);
 
         $this->traitUpdate($model, $attributes);

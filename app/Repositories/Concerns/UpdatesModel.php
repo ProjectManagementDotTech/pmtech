@@ -13,6 +13,8 @@ trait UpdatesModel
      */
     public function update(Model $model, array $attributes = [])
     {
+        unset($attributes['id']);
+
         $model->update($attributes);
         $model->save();
     }

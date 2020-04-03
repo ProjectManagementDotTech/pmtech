@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository implements UserRepositoryInterface
 {
-    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel,
-        UpdatesModel;
+    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel;
+    use UpdatesModel;
 
     //region Public Construction
 
@@ -23,6 +23,8 @@ class UserRepository implements UserRepositoryInterface
         $this->modelClass = User::class;
         $this->usesSoftDeletes = TRUE;
     }
+
+    //endregion
 
     //region Public Status Report
 
