@@ -4,13 +4,14 @@ namespace App;
 
 use App\Mail\Payment\FirstTime;
 use App\Traits\Models\SupportsETags;
+use IgnitionNbs\LaravelUuidModel\UuidModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Mail;
 
 class Workspace extends Model
 {
-    use SoftDeletes, SupportsETags;
+    use SoftDeletes, SupportsETags, UuidModel;
 
     //region Public Access
 

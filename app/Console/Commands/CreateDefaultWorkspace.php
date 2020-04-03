@@ -3,16 +3,18 @@
 namespace App\Console\Commands;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\WorkspaceRepository;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use Illuminate\Console\Command;
 
 class CreateDefaultWorkspace extends Command
 {
     //region Public Construction
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository,
+        WorkspaceRepositoryInterface $workspaceRepository)
     {
         $this->userRepository = $userRepository;
+        $this->workspaceRepository = $workspaceRepository;
 
         parent::__construct();
     }
@@ -34,7 +36,7 @@ class CreateDefaultWorkspace extends Command
         $this->output->progressStart(count($users));
         foreach($users as $user) {
             if($user->ownedWorkspaces()->count() == 0) {
-                WorkspaceRepository::create([
+                $this->workspaceRepository->create([
                     'owner_user_id' => $user->id,
                     'name' => 'Default'
                 ]);
@@ -70,6 +72,13 @@ class CreateDefaultWorkspace extends Command
      * @var UserRepositoryInterface
      */
     protected $userRepository;
+
+    /**
+     * The workspace repository.
+     *
+     * @var WorkspaceRepositoryInterface
+     */
+    protected $workspaceRepository;
 
     //endregion
 }

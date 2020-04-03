@@ -7,12 +7,13 @@ use App\Http\Requests\v1\CreateClientRequest;
 use App\Http\Requests\v1\StoreProjectRequest;
 use App\Http\Requests\v1\CreateWorkspace;
 use App\Http\Requests\v1\InvitationRequest;
+use App\Http\Requests\v1\StoreWorkspaceRequest;
 use App\Mail\Invitation;
 use App\Repositories\Contracts\ClientRepositoryInterface;
 use App\Repositories\Contracts\InvitationRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Repositories\ProjectRepository;
-use App\Repositories\WorkspaceRepository;
 use App\User;
 use App\Workspace;
 use Illuminate\Http\Request;
@@ -31,12 +32,14 @@ class WorkspaceController extends Controller
      * @param InvitationRepositoryInterface $invitationRepository
      */
     public function __construct(ClientRepositoryInterface $clientRepository,
-								InvitationRepositoryInterface $invitationRepository,
-								UserRepositoryInterface $userRepository)
+        InvitationRepositoryInterface $invitationRepository,
+        UserRepositoryInterface $userRepository,
+        WorkspaceRepositoryInterface $workspaceRepository)
     {
         $this->clientRepository = $clientRepository;
         $this->invitationRepository = $invitationRepository;
         $this->userRepository = $userRepository;
+        $this->workspaceRepository = $workspaceRepository;
     }
 
     //endregion
@@ -53,7 +56,7 @@ class WorkspaceController extends Controller
      */
     public function archive(Workspace $workspace)
     {
-        WorkspaceRepository::archive($workspace);
+        $this->workspaceRepository->archive($workspace);
 
         return response('', 205, [
             'Location' => route('workspaces.show', [
@@ -97,7 +100,7 @@ class WorkspaceController extends Controller
     {
         $data = $request->input();
         $data['owner_user_id'] = Auth::user()->id;
-        $workspace = WorkspaceRepository::create($data);
+        $workspace = $this->workspaceRepository->create($data);
 
         if($workspace) {
             return response('', 201, [
@@ -159,7 +162,7 @@ class WorkspaceController extends Controller
      */
     public function delete(Workspace $workspace)
     {
-        WorkspaceRepository::delete($workspace);
+        $this->workspaceRepository->delete($workspace);
 
         return response('', 205, [
             'Location' => route('workspaces.show', [
@@ -331,27 +334,9 @@ class WorkspaceController extends Controller
      * @param Workspace $workspace
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(Request $request, Workspace $workspace)
+    public function update(StoreWorkspaceRequest $request, Workspace $workspace)
     {
-        $validatedData = $request->validate([
-            'name' => [
-                'required',
-                'max:255',
-                function ($attribute, $value, $fail) use ($workspace) {
-                    foreach(
-                        WorkspaceRepository::allFromSameOwnerExcept($workspace)
-                        as $ownedWorkspace
-                    ) {
-                        if($ownedWorkspace->name == $value) {
-                            $fail('The given value is already in use for ' .
-                                $attribute . '.');
-                        }
-                    }
-                }
-            ]
-        ]);
-
-        WorkspaceRepository::update($workspace, $validatedData);
+        $this->workspaceRepository->update($workspace, $request->validated());
 
         return response('', 204);
     }
@@ -380,6 +365,13 @@ class WorkspaceController extends Controller
      * @var UserRepositoryInterface
      */
     protected $userRepository;
+
+    /**
+     * This workspace repository.
+     *
+     * @var WorkspaceRepositoryInterface
+     */
+    protected $workspaceRepository;
 
     //endregion
 }

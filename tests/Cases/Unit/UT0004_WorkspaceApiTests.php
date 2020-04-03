@@ -14,6 +14,8 @@ class UT0004_WorkspaceApiTests extends TestCase
     {
         parent::__construct($name, $data, $dataName);
         $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
     }
 
     /** @test */
@@ -67,9 +69,9 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0001'
-        ])[0];
+        ]);
         $response = $this->get('/api/v1/workspaces/' . $workspace->id);
         $etag = $response->headers->get('etag');
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
@@ -85,7 +87,8 @@ class UT0004_WorkspaceApiTests extends TestCase
             'id' => $workspace->id
         ]);
 
-        WorkspaceRepository::restore($workspace);
+        $workspace->refresh();
+        $this->workspaceRepository->restore($workspace);
         $workspace->refresh();
         $this->assertNull($workspace->deleted_at);
     }
@@ -123,9 +126,9 @@ class UT0004_WorkspaceApiTests extends TestCase
             'name' => 'UT0004-0002'
         ]);
 
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0002'
-        ])[0];
+        ]);
         $response = $this->delete('/api/v1/workspaces/' . $workspace->id, [], [
             'If-Match' => $workspace->eTag()
         ]);
@@ -162,9 +165,9 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0001'
-        ])[0];
+        ]);
         $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
             'name' => 'UT0004-0003'
         ], [
@@ -187,9 +190,9 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0001'
-        ])[0];
+        ]);
         $response = $this->put('/api/v1/workspaces/' . $workspace->id, [
             'name' => 'Test0001'
         ], [
@@ -199,7 +202,7 @@ class UT0004_WorkspaceApiTests extends TestCase
             'message' => 'The given data was invalid.',
             'errors' => [
                 'name' => [
-                    'The given value is already in use for name.'
+                    'The name is already used.'
                 ]
             ]
         ]);
@@ -235,11 +238,15 @@ class UT0004_WorkspaceApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = WorkspaceRepository::filter(['name' => 'UT0004-0001'])[0];
+        $workspace = $this->workspaceRepository->first([
+            'name' => 'UT0004-0001'
+        ]);
         $response = $this->get('/api/v1/workspaces/' . $workspace->id .
             '/members');
         $response->assertStatus(200)->assertJsonCount(1);
     }
 
     protected $userRepository;
+
+    protected $workspaceRepository;
 }

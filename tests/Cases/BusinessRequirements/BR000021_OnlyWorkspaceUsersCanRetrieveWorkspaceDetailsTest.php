@@ -14,6 +14,8 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
     {
         parent::__construct($name, $data, $dataName);
         $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
     }
 
     /** @test */
@@ -23,9 +25,9 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
 
         $this->login('user0001@test.com', 'Welcome123');
 
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'Test0001'
-        ])[0];
+        ]);
         $response = $this->get('/api/v1/workspaces/' . $workspace->id);
         $response->assertStatus(200)->assertJsonFragment([
             'name' => 'Test0001'
@@ -46,4 +48,5 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
     }
 
     protected $userRepository;
+    protected $workspaceRepository;
 }

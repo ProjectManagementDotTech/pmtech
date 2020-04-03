@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Contracts\SettingsRepositoryInterface as
     SettingsRepositoryInterface;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Repositories\SettingsRepository;
-use App\Repositories\WorkspaceRepository;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -27,11 +27,13 @@ class VerificationController extends Controller
      *
      * @return void
      */
-    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    public function __construct(SettingsRepositoryInterface $settingsRepository,
+        WorkspaceRepositoryInterface $workspaceRepository)
     {
         $this->middleware('guest');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
         $this->settingsRepository = $settingsRepository;
+        $this->workspaceRepository = $workspaceRepository;
     }
 
     //endregion
@@ -88,7 +90,7 @@ class VerificationController extends Controller
                 $user->email_verified_at = Carbon::now();
                 $user->save();
 
-                WorkspaceRepository::create([
+                $this->workspaceRepository->create([
                     'owner_user_id' => $user->id,
                     'name' => 'Default'
                 ]);
@@ -110,9 +112,18 @@ class VerificationController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
+     * The settings repository.
+     *
      * @var SettingsRepository
      */
     protected $settingsRepository;
+
+    /**
+     * The workspace repository.
+     *
+     * @var WorkspaceRepositoryInterface
+     */
+    protected $workspaceRepository;
 
     //endregion
 }

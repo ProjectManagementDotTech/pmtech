@@ -4,14 +4,23 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CreateSubscriptionRequest;
-use App\Repositories\WorkspaceRepository;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    //region Public Construction
+
+    public function __construct(
+        WorkspaceRepositoryInterface $workspaceRepository)
+    {
+        $this->workspaceRepository = $workspaceRepository;
+    }
+
+    //endregion
+
     //region Public Status Report
 
     /**
@@ -59,7 +68,7 @@ class UserController extends Controller
     public function createSubscription(CreateSubscriptionRequest $request)
     {
         $user = Auth::user();
-        $workspace = WorkspaceRepository::find($request->input('workspace_id'));
+        $workspace = $this->workspaceRepository->find($request->input('workspace_id'));
         if(!$workspace) {
             abort(404);
         }
@@ -227,6 +236,17 @@ class UserController extends Controller
     {
         return Auth::user()->createSetupIntent();
     }
+
+    //endregion
+
+    //region Protected Attributes
+
+    /**
+     * The workspace repository.
+     *
+     * @var WorkspaceRepositoryInterface
+     */
+    protected $workspaceRepository;
 
     //endregion
 }

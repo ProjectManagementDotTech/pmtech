@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Concerns;
 
+use App\Exceptions\RestoreFailedException;
 use Illuminate\Database\Eloquent\Model;
 
 trait DeletesModel
@@ -36,7 +37,9 @@ trait DeletesModel
     public function restore(Model $model)
     {
         if($this->usesSoftDeletes) {
-            $model->restore();
+            if(!$model->restore()) {
+                throw new RestoreFailedException($model);
+            }
         }
     }
 

@@ -13,6 +13,14 @@ use Tests\Shared\TestCase;
 
 class FT0001_InviteNewUserToWorkspaceTest extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
+    }
+
     /** @test */
     public function sendInvitation()
     {
@@ -22,7 +30,9 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
 
         $this->login('user0001@test.com', 'Welcome123');
 
-        $workspace = WorkspaceRepository::filter(['name' => 'UT0004-0001'])[0];
+        $workspace = $this->workspaceRepository->first([
+            'name' => 'UT0004-0001'
+        ]);
         $this->assertEquals(1, count($workspace->users));
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
@@ -68,7 +78,9 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = WorkspaceRepository::filter(['name' => 'UT0004-0001'])[0];
+        $workspace = $this->workspaceRepository->first([
+            'name' => 'UT0004-0001'
+        ]);
         $this->assertEquals(2, count($workspace->users));
         $this->assertEquals(1, $workspace
             ->users()
@@ -81,4 +93,7 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
             ->count()
         );
     }
+
+    protected $userRepository;
+    protected $workspaceRepository;
 }

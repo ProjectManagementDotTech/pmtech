@@ -17,10 +17,11 @@ class BR000018_ThereIsOnlyOneRunningTimesheetEntryTest extends TestCase
         Log::info(__METHOD__);
 
         $userRepository = new UserRepository();
+        $workspaceRepository = new WorkspaceRepository($userRepository);
         $user = $userRepository->findByEmail('user0001@test.com');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $workspaceRepository->first([
             'name' => 'Test0001'
-        ])[0];
+        ]);
         $this->login('user0001@test.com', 'Welcome123');
 
         $response = $this->post('/api/v1/timesheet_entries', [

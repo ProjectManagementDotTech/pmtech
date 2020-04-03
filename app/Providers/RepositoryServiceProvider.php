@@ -13,10 +13,12 @@ use App\Repositories\Contracts\SettingsRepositoryInterface as
     SettingsRepositoryInterface;
 use App\Repositories\Contracts\TaskRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface as UserRepositoryInterface;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Repositories\InvitationRepository;
 use App\Repositories\SettingsRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\WorkspaceRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -40,6 +42,8 @@ class RepositoryServiceProvider extends ServiceProvider
             TaskRepository::class);
         $this->app->singleton(UserRepositoryInterface::class,
             UserRepository::class);
+        $this->app->singleton(WorkspaceRepositoryInterface::class,
+            WorkspaceRepository::class);
     }
 
     /**

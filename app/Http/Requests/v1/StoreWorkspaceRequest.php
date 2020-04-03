@@ -6,7 +6,7 @@ use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Rules\UniqueWorkspaceNameForOwnerUser;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateWorkspace extends FormRequest
+class StoreWorkspaceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,6 +29,7 @@ class CreateWorkspace extends FormRequest
             'name' => [
                 'required',
                 'string',
+                'max:255',
                 new UniqueWorkspaceNameForOwnerUser($workspaceRepository)
             ]
         ];

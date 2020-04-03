@@ -125,7 +125,6 @@ workspace defined in the workspace yet
 recorded against each task
 1. Project and Workspace `id` cannot be updated through their respective
 repositories
-1. `WorkspaceRepository::get` should be allowed to return NULL
 1. Add Currency model / migration
 1. Link `Workspace` and `Project` to `Currency`
 1. Automatically convert to workspace currency any project that has financial
@@ -134,7 +133,6 @@ package mentioned in Laravel News "Laravel Exchange Rates is a package by Ash
 Allen for interacting with the exchangeratesapi.io API.".  
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
-1. Listen to private broadcast channel for each task in Vuex
 1. GanttChart should only update API if the task was truly altered
 1. Global "loading" div with incrementLoading and decrementLoading vuex
 committers
@@ -357,6 +355,7 @@ selections are possible through use of Shift-Click and Ctrl-Click
 1. `GridTable` needs `GridPercentageEditor`
 1. Protect tasks with e-tags (so that multiple clients can view tasks...)
 1. Listen to private broadcast channel for each task in Vuex
+1. `WorkspaceRepository::get` should be allowed to return NULL
 
 #Details
 ##BR000001

@@ -13,6 +13,8 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
         $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
     }
 
     /** @test */
@@ -29,7 +31,7 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
             '/transfer/' . $newOwner->id);
         $response->assertNoContent(201);
-        $workspaceReloaded = WorkspaceRepository::find($workspace->id);
+        $workspaceReloaded = $this->workspaceRepository->find($workspace->id);
         $this->assertNotEquals($workspace->owner_user_id,
             $workspaceReloaded->owner_user_id);
         $this->assertEquals($newOwner->id, $workspaceReloaded->owner_user_id);
@@ -55,11 +57,12 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
             '/transfer/' . $newOwner->id);
         $response->assertStatus(403);
-        $workspaceReloaded = WorkspaceRepository::find($workspace->id);
+        $workspaceReloaded = $this->workspaceRepository->find($workspace->id);
         $this->assertEquals($workspace->owner_user_id,
             $workspaceReloaded->owner_user_id);
         $this->assertNotEquals($newOwner->id, $workspaceReloaded->owner_user_id);
     }
 
     protected $userRepository;
+    protected $workspaceRepository;
 }

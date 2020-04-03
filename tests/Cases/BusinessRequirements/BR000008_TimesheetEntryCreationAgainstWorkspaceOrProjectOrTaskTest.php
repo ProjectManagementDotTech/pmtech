@@ -16,6 +16,8 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         parent::__construct($name, $data, $dataName);
         $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
     }
 
     /** @test */
@@ -23,9 +25,9 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         Log::info(__METHOD__);
 
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'Test0001'
-        ])[0];
+        ]);
         $user = $this->userRepository->findByEmail('user0001@test.com');
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
@@ -48,9 +50,9 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
         Log::info(__METHOD__);
 
         $user = $this->userRepository->findByEmail('user0001@test.com');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'Test0001'
-        ])[0];
+        ]);
         $project = ProjectRepository::byName('UT0008-0001', $workspace);
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
@@ -75,9 +77,9 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
         Log::info(__METHOD__);
 
         $user = $this->userRepository->findByEmail('user0001@test.com');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'Test0001'
-        ])[0];
+        ]);
         $project = ProjectRepository::byName('UT0008-0001', $workspace);
         $taskRepository = new TaskRepository();
         $task = $taskRepository->findByName('UT0010-0001', $project)[0];
@@ -100,4 +102,5 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     }
 
     protected $userRepository;
+    protected $workspaceRepository;
 }

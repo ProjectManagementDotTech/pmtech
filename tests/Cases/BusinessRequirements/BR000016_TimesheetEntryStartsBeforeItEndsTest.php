@@ -2,6 +2,7 @@
 
 namespace Tests\Cases\BusinessRequirements;
 
+use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -14,10 +15,12 @@ class BR000016_TimesheetEntryStartsBeforeItEndsTest extends TestCase
     {
         Log::info(__METHOD__);
 
+        $workspaceRepository = new WorkspaceRepository(new UserRepository);
+
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $workspaceRepository->first([
             'name' => 'Test0001'
-        ])[0];
+        ]);
         $endedAt = Carbon::now()->subMinute();
         $startedAt = Carbon::now();
         $response = $this->post('/api/v1/timesheet_entries', [

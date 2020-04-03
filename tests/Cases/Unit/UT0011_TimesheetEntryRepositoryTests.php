@@ -19,6 +19,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         parent::__construct($name, $data, $dataName);
         $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
     }
 
     /** @test */
@@ -26,9 +28,9 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0001'
-        ])[0];
+        ]);
         $user = $this->userRepository->findByEmail('user0004@test.com');
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
@@ -61,9 +63,9 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $user = $this->userRepository->findByEmail('user0004@test.com');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0001'
-        ])[0];
+        ]);
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
@@ -93,9 +95,9 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $user = $this->userRepository->findByEmail('user0004@test.com');
-        $workspace = WorkspaceRepository::filter([
+        $workspace = $this->workspaceRepository->first([
             'name' => 'UT0004-0001'
-        ])[0];
+        ]);
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
@@ -303,4 +305,6 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     }
 
     protected $userRepository;
+
+    protected $workspaceRepository;
 }
