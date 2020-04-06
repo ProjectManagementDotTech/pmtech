@@ -15,19 +15,78 @@
 * OK color: green-500
 
 #To do (v2020.2)
-###Edit workspace settings
-1. Allow user to request another activiation link
-###Workspace members
 ###Clients
+###Core
+1. Repository `findBy` methods need to distinguish between find first and find
+all.
+1. Intercept 412 responses and fetch the desired object first rejecting the
+original alteration request with a generic message: "Object was externally
+modified, so your changes could not be applied. The modifications were loaded
+from the API, and should be visible."
+1. Support setting moment locale based on Laravel / browser locale.
 ###DateTimePicker
 ###FilteringDropdownControl
 ###General
-###Navigation
+1. Upgrade to Laravel 7.
+1. Break-up Project-Management.tech into several packages:
+   + Core: Have the basic interface definitions, and things like tailwind
+   + i12: Iso related information, services and tables.
+   + Project: Deal with all project related stuff
+   + Public-Web: Have the public facing parts of the website
+   + Task: Deal with all task related stuff
+   + Timesheet: Deal with all timesheet related stuff
+   + UI: Deal with general UI things
+   + Workspace: Deal with all workspace related stuff
 ###Projects
+1. Write tests around ProjectRepository
+1. Delete Project in SPA
+1. Archive Project in SPA
+1. Update Project in SPA
+1. Write tests around Project API
+1. Close project. This stops timesheet entries being created against those
+projects (even historic timesheet entries cannot be started against closed
+projects).
+###Tasks
 ###Timesheets
+1. Make timesheet report graphs responsive (including ticks on X axis)
+###UI/UX
+1. Make `PmtechInput` a global component
+1. Add FlashMessage component of some variety to show info, warning, success and
+global error messages.
+1. Update window title with `title` from routes in the afterEach guard
+###Users
+1. Allow user to request another activiation link
+1. Allow user to set for which events an email should be sent.
+1. Remove an account completely with an option to download all data and files
+for all projects etc. that would have been stored in the any of the owned
+workspaces.
+1. Complement User tests with the Settings stuff
+1. Delete settings when User model is deleted
+###Workspaces
+1. Add full member profile in order to understand email domain and country
+information for each user / subscriber. This can be used to determine the amount
+of users in a workspace and to determine whether or not VAT is to be applied to
+the billable amount.
+1. Make sure WorkspaceUpdated events are send (via Pusher) to web clients
+listening on the Workspace private channel. Make sure to have this covered in
+test cases.
+1. Complete WorkspacePolicy with reference to all Business Requirements
+1. Write WorkspaceController actions
+1. Create routes for workspace things - CRUD actions for API
 
 #To do (v2020.3)
-### Tasks
+###Clients
+###Core
+###General
+###Navigation
+###Projects
+1. Add `price` attribute for projects
+1. Add `reduction_percentage` to Project
+1. When adding price to project, show estimate based on project tasks and
+profit_margin.
+1. Allow project member to overwrite `cost` from workspace member
+1. Allow project to overwrite `profit_margin` from workspace
+###Tasks
 1. Add `percent_completion` to `Task`
 1. Add Completion field to GanttChart's GridTable
 1. Add Completion field to TaskProperties (if all tasks are at 100%, show a
@@ -39,81 +98,31 @@ have the same percent_completion value, do not allow editing of this field.
 1. ForceDelete Task in SPA only if task has no timesheet entries
 1. Reorder tasks (via buttons in toolbar)
 1. Send TaskUpdated event when task was updated
-### Projects
-1. Add `price` attribute for projects
-1. Add `reduction_percentage` to Project
-1. When adding price to project, show estimate based on project tasks and
-profit_margin.
-1. Allow project member to overwrite `cost` from workspace member
-1. Allow project to overwrite `profit_margin` from workspace
-### Workspace
+1. When task is work-driven, update % complete according to approved timesheet
+records
+1. Mark task as 100% or completed. This stops timesheet entries being created
+against those tasks (even historic timesheet entries cannot be started against
+completed tasks).
+###Timesheets
+###UI/UX
+###Users
+###Workspace
 1. Add `cost` per workspace member
 1. Add `profit_margin` to workspace
 
 #To do (v2021.1)
 
 #To do (unassigned to release)
-1. Make `PmtechInput` a global component
-1. Repository `findBy` methods need to distinguish between find first and find
-all.
-1. Break-up Project-Management.tech into several packages:
-   + Core: Have the basic interface definitions, and things like tailwind
-   + Iso: Iso related information, services and tables.
-   + Project: Deal with all project related stuff
-   + Public-Web: Have the public facing parts of the website
-   + Task: Deal with all task related stuff
-   + Timesheet: Deal with all timesheet related stuff
-   + UI: Deal with general UI things
-   + Workspace: Deal with all workspace related stuff
-1. Intercept 412 responses and fetch the desired object first rejecting the
-original alteration request with a generic message: "Object was externally
-modified, so your changes could not be applied. The modifications were loaded
-from the API, and should be visible."
-1. Make sure WorkspaceUpdated events are send (via Pusher) to web clients
-listening on the Workspace private channel. Make sure to have this covered in
-test cases.
-1. Upgrade to Laravel 7.
-1. Mark task as 100% or completed. This stops timesheet entries being created
-against those tasks (even historic timesheet entries cannot be started against
-completed tasks).
-1. Close project. This stops timesheet entries being created against those
-projects (even historic timesheet entries cannot be started against closed
-projects).
-1. Support setting moment locale based on Laravel / browser locale.
 1. When user accepted invitation to join or was added to a workspace, the
 workspace owner should be notified that the user now needs access to projects
 in order to collaborate with other project members.
-1. Add FlashMessage component of some variety to show info, warning, success and
-global error messages.
-1. Allow user to set for which events an email should be sent.
-1. Add full member profile in order to understand email domain and country
-information for each user / subscriber. This can be used to determine the amount
-of users in a workspace and to determine whether or not VAT is to be applied to
-the billable amount.
-1. Make timesheet report graphs responsive (including ticks on X axis)
-1. Complete WorkspacePolicy with reference to all Business Requirements
 1. Bruteforce POST login protection - Make sure that users cannot fail login
 attempts more than 5 times in 5 seconds
 1. Add Brute Force protection around registration route as well.
-1. Remove an account completely with an option to download all data and files
-for all projects etc. that would have been stored in the any of the owned
-workspaces.
-1. Complement User tests with the Settings stuff
-1. Delete settings when User model is deleted
-1. Write WorkspaceController actions
-1. Create routes for workspace things - CRUD actions for API
-1. Write tests around ProjectRepository
-1. Delete Project in SPA
-1. Archive Project in SPA
-1. Update Project in SPA
-1. Write tests around Project API
 1. Submit weekly timesheet
 1. Lock timesheet entries after submitting
-1. When task is work-driven, update % complete according to approved timesheet
-records
 1. Add hourly cost to workspace or project members
 1. Add type to project - hourly, fixed, retainer
-1. Update window title with `title` from routes in the afterEach guard
 1. Currency per workspace and apply xe exchange rate between project and
 workspace defined in the workspace yet
 1. Unit test NotificationRepository
