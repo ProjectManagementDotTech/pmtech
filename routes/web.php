@@ -37,7 +37,7 @@
 use Illuminate\Support\Facades\Cache;
 
 /*Route::get('/activation-mailable', function () {
-    $user = \App\User::find('3d58dbea-e0d6-4a0f-ad97-771687372bf7');
+    $user = \App\User::find('something');
     $buttons = [
         [
             'href' => env('APP_URL') . 'email/verify/' .
@@ -51,12 +51,60 @@ use Illuminate\Support\Facades\Cache;
         'user' => $user
     ]);
 });*/
+/*Route::get('/emails/payments/first_time', function() {
+    $userRepository = new \App\Repositories\UserRepository();
+    $user = $userRepository->findByEmail('php.guus@gmail.com');
+    $workspace = $user->ownedWorkspaces()->where('name', 'Private projects')->first();
+    $subscriptionFee = ($workspace->users()->count() - 5) * 4.99;
+    if($subscriptionFee < 0) {
+        $subscriptionFee = 0.0;
+    }
+    $appUrl = env('APP_URL');
+    if($appUrl[strlen($appUrl) - 1] != '/') {
+        $appUrl .= '/';
+    }
+    $buttons = [
+        [
+            'href' => $appUrl . 'workspaces/' . $workspace->id . '/users/' .
+                $workspace->owner_user_id . '/settings/billing/payment',
+            'text' => 'Setup payment method'
+        ]
+    ];
+
+    return view('emails.payments.first_time')->with(
+        compact('buttons', 'subscriptionFee', 'workspace')
+    );
+});*/
+
+/*Route::get('/invitation-mailable', function (\App\Repositories\InvitationRepository $invitationRepository) {
+    $invitation = $invitationRepository->byEmail('guus.leeuw@itpassion.com');
+    $buttons = [
+        [
+            'href' => env('APP_URL') . 'invitation/accept/' .
+                $invitation->nonce . '/' .
+                Cache::store('database')->get($invitation->email),
+            'text' => 'Accept invitation'
+        ]
+    ];
+    return view('emails.authn.invitation')->with([
+        'buttons' => $buttons,
+        'invitation' => $invitation
+    ]);
+});*/
 
 Route::post('errors', 'v1\ErrorController@store')->name('errors.store');
 Route::post('register', 'Auth\RegisterController@register');
 Route::post('logout', 'Auth\LoginController@logout');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')
     ->name('verification.verify');
+Route::get('invitation/accept/{invitationNonce}/{cacheNonce}',
+    'Auth\InvitationController@accept')
+    ->name('invitation.accept')
+    ->where('invitationNonce', '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/')
+    ->where('cacheNonce', '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/');
+Route::post('invitation/details/{invitationNonce}/{cacheNonce}',
+    'Auth\InvitationController@storeDetails')
+    ->name('invitation.storeDetails');
 
 /*
  * If nothing matches, we simply load the SPA app and let it deal with the

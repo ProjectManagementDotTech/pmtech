@@ -2,14 +2,17 @@
 
 namespace App;
 
+use App\Traits\Models\SupportsETags;
+use IgnitionNbs\LaravelUuidModel\UuidModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, SupportsETags, UuidModel;
 
     //region Public Access
+
     //endregion
 
     //region Public Relationships
@@ -38,11 +41,6 @@ class Task extends Model
 
     //region Public Status Reports
 
-    /**
-     * @inheritDoc
-     */
-    public $incrementing = FALSE;
-
     //endregion
 
     //region Protected Attributes
@@ -51,26 +49,21 @@ class Task extends Model
      * @inheritDoc
      */
     protected $fillable = [
-        'id', 'name', 'project_id', 'wbs',
+        'id', 'name', 'project_id', 'wbs', 'work_driven'
     ];
 
     /**
      * @inheritDoc
      */
     protected $hidden = [
-        'project_id',
+        'created_at', 'deleted_at', 'project_id', 'updated_at'
     ];
 
     /**
      * @inheritDoc
      */
-    protected $keyType = 'string';
-
-    /**
-     * @inheritDoc
-     */
     protected $visible = [
-        'id', 'name', 'wbs',
+        'id', 'name', 'wbs', 'work_driven'
     ];
 
     //endregion

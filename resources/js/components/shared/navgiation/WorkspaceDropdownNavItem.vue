@@ -7,6 +7,11 @@
         <button v-if="isOpen" class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default" tabindex="-1" @click="isOpen = false"></button>
         <div v-if="isOpen" class="absolute right-0 bg-white rounded-lg py-2 w-48 shadow-xl z-40">
             <a class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none cursor-pointer" @click="onClickAddWorkspace">Add</a>
+            <div class="border-t border-gray-200 h-px my-1" />
+            <div class="bg-gray-200 cursor-default px-2 py-1 text-xs uppercase">
+                {{ $store.getters["workspaces/byId"]($route.params.workspaceId).name }}
+            </div>
+            <router-link class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId + '/settings'" @click.native="isOpen = false">Settings</router-link>
         </div>
     </div>
 </template>

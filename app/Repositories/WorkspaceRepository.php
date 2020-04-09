@@ -2,63 +2,52 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Workspace;
 use Illuminate\Database\Eloquent\Collection;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\Model;
 
-class WorkspaceRepository
+class WorkspaceRepository implements WorkspaceRepositoryInterface
 {
-    //region Static Public Access
-
-    /**
-     * Archive the given Workspace.
-     *
-     * @param Workspace $workspace
-     * @throws \Exception
-     */
-    static public function archive(Workspace $workspace)
-    {
-        $workspace->delete();
+    use ConstructsRepository, CreatesModel {
+        create as traitCreate;
     }
+    use DeletesModel, FindsModel, UpdatesModel;
+
+    //region Public Construction
 
     /**
-     * Delete the given Workspace.
-     *
-     * @param Workspace $workspace
+     * TaskRepository constructor.
      */
-    static public function delete(Workspace $workspace)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $workspace->forceDelete();
-    }
-
-    /**
-     * Restore, from archive, the given workspace.
-     *
-     * @param Workspace $workspace
-     */
-    static public function restore(Workspace $workspace)
-    {
-        $workspace->restore();
-    }
-
-    /**
-     * Update the given workspace with the provided $data.
-     *
-     * @param Workspace $workspace
-     * @param array $data
-     */
-    static public function update(Workspace $workspace, array $data)
-    {
-        foreach($data as $key => $value) {
-            $workspace->$key = $value;
-        }
-
-        $workspace->save();
+        $this->modelClass = Workspace::class;
+        $this->userRepository = $userRepository;
+        $this->usesSoftDeletes = TRUE;
     }
 
     //endregion
 
-    //region Static Public Status Report
+    //region Public Status Report
+
+    /**
+     * @inheritDoc
+     */
+    public function all(array $criteria = []): Collection
+    {
+        $result = Workspace::query();
+        foreach($criteria as $key => $value) {
+            $result = $result->where($key, $value);
+        }
+
+        return $result->get();
+    }
 
     /**
      * All the workspaces owned by the same owner as the given $workspace,
@@ -67,73 +56,53 @@ class WorkspaceRepository
      * @param Workspace $workspace
      * @return mixed
      */
-    static public function allFromSameOwnerExcept(Workspace $workspace)
+    public function allFromSameOwnerExcept(Workspace $workspace)
     {
         return $workspace->ownerUser->ownedWorkspaces()
-            ->whereNot('id', $workspace->id)
+            ->where('id', '<>', $workspace->id)
             ->get();
     }
 
     /**
-     * Create a new workspace based on the given data.
-     *
-     * @param array $data
-     * @return Workspace|null
+     * @inheritDoc
      * @throws \Exception
      */
-    static public function create(array $data): ?Workspace
+    public function create(array $attributes = []): Model
     {
-        $user = UserRepository::find($data['owner_user_id']);
-        if($user !== NULL) {
-            $data['id'] = Uuid::uuid4()->toString();
-            $workspace = Workspace::create($data);
-            $workspace->users()->attach($user);
-            return $workspace;
+        $user = $this->userRepository->find($attributes['owner_user_id']);
+        if(!$user) {
+            throw new \Exception('Cannot find user #' .
+                $attributes['owner_user_id']);
         }
 
-        return NULL;
+        $result = $this->traitCreate($attributes);
+        $user->attachToWorkspace($result);
+        return $result;
     }
 
     /**
-     * Filter the workspaces by the given criteria
-     *
-     * @param array $criteria
-     * @return Collection
+     * @inheritDoc
      */
-    static public function filter(array $criteria): Collection
+    public function first(array $criteria = []): ?Model
     {
         $result = Workspace::query();
         foreach($criteria as $key => $value) {
             $result = $result->where($key, $value);
         }
-        return $result->get();
+
+        return $result->first();
     }
+
+    //endregion
+
+    //region Protected Attributes
 
     /**
-     * Get the workspace identified by $id.
+     * The user repository.
      *
-     * @param string $id
-     * @return Workspace|null
+     * @var UserRepositoryInterface
      */
-    static public function find(string $id): ?Workspace
-    {
-        return Workspace::find($id);
-    }
-
-    /**
-     * Restore, from archive, a Workspace model given its ID.
-     *
-     * @param string $id
-     * @return Workspace|null
-     */
-    static public function restoreById(string $id): ?Workspace
-    {
-        $workspace = Workspace::withTrashed()->where('id', $id)->first();
-        if($workspace)
-            $workspace->restore();
-
-        return $workspace;
-    }
+    protected $userRepository;
 
     //endregion
 }

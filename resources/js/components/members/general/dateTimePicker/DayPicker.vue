@@ -1,13 +1,13 @@
 <template>
     <div class="block">
         <div class="w-full px-4 flex items-center justify-between border-b border-gray-400">
-            <div class="w-1/7 text-center">Su</div>
-            <div class="w-1/7 text-center">Mo</div>
-            <div class="w-1/7 text-center">Tu</div>
-            <div class="w-1/7 text-center">We</div>
-            <div class="w-1/7 text-center">Th</div>
-            <div class="w-1/7 text-center">Fr</div>
-            <div class="w-1/7 text-center">Sa</div>
+            <div class="w-1/7 text-center">{{ $t("Su") }}</div>
+            <div class="w-1/7 text-center">{{ $t("Mo") }}</div>
+            <div class="w-1/7 text-center">{{ $t("Tu") }}</div>
+            <div class="w-1/7 text-center">{{ $t("We") }}</div>
+            <div class="w-1/7 text-center">{{ $t("Th") }}</div>
+            <div class="w-1/7 text-center">{{ $t("Fr") }}</div>
+            <div class="w-1/7 text-center">{{ $t("Sa") }}</div>
         </div>
         <div v-for="(week, wkey) in weeks" :key="wkey"
              class="w-full px-4 flex items-center justify-between week">

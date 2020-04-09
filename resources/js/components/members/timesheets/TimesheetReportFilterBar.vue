@@ -1,13 +1,15 @@
 <template>
     <div>
         <div class="flex flex-wrap w-full items-center">
-            <div class="w-6/12 md:w-3/12">
-                <filtering-dropdown-control :value="filter.selectedProject"
-                                            :entries="$store.getters['projects/all']"
-                                            @blur="onBlur"
-                                            @input="onInputProject" />
+            <div class="w-6/12 md:w-2/12">
+                <client-selection-control v-model="filter.client" />
             </div>
-            <div class="w-6/12 md:w-3/12">
+            <div class="w-6/12 md:w-2/12">
+                <combo-control :entries="clientProjects"
+                               :value="filter.selectedProject" @blur="onBlur"
+                               @input="onInputProject" />
+            </div>
+            <div class="w-6/12 md:w-2/12">
                 <existing-task-input-control :project="filter.selectedProject"
                                              :value="filter" @blur="onBlur"
                                              @input="onInputTask" />
@@ -18,7 +20,7 @@
                                    @input:end-date="onInputEndDate"
                                    @input:start-date="onInputStartDate" />
             </div>
-            <div class="w-6/12 md:w-3/12">
+            <div class="w-6/12 md:w-2/12">
                 <button class="btn btn-secondary" type="button" @click="onClickResetFilter">
                     Reset filter
                 </button>
@@ -31,16 +33,29 @@
 </template>
 
 <script>
+    import ComboControl from "../general/ComboControl";
     import ExistingTaskInputControl from "../tasks/ExistingTaskInputControl";
-    import FilteringDropdownControl from "../general/FilteringDropdownControl";
     import Vue from "vue";
     import DateRangePicker from "../general/DateRangePicker";
+    import ClientSelectionControl from "../clients/ClientSelectionControl";
 
     export default {
         components: {
+            ClientSelectionControl,
+            ComboControl,
             DateRangePicker,
             ExistingTaskInputControl,
-            FilteringDropdownControl
+        },
+        computed: {
+            clientProjects() {
+                if(this.filter.client !== undefined) {
+                    return this.$store.getters['projects/all'].filter(
+                        p => p.client_id == this.filter.client.id
+                    );
+                } else {
+                    return this.$store.getters['projects/all'];
+                }
+            }
         },
         methods: {
             onBlur() {

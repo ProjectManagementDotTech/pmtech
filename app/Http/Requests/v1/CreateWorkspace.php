@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\v1;
 
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Rules\UniqueWorkspaceNameForOwnerUser;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class CreateWorkspace extends FormRequest
 {
@@ -23,13 +23,13 @@ class CreateWorkspace extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(WorkspaceRepositoryInterface $workspaceRepository)
     {
         return [
             'name' => [
                 'required',
                 'string',
-                new UniqueWorkspaceNameForOwnerUser
+                new UniqueWorkspaceNameForOwnerUser($workspaceRepository)
             ]
         ];
     }

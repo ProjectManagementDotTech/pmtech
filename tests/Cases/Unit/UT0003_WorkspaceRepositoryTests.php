@@ -2,6 +2,7 @@
 
 namespace Tests\Cases\Unit;
 
+use App\Repositories\UserRepository;
 use App\User;
 use App\Workspace;
 use App\Repositories\WorkspaceRepository;
@@ -10,13 +11,22 @@ use Tests\Shared\TestCase;
 
 class UT0003_WorkspaceRepositoryTests extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+
+        $this->userRepository = new UserRepository();
+        $this->workspaceRepository = new WorkspaceRepository(
+            $this->userRepository);
+    }
+
     /** @test */
     public function createWorkspace()
     {
         Log::info(__METHOD__);
 
         $user = User::where('email', 'user0001@test.com')->first();
-        WorkspaceRepository::create([
+        $this->workspaceRepository->create([
             'owner_user_id' => $user->id,
             'name' => 'UT0003-0001'
         ]);
@@ -32,8 +42,10 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = Workspace::where('name', 'UT0003-0001')->first();
-        WorkspaceRepository::update($workspace, [
+        $workspace = $this->workspaceRepository->first([
+            'name' => 'UT0003-0001'
+        ]);
+        $this->workspaceRepository->update($workspace, [
             'name' => 'UT0003-0002'
         ]);
 
@@ -50,16 +62,11 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $temp = Workspace::where('name', 'UT0003-0002')->first();
-        $workspace = WorkspaceRepository::find($temp->id);
+        $workspace = $this->workspaceRepository->first([
+            'name' => 'UT0003-0002'
+        ]);
 
         $this->assertNotNull($workspace);
-        $this->assertEquals($temp->id, $workspace->id);
-        $this->assertEquals($temp->owner_user_id, $workspace->owner_user_id);
-        $this->assertEquals($temp->name, $workspace->name);
-        $this->assertEquals($temp->created_at, $workspace->created_at);
-        $this->assertEquals($temp->updated_at, $workspace->updated_at);
-        $this->assertEquals($temp->deleted_at, $workspace->deleted_at);
     }
 
     /** @test */
@@ -67,9 +74,11 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = Workspace::where('name', 'UT0003-0002')->first();
+        $workspace = $this->workspaceRepository->first([
+            'name' => 'UT0003-0002'
+        ]);
 
-        WorkspaceRepository::archive($workspace);
+        $this->workspaceRepository->archive($workspace);
 
         $this->assertSoftDeleted('workspaces', [
             'id' => $workspace->id
@@ -88,7 +97,7 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
             ->where('name', 'UT0003-0002')
             ->first();
 
-        WorkspaceRepository::restore($workspace);
+        $this->workspaceRepository->restore($workspace);
 
         $this->assertDatabaseHas('workspaces', [
             'id' => $workspace->id
@@ -99,33 +108,6 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     }
 
     /** @test */
-    public function restoreWorkspaceById()
-    {
-        Log::info(__METHOD__);
-
-        $user = User::where('email', 'user0001@test.com')->first();
-        $workspace = WorkspaceRepository::create([
-            'owner_user_id' => $user->id,
-            'name' => 'UT0003-0001'
-        ]);
-
-        WorkspaceRepository::archive($workspace);
-
-        $workspace = Workspace::withTrashed()
-            ->where('name', 'UT0003-0001')
-            ->first();
-        $this->assertNotNull($workspace->deleted_at);
-
-        $restoredWorkspace = WorkspaceRepository::restoreById($workspace->id);
-        $this->assertNull($restoredWorkspace->deleted_at);
-
-        $this->assertDatabaseHas('workspaces', [
-            'id' => $workspace->id,
-            'deleted_at' => NULL
-        ]);
-    }
-
-    /** @test */
     public function deleteWorkspace()
     {
         Log::info(__METHOD__);
@@ -133,7 +115,7 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
         $user = User::where('email', 'user0001@test.com')->first();
         foreach($user->ownedWorkspaces as $workspace) {
             if($workspace->name != 'Test0001') {
-                WorkspaceRepository::delete($workspace);
+                $this->workspaceRepository->delete($workspace);
                 $this->assertDatabaseMissing('workspaces', [
                     'id' => $workspace->id,
                     'owner_user_id' => $user->id,
@@ -147,4 +129,8 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
             'name' => 'Test0001'
         ]);
     }
+
+    protected $userRepository;
+
+    protected $workspaceRepository;
 }

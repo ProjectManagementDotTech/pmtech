@@ -10,7 +10,15 @@ module.exports = {
                 'gold-600': '#ae8f30',
                 'gold-700': '#897129',
                 'gold-800': '#655421',
-                'gold-900': '#251f11'
+                'gold-900': '#251f11',
+
+                /*
+                 * Credit Card colors
+                 */
+                'cc-amex-500': '#002663',
+                'cc-mastercard-500': '#000066',
+                'cc-visa-500': '#1a1f71',
+
             },
             width: {
                 '1/7': '14.2857143%',
@@ -24,7 +32,8 @@ module.exports = {
     },
     variants: {
         backgroundColor: ['responsive', 'odd', 'even', 'hover', 'focus'],
-        borderWidth: ['responsive', 'last', 'hover', 'focus']
+        borderWidth: ['responsive', 'last', 'hover', 'focus'],
+        margin: ['responsive', 'last']
     },
     plugins: []
 };

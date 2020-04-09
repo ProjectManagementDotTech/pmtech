@@ -2,26 +2,26 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\UserRepository;
-use App\Repositories\WorkspaceRepository;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use Illuminate\Console\Command;
 
 class CreateDefaultWorkspace extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'workspace:create-default';
+    //region Public Construction
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a default workspace for verified users ' .
-        'that have no owned workspace(s)';
+    public function __construct(UserRepositoryInterface $userRepository,
+        WorkspaceRepositoryInterface $workspaceRepository)
+    {
+        $this->userRepository = $userRepository;
+        $this->workspaceRepository = $workspaceRepository;
+
+        parent::__construct();
+    }
+
+    //endregion
+
+    //region Public Access
 
     /**
      * Execute the console command.
@@ -31,12 +31,12 @@ class CreateDefaultWorkspace extends Command
      */
     public function handle()
     {
-        $users = UserRepository::verifiedUsers();
+        $users = $this->userRepository->verified();
 
         $this->output->progressStart(count($users));
         foreach($users as $user) {
             if($user->ownedWorkspaces()->count() == 0) {
-                WorkspaceRepository::create([
+                $this->workspaceRepository->create([
                     'owner_user_id' => $user->id,
                     'name' => 'Default'
                 ]);
@@ -46,4 +46,39 @@ class CreateDefaultWorkspace extends Command
 
         $this->output->progressFinish();
     }
+
+    //endregion
+
+    //region Protected Attributes
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a default workspace for verified users ' .
+    'that have no owned workspace(s)';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'workspace:create-default';
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    /**
+     * The workspace repository.
+     *
+     * @var WorkspaceRepositoryInterface
+     */
+    protected $workspaceRepository;
+
+    //endregion
 }

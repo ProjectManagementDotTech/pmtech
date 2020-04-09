@@ -150,31 +150,35 @@ class TimesheetEntryController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', 'Workspace');
-        $sheet->setCellValue('B1', 'Project');
-        $sheet->setCellValue('C1', 'Task');
-        $sheet->setCellValue('D1', 'Description');
-        $sheet->setCellValue('E1', 'Started at');
-        $sheet->setCellValue('F1', 'Ended at');
-        $sheet->setCellValue('G1', 'Duration');
+        $sheet->setCellValue('B1', 'Client');
+        $sheet->setCellValue('C1', 'Project');
+        $sheet->setCellValue('D1', 'Task');
+        $sheet->setCellValue('E1', 'Description');
+        $sheet->setCellValue('F1', 'Started at');
+        $sheet->setCellValue('G1', 'Ended at');
+        $sheet->setCellValue('H1', 'Duration');
 
         $row = 2;
         foreach($timesheetEntries as $timesheetEntry) {
             if($timesheetEntry->workspace)
                 $sheet->setCellValue("A$row", $timesheetEntry->workspace->name);
             if($timesheetEntry->project)
-                $sheet->setCellValue("B$row", $timesheetEntry->project->name);
+                if($timesheetEntry->project->client) {
+                    $sheet->setCellValue("B$row", $timesheetEntry->project->client->name);
+                }
+                $sheet->setCellValue("C$row", $timesheetEntry->project->name);
             if($timesheetEntry->task)
-                $sheet->setCellValue("C$row", $timesheetEntry->task->name);
-            $sheet->setCellValue("D$row", $timesheetEntry->description);
-            $sheet->setCellValue("E$row",
-                $timesheetEntry->started_at->format("d M Y H:i:s"));
+                $sheet->setCellValue("D$row", $timesheetEntry->task->name);
+            $sheet->setCellValue("E$row", $timesheetEntry->description);
             $sheet->setCellValue("F$row",
+                $timesheetEntry->started_at->format("d M Y H:i:s"));
+            $sheet->setCellValue("G$row",
                 $timesheetEntry->ended_at->format("d M Y H:i:s"));
-            $sheet->setCellValue("G$row", $timesheetEntry->duration);
+            $sheet->setCellValue("H$row", $timesheetEntry->duration);
             $row++;
         }
 
-        $sheet->setAutoFilter("A1:G$row");
+        $sheet->setAutoFilter("A1:H$row");
 
         $fileName = storage_path('app') . '/' . Uuid::uuid4()->getHex() .
             '.xls';
@@ -211,6 +215,7 @@ class TimesheetEntryController extends Controller
             $endDate = Carbon::now()->endOfDay();
         }
         $filterData = [
+            'client_id' => $request->input('client_id', NULL),
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
             'started_at' => $startDate,

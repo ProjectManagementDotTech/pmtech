@@ -5,7 +5,9 @@
                 <button class="focus:outline-none" @click="decreaseMonth">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div v-html="value ? value.format('MMMM') : ''" />
+                <button class="focus:outline-none" @click="onClickMonth">
+                    {{ value ? value.format("MMMM") : "" }}
+                </button>
                 <button class="focus:outline-none" @click="increaseMonth">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -14,7 +16,9 @@
                 <button class="focus:outline-none" @click="decreaseYear">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div v-html="value ? value.format('YYYY') : ''" />
+                <button class="focus:outline-none" @click="onClickYear">
+                    {{ value ? value.format("YYYY") : "" }}
+                </button>
                 <button class="focus:outline-none" @click="increaseYear">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -24,7 +28,11 @@
             <div class="block w-full">
                 <keep-alive>
                     <component v-bind:is="visibleComponent" v-bind:value="value"
-                               :config="config" :weeks="weeks" @input="onInput" />
+                               :config="config" :decades="decades"
+                               :months="months" :weeks="weeks" :years="years"
+                               @decade-picked="onDecadePicked"
+                               @input="onInput"
+                               @shift-decades="onShiftDecades" />
                 </keep-alive>
             </div>
         </div>
@@ -33,15 +41,24 @@
 
 <script>
     import DayPicker from "./DayPicker";
+    import DecadePicker from "./DecadePicker";
+    import MonthPicker from "./MonthPicker";
+    import YearPicker from "./YearPicker";
 
     export default {
         components: {
-            DayPicker
+            DayPicker,
+            DecadePicker,
+            MonthPicker,
+            YearPicker
         },
         data() {
             return {
+                decades: [],
+                months: [],
                 visibleComponent: "day-picker",
-                weeks: []
+                weeks: [],
+                years: [],
             };
         },
         methods: {
@@ -61,15 +78,86 @@
                 let newValue = this.$moment(this.value).add(1, "years");
                 this.$emit("input", newValue);
             },
+            onClickMonth() {
+                if(this.visibleComponent == "day-picker") {
+                    this.visibleComponent = "month-picker";
+                } else {
+                    this.visibleComponent = "day-picker";
+                }
+            },
+            onClickYear() {
+                if(this.visibleComponent == "day-picker") {
+                    this.visibleComponent = "decade-picker";
+                } else {
+                    this.visibleComponent = "day-picker";
+                }
+            },
+            onDecadePicked(newDecade) {
+                this.updateYearsArray(newDecade);
+                this.visibleComponent = "year-picker";
+            },
             onInput(newValue) {
                 this.$emit("input", newValue);
             },
-            updateArrays() {
-                this.updateWeeksArray();
-                // this.updateDecadesArray();
+            onShiftDecades(newDecade) {
+                this.updateDecadesArray(newDecade);
             },
-            updateDecadesArray() {
+            updateArrays() {
+                this.updateDecadesArray();
+                this.updateWeeksArray();
+            },
+            updateDecadesArray(middleDecade) {
+                let startDate = undefined;
+                if(middleDecade == undefined) {
+                    startDate = this.$moment(this.value).startOf("year");
+                } else {
+                    startDate = this.$moment(this.value).startOf("year")
+                        .year(middleDecade);
+                }
+                /*
+                 * Make sure we're at the start of the decade...
+                 */
+                let year = startDate.year();
+                year = year - (year % 10);
+                startDate.year(year - 50);
 
+                /*
+                 * Show 4 rows of 3 decades each, starting 50 years ago,
+                 * spanning a century
+                 */
+                let decades = [];
+                let row = [];
+                for(let i = 0; i < 10; i += 3) {
+                    for(let j = 0; j < 3; j++) {
+                        if(i < 9 || (i == 9 && j < 2)) {
+                            row[j] = startDate.year();
+                            startDate.year(row[j] + 10);
+                        } else {
+                            row[j] = "";
+                        }
+                    }
+                    decades.push(JSON.parse(JSON.stringify(row)));
+                    row = [];
+                }
+                this.decades = JSON.parse(JSON.stringify(decades));
+            },
+            updateMonthsArray() {
+                let startDate = this.$moment(this.value).startOf("year");
+                let months = [];
+                let row = [];
+                for(let i = 0; i < 12; i += 3) {
+                    for(let j = 0; j < 3; j++) {
+                        row.push({
+                            m: i + j,
+                            mmmm: startDate.format("MMMM")
+                        });
+                        startDate.add(1, "month");
+                    }
+                    months.push(JSON.parse(JSON.stringify(row)));
+                    row = [];
+                }
+
+                this.months = JSON.parse(JSON.stringify(months));
             },
             updateWeeksArray() {
                 let startDate = this.$moment(this.value).startOf("month");
@@ -97,10 +185,35 @@
                     weeks.push(week);
                 }
                 this.weeks = JSON.parse(JSON.stringify(weeks));
-            }
+            },
+            updateYearsArray(decade) {
+                let startDate = this.$moment(this.value).startOf("year");
+                startDate.year(decade);
+
+                /*
+                 * Show 4 rows of 3 decades each, starting 50 years ago,
+                 * spanning a century
+                 */
+                let years = [];
+                let row = [];
+                for(let i = 0; i < 10; i += 3) {
+                    for(let j = 0; j < 3; j++) {
+                        if(i < 9 || (i == 9 && j < 1)) {
+                            row[j] = startDate.year();
+                            startDate.add(1, "year");
+                        } else {
+                            row[j] = "";
+                        }
+                    }
+                    years.push(JSON.parse(JSON.stringify(row)));
+                    row = [];
+                }
+                this.years = JSON.parse(JSON.stringify(years));
+            },
         },
         mounted() {
             this.updateArrays();
+            this.updateMonthsArray();
         },
         name: "DatePicker",
         props: {

@@ -2,11 +2,20 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Console\Command;
 
 class AssignUsersToOwnedWorkspaces extends Command
 {
+    //region Public Constructor
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+
+        parent::__construct();
+    }
+
     //region Public Access
 
     /**
@@ -16,12 +25,12 @@ class AssignUsersToOwnedWorkspaces extends Command
      */
     public function handle()
     {
-        $users = UserRepository::verifiedUsers();
+        $users = $this->userRepository->verified();
 
         $this->output->progressStart(count($users));
         foreach($users as $user) {
             foreach($user->ownedWorkspaces as $workspace) {
-                $user->workspaces()->attach($workspace->id);
+                $user->attachToWorkspace($workspace);
             }
             $this->output->progressAdvance();
         }
@@ -34,6 +43,13 @@ class AssignUsersToOwnedWorkspaces extends Command
     //region Protected Attributes
 
     /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Assign each user to their owned workspaces';
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -41,11 +57,11 @@ class AssignUsersToOwnedWorkspaces extends Command
     protected $signature = 'user:assign-to-owned-workspaces';
 
     /**
-     * The console command description.
+     * The user repository.
      *
-     * @var string
+     * @var UserRepositoryInterface
      */
-    protected $description = 'Assign each user to their owned workspaces';
+    protected $userRepository;
 
     //endregion
 }

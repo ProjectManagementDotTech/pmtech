@@ -58,7 +58,8 @@ class UT0002_UserApiTests extends TestCase
             ->assertJson([
                 'email' => 'user0001@test.com',
                 'name' => 'Test User 0001'
-            ]);
+            ])
+            ->assertHeader('ETag');
     }
 
     /** @test */
@@ -85,6 +86,9 @@ class UT0002_UserApiTests extends TestCase
         });
         $this->assertDatabaseHas('cache', [
             'key' => 'project_managementtech_cacheuser0004@test.com'
+        ]);
+        $this->assertDatabaseMissing('settings', [
+            'user_id' => $user->id
         ]);
     }
 
@@ -116,6 +120,9 @@ class UT0002_UserApiTests extends TestCase
         $response = $this->get('/email/verify/' . $user->id . '/' .
             $cacheValue);
         $response->assertStatus(302);
+        $this->assertDatabaseHas('settings', [
+            'user_id' => $user->id
+        ]);
     }
 
     /** @test */
@@ -158,5 +165,25 @@ class UT0002_UserApiTests extends TestCase
         $this->assertDatabaseHas('cache', [
             'key' => 'project_managementtech_cacheuser0005@test.com'
         ]);
+    }
+
+    /** @test */
+    public function createSetupIntent()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/user/setup-intent');
+        $response->assertStatus(200)->assertSee('client_secret');
+    }
+
+    /** @test */
+    public function indexPaymentMethods()
+    {
+        Log::info(__METHOD__);
+
+        $this->login('user0001@test.com', 'Welcome123');
+        $response = $this->get('/api/v1/user/payment-methods');
+        $response->assertStatus(200)->assertJsonCount(0);
     }
 }

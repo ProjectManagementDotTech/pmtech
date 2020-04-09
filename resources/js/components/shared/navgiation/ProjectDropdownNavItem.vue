@@ -8,6 +8,12 @@
         <div v-if="isOpen" class="absolute right-0 bg-white rounded-lg py-2 w-48 shadow-xl z-40">
             <a class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none cursor-pointer" @click="onClickAddProject">Add</a>
             <router-link class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId" @click.native="isOpen = false">Overview</router-link>
+            <template v-if="currentProject">
+                <div class="bg-gray-200 cursor-default px-2 py-1 text-xs uppercase">
+                    {{ $store.getters["projects/byId"]($route.params.projectId).name }}
+                </div>
+                <router-link class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none" :to="'/workspaces/' + $route.params.workspaceId + '/projects/' + $route.params.projectId + '/settings'" @click.native="isOpen = false">Settings</router-link>
+            </template>
         </div>
     </div>
 </template>
@@ -17,6 +23,11 @@
         beforeDestroy() {
             window.removeEventListener("resize", this.onResize);
             document.removeEventListener("keydown", this.onKeyDown);
+        },
+        computed: {
+            currentProject() {
+                return this.$route.params.projectId !== undefined;
+            }
         },
         created() {
             window.addEventListener("resize", this.onResize);
@@ -67,5 +78,4 @@
 </script>
 
 <style scoped>
-
 </style>

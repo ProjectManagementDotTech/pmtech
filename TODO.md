@@ -8,109 +8,123 @@
 * Primary color: indigo-500
 * Secondary color: gray-500
 * Danger color: red-500
+* Info background color: blue-100
+* Info icon color: blue-500
 * Warning color: yellow-500
+* Success color: green-100
 * OK color: green-500
 
-#To do (v2020.1)
-###General
-###Front-end
-###Timesheets
-###Upgrade process
-###Workspaces
-
 #To do (v2020.2)
-###Edit workspace settings
-1. Let the user archive a workspace in SPA
-1. Let the user delete a workspace in SPA
-1. **BR000014** - If a user deletes / archives his / her last owned workspace, warn the user
-that a new Default workspace will be set up for them, unless they explicitly do
-not want to do that because they are in the process of removing their account.
-1. Let the user edit the workspace name in SPA
-1. Let the user assign ownership of a workspace to another user
-###Workspace members
-1. Invite users (new and existing) to the workspace
-1. When the workspace has more than 5 members the owner needs to pay
-1. When an email address registers again, but was not verified, send the whole
-verification email again (also create a cache entry).
-1. When an email address registers again, and it was verified before, the
-request should send an *Unauthorized.* response.
-1. Allow user to request another activiation link
 ###Clients
-1. Add Client model / migration / controller
-1. **BR000015** - Client name must unique inside a workspace
-1. Projects can be associated with a client
-1. Timesheet report can be drilled down by Client
-1. Add project allows user to pick a client
+###Core
+1. Repository `findBy` methods need to distinguish between find first and find
+all.
+1. Intercept 412 responses and fetch the desired object first rejecting the
+original alteration request with a generic message: "Object was externally
+modified, so your changes could not be applied. The modifications were loaded
+from the API, and should be visible."
+1. Support setting moment locale based on Laravel / browser locale.
 ###DateTimePicker
-1. Support i18n in terms of month and day names
-1. Support Clicking Year to show a list of 10 decades (based on the current
-Year). Each decade can be clicked to pick a specific year in that decade
-1. Support Clicking Month to show a list of months that can be picked
-1. Support Clicking Hour to show a list of all hours that can be picked
-1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
-minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
-1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
-`props` and a new, merged, `config` in `data` which is passed on to
-subcomponents)
 ###FilteringDropdownControl
-1. Rename `FilteringDropdownControl` to `ComboControl`
-1. Support native hover events to recalculate `highlightedEntryIdx` and
-`highlightedEntryId` based on those hover events
+###General
+1. Upgrade to Laravel 7.
+1. Break-up Project-Management.tech into several packages:
+   + Core: Have the basic interface definitions, and things like tailwind
+   + i12: Iso related information, services and tables.
+   + Project: Deal with all project related stuff
+   + Public-Web: Have the public facing parts of the website
+   + Task: Deal with all task related stuff
+   + Timesheet: Deal with all timesheet related stuff
+   + UI: Deal with general UI things
+   + Workspace: Deal with all workspace related stuff
 ###Projects
-1. Add `abbreviation` and `start_date` attributes to project Model
-###Timesheets
-1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
-the user has a timesheet entry started **and** is not visiting the timesheet
-editor.
-
-#To do (v2020.3)
-### Tasks
-1. Archive Task in SPA
-1. Delete Task in SPA
-1. Sort tasks by name in SPA
-1. Add dropdown menu "Tasks" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
-1. Add `percent_completion` to `Task`
-1. Send TaskUpdated event when task was updated
-1. Add `nesting_level` and `parent_task_id` to Task model
-1. Add actual `duration`, `ended_at`, `started_at` and `work` to Task model
-1. Add planned `duration`, `ended_at`, `started_at` and `work` to Task model
-
-#To do (v2021.1)
-
-#To do (unassigned to release)
-1. Make timesheet report graphs responsive (including ticks on X axis)
-1. Complete WorkspacePolicy with reference to all Business Requirements
-1. Bruteforce POST login protection - Make sure that users cannot fail login
-attempts more than 5 times in 5 seconds
-1. Complete CRUD actions in UserRepository - And write corresponding test cases
-1. Remove an account completely with an option to download all data and files
-for all projects etc. that would have been stored in the any of the owned
-workspaces.
-1. Complement User tests with the Settings stuff
-1. Delete settings when User model is deleted
-1. Implement SettingsRepository and use it in SettingsController
-1. Write tests around SettingsRepository and SettingsController
-1. Write WorkspaceController actions
-1. Create routes for workspace things - CRUD actions for API
 1. Write tests around ProjectRepository
 1. Delete Project in SPA
 1. Archive Project in SPA
 1. Update Project in SPA
 1. Write tests around Project API
-1. Submit weekly timesheet
-1. Lock timesheet entries after submitting
+1. Close project. This stops timesheet entries being created against those
+projects (even historic timesheet entries cannot be started against closed
+projects).
+###Tasks
+###Timesheets
+1. Make timesheet report graphs responsive (including ticks on X axis)
+###UI/UX
+1. Make `PmtechInput` a global component
+1. Add FlashMessage component of some variety to show info, warning, success and
+global error messages.
+1. Update window title with `title` from routes in the afterEach guard
+###Users
+1. Allow user to request another activiation link
+1. Allow user to set for which events an email should be sent.
+1. Remove an account completely with an option to download all data and files
+for all projects etc. that would have been stored in the any of the owned
+workspaces.
+1. Complement User tests with the Settings stuff
+1. Delete settings when User model is deleted
+###Workspaces
+1. Add full member profile in order to understand email domain and country
+information for each user / subscriber. This can be used to determine the amount
+of users in a workspace and to determine whether or not VAT is to be applied to
+the billable amount.
+1. Make sure WorkspaceUpdated events are send (via Pusher) to web clients
+listening on the Workspace private channel. Make sure to have this covered in
+test cases.
+1. Complete WorkspacePolicy with reference to all Business Requirements
+1. Write WorkspaceController actions
+1. Create routes for workspace things - CRUD actions for API
+
+#To do (v2020.3)
+###Clients
+###Core
+###General
+###Navigation
+###Projects
+1. Add `price` attribute for projects
+1. Add `reduction_percentage` to Project
+1. When adding price to project, show estimate based on project tasks and
+profit_margin.
+1. Allow project member to overwrite `cost` from workspace member
+1. Allow project to overwrite `profit_margin` from workspace
+###Tasks
+1. Add `percent_completion` to `Task`
+1. Add Completion field to GanttChart's GridTable
+1. Add Completion field to TaskProperties (if all tasks are at 100%, show a
+checked checkbox, otherwise show a number input min 0 max 100). If not all tasks
+have the same percent_completion value, do not allow editing of this field.
+1. Add `nesting_level` and `parent_task_id` to Task model
+1. Add actual `duration`, `ended_at`, `started_at` and `work` to Task model
+1. Add planned `duration`, `ended_at`, `started_at` and `work` to Task model
+1. ForceDelete Task in SPA only if task has no timesheet entries
+1. Reorder tasks (via buttons in toolbar)
+1. Send TaskUpdated event when task was updated
 1. When task is work-driven, update % complete according to approved timesheet
 records
+1. Mark task as 100% or completed. This stops timesheet entries being created
+against those tasks (even historic timesheet entries cannot be started against
+completed tasks).
+###Timesheets
+###UI/UX
+###Users
+###Workspace
+1. Add `cost` per workspace member
+1. Add `profit_margin` to workspace
+
+#To do (v2021.1)
+
+#To do (unassigned to release)
+1. When user accepted invitation to join or was added to a workspace, the
+workspace owner should be notified that the user now needs access to projects
+in order to collaborate with other project members.
+1. Bruteforce POST login protection - Make sure that users cannot fail login
+attempts more than 5 times in 5 seconds
+1. Add Brute Force protection around registration route as well.
+1. Submit weekly timesheet
+1. Lock timesheet entries after submitting
 1. Add hourly cost to workspace or project members
 1. Add type to project - hourly, fixed, retainer
-1. Add E-Tag support
-1. Add test that Settings are created when account was verified
-1. Update window title with `title` from routes in the afterEach guard
-1. Global "loading" div with incrementLoading and decrementLoading vuex
-committers
 1. Currency per workspace and apply xe exchange rate between project and
 workspace defined in the workspace yet
-1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
 1. Unit test NotificationRepository
 1. Write Notification routes and Controller methods
 1. Unit test Notification API
@@ -118,38 +132,24 @@ workspace defined in the workspace yet
 1. Write NotificationRepository
 1. Project Dashboard to list all tasks' main details (name) and total hours
 recorded against each task
-1. Order projects in the index by their `name` by default
-1. Project and Workspace `id` cannot be updated through their respective
-repositories
-1. `WorkspaceRepository::get` should be allowed to return NULL
 1. Add Currency model / migration
 1. Link `Workspace` and `Project` to `Currency`
 1. Automatically convert to workspace currency any project that has financial
 details in a different currency (payable and submitted invoices). Use the
 package mentioned in Laravel News "Laravel Exchange Rates is a package by Ash
 Allen for interacting with the exchangeratesapi.io API.".  
-1. Allow task to be work-driven
-1. Allow project index to be ordered by name, progress, etc.
 1. Implement logic in Login SPA Component to go to the back URL
 1. Listen to private broadcast channel for each project in Vuex
-1. Listen to private broadcast channel for each task in Vuex
-1. Protect tasks with e-tags (so that multiple clients can view tasks...)
-1. GridTextEditor needs to send input updates more frequently than onBlur
 1. GanttChart should only update API if the task was truly altered
+1. Global "loading" div with incrementLoading and decrementLoading vuex
+committers
 1. Replace App.vue `loading` with a full modal div that shows whenever there are
 Axios requests in progress for longer than 2 seconds
-1. Implement 401 interceptor to ask for the user's password, login, and then
-submit the intercepted request again
-1. Rewrite repositories to implement a common interface and derive from a
-common parent class
 1. `GridTable` to support `sortable` flag in field definition and sorting by
 multiple `sortable` fields
 1. `GridTable` to support notion of visible and hidden columns. Right click
 shows a popup menu where one can select to make hidden columns visible; also one
 can make visible columns hidden
-1. `GridTable` to support clicking on row headers to select entire row. Multiple
-selections are possible through use of Shift-Click and Ctrl-Click
-1. `GridTable` needs `GridPercentageEditor`
 1. **BR000003** - Add project to workspace should send Notification to Workspace
 Owner
 1. **BR000004** - Even though tasks can be archived or deleted, this cannot
@@ -158,14 +158,18 @@ happen when there are timesheet entries against a task.
 happen when there are timesheet entries against a project.
 1. **BR000010** - Users with the role "Line Manager" or "Project Manager" can
 approve submitted timesheets
-1. **BR000011** - Approved timesheet entries can only be archived by users with
+1. **BR000011** - Approved timesheet entries can only be archived by users  with
 the role "Programme Manager" or "Portfolio Manager"
 1. **BR000012** - Lock timesheet entries after submitting so that they cannot be
 edited by the user, but only approved / rejected by the respective Manager users
+1. **BR000014** - Write cypress tests to make sure that the correct confirmation
+messages are shown.
 
 #To do (Good first issue)
 
 #In Progress
+1. Rewrite repositories to implement a common interface and derive from a
+common parent class
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -179,6 +183,10 @@ workspace.
 task or simply in the workspace
 1. **BR000009** - Users can edit only their own timesheet entries
 1. **BR000013** - Workspace names should be unique for the ownerUser
+1. **BR000014** - If a user deletes / archives his / her last owned workspace,
+warn the user specifically that that is the last owned workspace. The user can
+always create a new workspace any time (s)he wants.
+1. **BR000015** - Client name must unique inside a workspace
 1. **BR000016** - `TimesheetEntry`.`started_at` must be before
 `TimesheetEntry`.`ended_at`
 1. **BR000017** - Two timesheet entries for the same user (regardless of
@@ -293,6 +301,70 @@ styles, really.
 1. Start writing e2e UI tests using cypress.io
 1. Migrate data from current www.project-management.tech to new
 www.project-management.tech implementation
+1. Let the user archive a workspace in SPA
+1. Let the user delete a workspace in SPA
+1. Let the user edit the workspace name in SPA
+1. Invite users (new and existing) to the workspace
+1. Let the user assign ownership of a workspace to another user
+1. When the workspace has more than 5 members the owner needs to pay
+1. When an email address registers again, but was not verified, send the whole
+verification email again (also create a cache entry).
+1. When an email address registers again, and it was verified before, the
+request should send an *Unauthorized.* response.
+1. Add Client model / migration / controller / repository
+1. Allow user to add client in SPA
+1. Projects can be associated with a client
+1. Add project allows user to pick a client
+1. Timesheet report can be drilled down by Client
+1. Support i18n in terms of month and day names
+1. Support Clicking Year to show a list of 10 decades (based on the current
+Year). Each decade can be clicked to pick a specific year in that decade
+1. Support Clicking Month to show a list of months that can be picked
+1. Support Clicking Hour to show a list of all hours that can be picked
+1. Support Clicking Minute / Second to show a list of 12 minutes / seconds (5
+minutes / seconds between each, i.e. 0 5 10 15 etc) that can be picker
+1. Support proper config merging (`defaultConfig` in `data`, `passedConfig` in
+`props` and a new, merged, `config` in `data` which is passed on to
+subcomponents)
+1. Rename `FilteringDropdownControl` to `ComboControl`
+1. Support native hover events to recalculate `highlightedEntryIdx` and
+`highlightedEntryId` based on those hover events
+1. Receive a lot of 419 errors after 1 hour of not interacting with the site.
+Implement silent keep-alive or increase lifetime of session / Airlock cookie.
+1. Allow user to switch workspaces in xs / sm screens
+1. Add `abbreviation` and `start_date` attributes to project Model
+1. Show a small `TimesheetEntryEditor` in the bottom right hand corner when
+the user has a timesheet entry started **and** is not visiting the timesheet
+editor.
+1. Make sure the ComboControl filtering matches case-insensitively a regex,
+rather than just the start
+1. Remove members from workspace
+1. Create simple analytics where we store only the user agent and screen size
+information in the database.
+1. Implement SettingsRepository and use it in SettingsController
+1. Write tests around SettingsRepository and SettingsController
+1. UserRepository should not create Settings object. That has to be done in a
+UserObserver class.
+1. Add dropdown menu "Projects" into menu bar (see https://tailwindcss.com/course/making-the-dropdown-interactive/)
+1. Order projects in the index by their `name` by default
+1. Allow project index to be ordered by name, progress, etc.
+1. Add test that Settings are created when account was verified
+1. Add E-Tag support
+   1. In middleware to verify against put requests
+   1. In middleware to add to the response headers
+   1. In models being updated out of the Vuex Store
+1. Complete CRUD actions in UserRepository - And write corresponding test cases
+1. `GridTable` to support clicking on row headers to select entire row. Multiple
+selections are possible through use of Shift-Click and Ctrl-Click
+1. Add toolbar with task and project related buttons just above the Gantt Chart 
+1. Allow task to be work-driven
+1. GridTextEditor needs to send input updates more frequently than onBlur
+1. `GridTable` needs `GridPercentageEditor`
+1. Protect tasks with e-tags (so that multiple clients can view tasks...)
+1. Listen to private broadcast channel for each task in Vuex
+1. `WorkspaceRepository::get` should be allowed to return NULL
+1. Project and Workspace `id` cannot be updated through their respective
+repositories
 
 #Details
 ##BR000001
@@ -304,4 +376,53 @@ the last visited Vue view, and if none, we need to check the list of workspaces
 to go to the *one* workspace, if not -> we simply go to the first workspace
 in the list.
 ##Send WorkspaceUpdated notification via Pusher
-Only send the id of the affected Workspace. Load the workspace from the API. If it is the current workspace, also dispatch "workspaceChanged".
+Only send the id of the affected Workspace. Load the workspace from the API. If
+it is the current workspace, also dispatch "workspaceChanged".
+##ETag support
+Supporting ETags on API endpoints is fairly straightforward: grab the response
+from the request pipeline, and calculate some kind of strong hash (eg. `sha1`).
+Compare that value against the value of the request header If-None-Match and
+send appropriate back to the API caller. This is what Laravel's built-in
+Cache-Control (via `cache.headers` middleware) supports.
+
+However, if one wants to store a number of Laravel Models in a Vuex store for
+easy access and retrieval without the need to keep going back to the API to
+retrieve these models a number of times, we need some mechanism to retrieve an
+ETag for each individual model in that index.
+
+There's two ways to go about it:
+1. Only send IDs as index response, and let the SPA fire off a number of GET 
+   requests as necessary to retrieve each Model's ETag.
+2. Calculate ETag hash values on individual objects.
+
+Option 1. has the potential to violate Laravel's throttle middleware, and thus
+each of those subsequent GET requests would need to be fired off at a rate of
+one request per second. This is not practicle in large-ish applications.
+
+Option 2. can be implemented in various ways. I've looked at:
+1. jsonSerialization overload
+2. Response Facade extension
+3. API Middleware
+
+Option 1. would work in terms of generating the ETag for each individual object,
+it would be called any time the API wants a serialized view of the model. This
+would open a potentially catastrophic amount of hash calculation that may slow 
+the API right down. Also, it is not entirely clear how an index API call would
+provide back all the individual ETags.
+
+Option 2. would work as well, and is, in fact, proposed by @fideloper, see
+https://fideloper.com/laravel4-etag-conditional-get.
+
+Option 3. is a direct result of that article because I started looking into the
+$response object as a whole, and saw, much to my surprise, that we have a member
+`original` in the Response instance that we can get to by calling
+`$response->getOriginalContent()`. For GET requests, then, where the response
+has an Eloquent Collection, we can calculate ETags for each Model in that
+collection, just before the response is sent to the API consumer.
+We can put the Model's ID in combination with the ETag in the response headers,
+and we can list multiple combinations like that by using the semicolon to
+separate entities. All we have to do now, when we commit an index response to
+Vuex, is parse the ETag header, and store the ETag with the individual object in
+Vuex. Thus we can use that ETag value next time the SPA uses the DELETE, GET or
+PUT method on the given model. We can then also implement a response interceptor
+that verifies for 304 responses or for 412 in case of mid-air collisions.

@@ -3,110 +3,74 @@
 namespace App\Repositories;
 
 use App\Project;
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\TaskRepositoryInterface;
 use App\Task;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
-class TaskRepository
+class TaskRepository implements TaskRepositoryInterface
 {
-    //region Static Public Access
-
-    /**
-     * Archive the given task.
-     *
-     * @param Task $task
-     * @throws \Exception
-     */
-    static public function archive(Task $task)
-    {
-        /*
-         * TODO Make sure there are no un-archived timesheet entries against
-         *   the task
-         */
-
-        $task->delete();
+    use ConstructsRepository, CreatesModel {
+        create as traitCreate;
+    }
+    use DeletesModel, FindsModel, UpdatesModel {
+        update as traitUpdate;
     }
 
-    /**
-     * Delete the given task.
-     *
-     * @param Task $task
-     */
-    static public function delete(Task $task)
-    {
-        /*
-         * TODO Make sure there are no timesheet entries against the task
-         */
-
-        $task->forceDelete();
-    }
+    //region Public Construction
 
     /**
-     * Restore, from archive, the given task.
-     *
-     * @param Task $task
+     * TaskRepository constructor.
      */
-    static public function restore(Task $task)
+    public function __construct()
     {
-        /*
-         * TODO Make sure to restore related timesheet entries
-         */
-
-        $task->restore();
-    }
-
-    /**
-     * Update the given task with the provided data, except for the `project_id`
-     * and `id` attributes.
-     *
-     * @param Task $task
-     * @param array $data
-     */
-    static public function update(Task $task, array $data)
-    {
-        foreach($data as $key => $value) {
-            if($key != 'project_id' && $key != 'id') {
-                $task->$key = $value;
-            }
-        }
-
-        $task->save();
-
-//        event(new TaskUpdated($task));
+        $this->modelClass = Task::class;
+        $this->usesSoftDeletes = TRUE;
     }
 
     //endregion
 
-    //region Static Public Status Report
+    //region Public Access
+
+    /*
+     * TODO Make sure there are no un-archived timesheet entries against
+     *   the task
+     */
 
     /**
-     * Get the task identified by the given $name in the given $project.
-     *
-     * @param string $name
-     * @param Project $project
-     * @return Task|null
+     * @inheritDoc
      */
-    static public function byName(string $name, Project $project): ?Task
+    public function update(Model $model, array $attributes = [])
     {
-        return Task::query()
-            ->where('project_id', $project->id)
-            ->where('name', $name)
-            ->first();
+        /*
+         * We cannot move tasks between projects.
+         */
+        unset($attributes['project_id']);
+
+        $this->traitUpdate($model, $attributes);
     }
 
-    /**
-     * Create a new task based on the given data.
-     *
-     * @param array $data
-     * @return Task
-     * @throws \Exception
-     */
-    static public function create(array $data): Task
-    {
-        $data['id'] = Uuid::uuid4()->toString();
-        $project = Project::find($data['project_id']);
-        $data['wbs'] = $project->tasks()->count() + 1;
+    //endregion
 
-        $task = Task::create($data);
+    //region Public Status Report
+
+    /**
+     * @inheritDoc
+     */
+    public function create(array $attributes = []): Model
+    {
+        /*
+         * TODO Use ProjectRepository
+         */
+        $project = Project::find($attributes['project_id']);
+        $attributes['wbs'] = $project->tasks()->count() + 1;
+
+        $task = $this->traitCreate($attributes);
 
 //        event(new ProjectUpdated($data['project_id']));
 
@@ -114,29 +78,19 @@ class TaskRepository
     }
 
     /**
-     * Get the task identified by $id.
-     *
-     * @param string $id
-     * @return Task|null
+     * @inheritDoc
      */
-    static public function find(string $id): ?Task
+    public function findByName(string $name, $projectOrWorkspace): Collection
     {
-        return Task::find($id);
-    }
+        $builder = Task::query();
 
-    /**
-     * Restore, from archive, a Workspace model given its ID.
-     *
-     * @param string $id
-     * @return Task|null
-     */
-    static public function restoreById(string $id): ?Task
-    {
-        $task = Task::withTrashed()->where('id', $id)->first();
-        if($task)
-            $task->restore();
+        if($projectOrWorkspace instanceof Project) {
+            $builder->where('project_id', $projectOrWorkspace->id);
+        } else {
+            $builder->where('project.workspace_id', $projectOrWorkspace->id);
+        }
 
-        return $task;
+        return $builder->get();
     }
 
     //endregion

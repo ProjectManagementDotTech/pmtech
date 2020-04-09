@@ -20,3 +20,10 @@ Broadcast::channel('App.Workspace.{workspace}', function($user, \App\Workspace $
         ->where('workspace_id', $workspace->id)
         ->first() !== NULL;
 });
+
+Broadcast::channel('App.Task.{task}', function($user, \App\Task $task) {
+    $project = $task->project;
+    return $user->workspaces()
+        ->where('workspace_id', $project->workspace_id)
+        ->first() !== NULL;
+});

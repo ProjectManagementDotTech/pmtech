@@ -18,7 +18,7 @@ class WorkspaceUpdated implements ShouldBroadcast
     /**
      * WorkspaceUpdated constructor.
      *
-     * @param Workspace $workspace
+     * @param $workspace
      */
     public function __construct($workspace)
     {

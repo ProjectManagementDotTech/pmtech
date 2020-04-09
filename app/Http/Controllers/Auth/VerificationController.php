@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Repositories\Contracts\SettingsRepositoryInterface as
+    SettingsRepositoryInterface;
+use App\Repositories\Contracts\WorkspaceRepositoryInterface;
 use App\Repositories\SettingsRepository;
-use App\Repositories\WorkspaceRepository;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -16,37 +18,35 @@ use Ramsey\Uuid\Uuid;
 
 class VerificationController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Email Verification Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be re-sent if the user didn't receive the original email message.
-    |
-    */
-
     use VerifiesEmails;
 
-    /**
-     * Where to redirect users after verification.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    //region Public Construction
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(SettingsRepositoryInterface $settingsRepository,
+        WorkspaceRepositoryInterface $workspaceRepository)
     {
         $this->middleware('guest');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
+        $this->settingsRepository = $settingsRepository;
+        $this->workspaceRepository = $workspaceRepository;
     }
 
+    //endregion
+
+    //region Public Status Report
+
+    /**
+     * Resend the activation link.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     */
     public function resend(Request $request)
     {
         $user = User::query()
@@ -90,11 +90,10 @@ class VerificationController extends Controller
                 $user->email_verified_at = Carbon::now();
                 $user->save();
 
-                WorkspaceRepository::create([
+                $this->workspaceRepository->create([
                     'owner_user_id' => $user->id,
                     'name' => 'Default'
                 ]);
-                SettingsRepository::create($user);
 
                 return redirect('/login');
             }
@@ -102,4 +101,29 @@ class VerificationController extends Controller
 
         throw new AuthorizationException();
     }
+
+    //region Protected Attributes
+
+    /**
+     * Where to redirect users after verification.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+
+    /**
+     * The settings repository.
+     *
+     * @var SettingsRepository
+     */
+    protected $settingsRepository;
+
+    /**
+     * The workspace repository.
+     *
+     * @var WorkspaceRepositoryInterface
+     */
+    protected $workspaceRepository;
+
+    //endregion
 }

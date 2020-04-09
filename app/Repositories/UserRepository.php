@@ -2,62 +2,46 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
-use Ramsey\Uuid\Uuid;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
-    //region Static Public Status Report
+    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel;
+    use UpdatesModel;
 
-    /**
-     * Create a new User based on the given data.
-     *
-     * @param array $data
-     * @return User
-     * @throws \Exception
-     */
-    static public function create(array $data): User
+    //region Public Construction
+
+    public function __construct()
     {
-        $data['id'] = Uuid::uuid4()->toString();
-        $user = User::create($data);
-        SettingsRepository::create($user);
-
-        return $user;
+        $this->modelClass = User::class;
+        $this->usesSoftDeletes = TRUE;
     }
 
+    //endregion
+
+    //region Public Status Report
+
     /**
-     * The user matching the given $email address.
-     *
-     * @param string $email
-     * @return User|null
+     * @inheritDoc
      */
-    static public function byEmail(string $email): ?User
+    public function findByEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
     }
 
     /**
-     * Get the user identified by $id.
-     *
-     * @param string $id
-     * @return User|null
+     * @inheritDoc
      */
-    static public function find(string $id): ?User
+    public function verified(): Collection
     {
-        return User::find($id);
-    }
-
-    /**
-     * Return all users who are verified.
-     *
-     * @return array
-     */
-    static public function verifiedUsers(): Collection
-    {
-        return User::query()
-            ->whereNotNull('email_verified_at')
-            ->get();
+        return User::whereNotNull('email_verified_at')->get();
     }
 
     //endregion

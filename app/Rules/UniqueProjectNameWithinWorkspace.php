@@ -16,8 +16,18 @@ class UniqueProjectNameWithinWorkspace implements Rule
      */
     public function passes($attribute, $value)
     {
-        $existingProject = ProjectRepository::byName($value,
-            request()->route('workspace'));
+        $project = NULL;
+        $workspace = request()->route('workspace');
+        if(!$workspace) {
+            $project = request()->route('project');
+            $workspace = $project->workspace;
+        }
+        $existingProject = ProjectRepository::byName($value, $workspace);
+
+        if($project) {
+            return $existingProject != NULL && $existingProject->id == $project->id;
+        }
+
         return $existingProject == NULL;
     }
 

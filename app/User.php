@@ -3,17 +3,44 @@
 namespace App;
 
 use App\Mail\AccountActivation;
+use App\Traits\Models\SupportsETags;
+use IgnitionNbs\LaravelUuidModel\UuidModel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, SoftDeletes;
+    use Billable, Notifiable, SoftDeletes, SupportsETags, UuidModel;
 
     //region Public Access
+
+    /**
+     * Attach $workspace to the user's workspaces, and update $workspace's
+     * subscription information.
+     *
+     * @param Workspace $workspace
+     */
+    public function attachToWorkspace(Workspace $workspace)
+    {
+        $this->workspaces()->attach($workspace);
+        $workspace->updateSubscriptionInformation();
+    }
+
+    /**
+     * Detach $this User from $workspace, and update $workspace's subscription
+     * information.
+     *
+     * @param Workspace $workspace
+     */
+    public function detachFromWorkspace(Workspace $workspace)
+    {
+        $this->workspaces()->detach($workspace);
+        $workspace->updateSubscriptionInformation();
+    }
 
     /**
      * @inheritDoc
@@ -81,11 +108,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     //region Public Status Report
 
-    /**
-     * @inheritDoc
-     */
-    public $incrementing = FALSE;
-
     //endregion
 
     //region Protected Attributes
@@ -101,27 +123,22 @@ class User extends Authenticatable implements MustVerifyEmail
      * @inheritDoc
      */
     protected $fillable = [
-        'email', 'id', 'name', 'password',
+        'email', 'email_verified_at', 'name', 'password',
     ];
 
     /**
      * @inheritDoc
      */
     protected $hidden = [
-        'created_at', 'deleted_at', 'email_verified_at', 'id', 'password',
+        'created_at', 'deleted_at', 'email_verified_at', 'password',
         'remember_token', 'updated_at',
     ];
 
     /**
      * @inheritDoc
      */
-    protected $keyType = 'string';
-
-    /**
-     * @inheritDoc
-     */
     protected $visible = [
-        'email', 'name', 'settings',
+        'id', 'email', 'name', 'settings',
     ];
 
     /**

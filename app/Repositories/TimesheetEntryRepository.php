@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Contracts\TaskRepositoryInterface;
 use App\TimesheetEntry;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,6 +10,20 @@ use Ramsey\Uuid\Uuid;
 
 class TimesheetEntryRepository
 {
+    //region Public Construction
+
+    /**
+     * TimesheetEntryRepository constructor.
+     *
+     * @param TaskRepositoryInterface $taskRepository
+     */
+    public function __construct(TaskRepositoryInterface $taskRepository)
+    {
+        $this->taskRepository = $taskRepository;
+    }
+
+    //endregion
+
     //region Static Public Access
 
     /**
@@ -116,7 +131,8 @@ class TimesheetEntryRepository
          * Set project_id and / or workspace_id from the provided input
          */
         if(isset($data['task_id']) && !isset($data['project_id'])) {
-            $task = TaskRepository::find($data['task_id']);
+            $taskRepository = new TaskRepository();
+            $task = $taskRepository->find($data['task_id']);
             $data['project_id'] = $task->project_id;
         }
 
@@ -140,7 +156,13 @@ class TimesheetEntryRepository
     {
         $result = TimesheetEntry::query();
         foreach($filterData as $key => $value) {
-            if($key == 'ended_at') {
+            if($key == 'client_id') {
+                if($value !== NULL) {
+                    $result = $result->whereIn('project_id', function ($query) use ($value) {
+                        $query->select('id')->from('projects')->where('client_id', $value);
+                    });
+                }
+            } else if($key == 'ended_at') {
                 if($value) {
                     $result = $result->where($key, '<=', $value);
                 } else {
@@ -173,6 +195,17 @@ class TimesheetEntryRepository
             ->orderBy('ended_at', 'desc')
             ->get();
     }
+
+    //endregion
+
+    //region Protected Attributes
+
+    /**
+     * The task repository.
+     *
+     * @var TaskRepositoryInterface
+     */
+    protected $taskRepository;
 
     //endregion
 }

@@ -7,6 +7,7 @@
             class="w-full py-2 px-3 leading-normal bg-transparent border-b"
             ref="input" v-bind="ariaInput" v-model="innerValue"
             :class="{ 'border-gray-700': !errors[0], 'border-red-600': errors[0], 'has-value': hasValue }"
+            :disabled="disabled"
             :id="name" :placeholder="placeholder" :type="type">
         <label class="absolute block inset-0 w-full px-2 py-2 leading-normal"
                :for="name"
@@ -42,6 +43,11 @@
         },
         name: "PmtechInput",
         props: {
+            disabled: {
+                default: false,
+                required: false,
+                type: Boolean
+            },
             label: {
                 default: "",
                 type: String

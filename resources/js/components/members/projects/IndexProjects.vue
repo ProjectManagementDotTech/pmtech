@@ -3,6 +3,11 @@
         <vuetable pagination-path="" ref="indexProjectsTable" :css="tableStyles"
                   :fields="fields" :http-fetch="fetchProjectIndex"
                   @vuetable:pagination-data="onPaginationData">
+            <template slot="client" slot-scope="props">
+                <span v-if="props.rowData.client_id !== null">
+                    {{ $store.getters['clients/byId'](props.rowData.client_id).name }}
+                </span>
+            </template>
             <template slot="color" slot-scope="props">
                 <div :style="'background-color: #' + props.rowData.color + '; display: block; min-height: 16px;'" />
             </template>
@@ -10,6 +15,11 @@
                 <router-link :to="'/workspaces/' + $route.params.workspaceId + '/projects/' + props.rowData.id">
                     {{ props.rowData.name }}
                 </router-link>
+            </template>
+            <template slot="start_date" slot-scope="props">
+                <span v-if="props.rowData.start_date !== null">
+                    {{ $moment(props.rowData.start_date, "YYYY-MM-DD").format("DD MMM YYYY") }}
+                </span>
             </template>
         </vuetable>
         <vuetable-pagination ref="indexProjectsPagination"
@@ -39,12 +49,27 @@
             return {
                 fields: [
                     {
+                        name: "__slot:client",
+                        title: "Client"
+                    },
+                    {
                         name: "__slot:color",
-                        title: "Color",
+                        title: "Color"
+                    },
+                    {
+                        name: "abbreviation",
+                        sortField: "abbreviation",
+                        title: "Abbreviation"
                     },
                     {
                         name: "__slot:name",
+                        sortField: "name",
                         title: "Project name"
+                    },
+                    {
+                        name: "__slot:start_date",
+                        sortField: "start_date",
+                        title: "Start date"
                     }
                 ],
                 paginationStyles: {

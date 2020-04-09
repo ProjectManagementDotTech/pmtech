@@ -11,7 +11,7 @@
             </div>
             <router-link class="block px-4 py-2 hover:bg-gold-100 hover:text-gray-800 focus:bg-gold-100 focus:outline-none"
                          v-for="workspace in $store.getters['workspaces/all']"
-                         :class="workspace.id == $route.params.workspaceId ? 'bg-indigo-400 text-white' : ''"
+                         :class="workspace.id == workspaceId ? 'bg-indigo-400 text-white' : ''"
                          :key="workspace.id" :to="'/workspaces/' + workspace.id"
                          @click.native="isOpen = false">
                 {{ workspace.name }}
@@ -20,6 +20,8 @@
             <div class="bg-gray-200 cursor-default px-2 py-1 text-xs uppercase">
                 {{ currentUser.name }}
             </div>
+            <sub-menu title="Settings" :children="settingsSubMenuChildren"
+                      @close="onClose" />
             <router-link class="block px-4 py-2 hover:bg-gold-100 focus:bg-gold-100 focus:outline-none" to="/logout" @click.native="isOpen = false">Logout</router-link>
         </div>
     </div>
@@ -27,11 +29,15 @@
 
 <script>
     import { mapGetters } from "vuex";
+    import SubMenu from "./SubMenu";
 
     export default {
         beforeDestroy() {
             window.removeEventListener("resize", this.onResize);
             document.removeEventListener("keydown", this.onKeyDown);
+        },
+        components: {
+            SubMenu
         },
         computed: {
             ...mapGetters(["currentUser"])
@@ -39,14 +45,22 @@
         created() {
             window.addEventListener("resize", this.onResize);
             document.addEventListener("keydown", this.onKeyDown);
+            this.workspaceId = this.$route.params.workspaceId;
+            this.updateSubMenuChildren();
         },
         data() {
             return {
                 chevronClass: "fa-chevron-right",
-                isOpen: false
-            }
+                isOpen: false,
+                settingsSubMenuChildren: [],
+                workspaceId: "",
+            };
         },
         methods: {
+            onClose() {
+                console.log("PersonDropdownNavItem::onClose");
+                this.isOpen = false;
+            },
             onKeyDown(e) {
                 if(e.key === "Esc" || e.key === "Escape") {
                     this.isOpen = false;
@@ -66,6 +80,40 @@
                         this.chevronClass = "fa-chevron-right";
                     }
                 }
+            },
+            updateSubMenuChildren() {
+                this.settingsSubMenuChildren = [
+                    {
+                        children: [
+                            {
+                                title: "Invoices",
+                                to: "/workspaces/" +
+                                    this.workspaceId + "/users/" +
+                                    this.$store.getters["currentUser"].id +
+                                    "/settings/billing/invoices",
+                                type: "link"
+                            },
+                            {
+                                title: "Payment",
+                                to: "/workspaces/" +
+                                    this.workspaceId + "/users/" +
+                                    this.$store.getters["currentUser"].id +
+                                    "/settings/billing/payment",
+                                type: "link"
+                            },
+                            {
+                                title: "Payment methods",
+                                to: "/workspaces/" +
+                                    this.workspaceId + "/users/" +
+                                    this.$store.getters["currentUser"].id +
+                                    "/settings/billing/payment-methods",
+                                type: "link"
+                            }
+                        ],
+                        title: "Billing",
+                        type: "menu"
+                    }
+                ];
             }
         },
         mounted() {
@@ -73,6 +121,12 @@
         },
         name: "PersonDropdownNavItem",
         watch: {
+            $route(to, from) {
+                if(to.params.workspaceId != from.params.workspaceId) {
+                    this.workspaceId = to.params.workspaceId;
+                    this.updateSubMenuChildren();
+                }
+            },
             isOpen() {
                 this.onResize();
             }
@@ -81,5 +135,4 @@
 </script>
 
 <style scoped>
-
 </style>

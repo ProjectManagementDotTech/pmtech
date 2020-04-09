@@ -2,12 +2,25 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\SettingsRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\SettingsRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Console\Command;
 
 class CreateUserSettings extends Command
 {
+    //region Public Construction
+
+    public function __construct(SettingsRepositoryInterface $settingsRepository,
+        UserRepositoryInterface $userRepository)
+    {
+        $this->settingsRepository = $settingsRepository;
+        $this->userRepository = $userRepository;
+
+        parent::__construct();
+    }
+
+    //endregion
+
     //region Public Access
 
     /**
@@ -17,12 +30,12 @@ class CreateUserSettings extends Command
      */
     public function handle()
     {
-        $users = UserRepository::verifiedUsers();
+        $users = $this->userRepository->verified();
 
         $this->output->progressStart(count($users));
         foreach($users as $user) {
             if(!$user->settings) {
-                SettingsRepository::create($user);
+                $this->settingsRepository->create(['user_id' => $user->id]);
             }
             $this->output->progressAdvance();
         }
@@ -35,6 +48,21 @@ class CreateUserSettings extends Command
     //region Protected Attributes
 
     /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a Settings model for each verified user ' .
+        'if that user does not have Settings yet';
+
+    /**
+     * The settings repository.
+     *
+     * @var SettingsRepositoryInterface
+     */
+    protected $settingsRepository;
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -42,12 +70,11 @@ class CreateUserSettings extends Command
     protected $signature = 'user:create-settings';
 
     /**
-     * The console command description.
+     * The user repository.
      *
-     * @var string
+     * @var UserRepositoryInterface
      */
-    protected $description = 'Create a Settings model for each verified user ' .
-        'if that user does not have Settings yet';
+    protected $userRepository;
 
     //endregion
 }

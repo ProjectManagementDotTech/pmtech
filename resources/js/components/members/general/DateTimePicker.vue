@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
         <input class="relative block border border-gray-200 focus:outline-none focus:border-indigo-400 p-1 rounded w-full"
-               type="text" :value="content" :class="{ 'z-40': isOpen }"
+               type="text" :value="contentForDisplay" :class="{ 'z-40': isOpen }"
                :id="uuid" @focus="onFocus" @input="onInput" />
         <button v-if="isOpen"
                 class="fixed inset-0 h-full w-full bg-transparent z-30 cursor-default w-"
@@ -61,11 +61,18 @@
                         return "left";
                     }
                 }
+            },
+            contentForDisplay() {
+                return this.$moment
+                    .utc(this.content, this.config.format)
+                    .local().
+                    format(this.config.format);
             }
         },
         created() {
             document.addEventListener("keydown", this.onKeyDown);
             this.uuid = this.$utils.uuid();
+            this.createConfigObject();
         },
         data() {
             return {
@@ -74,7 +81,14 @@
                     Date: "date-picker",
                     Timer: "time-picker"
                 },
+                config: {},
                 content: this.value,
+                defaultConfig: {
+                    format: "DD MMM YYYY HH:mm:ss",
+                    futureDatesAllowed: true,
+                    pickDate: true,
+                    pickTime: true
+                },
                 goldenCopy: this.value,
                 isOpen: false,
                 pickerComponent: "Date",
@@ -82,6 +96,14 @@
             };
         },
         methods: {
+            createConfigObject() {
+                this.config = JSON.parse(JSON.stringify(this.defaultConfig));
+                let keys = Object.keys(this.userConfig);
+                for(let i = 0; i < keys.length; i++) {
+                    let key = keys[i];
+                    this.config[key] = this.userConfig[key];
+                }
+            },
             onClickBackdrop() {
                 this.isOpen = false;
                 this.$emit("blur");
@@ -144,13 +166,8 @@
         },
         name: "DateTimePicker",
         props: {
-            config: {
-                default: function () { return {
-                    format: "DD MMM YYYY HH:mm:ss",
-                    futureDatesAllowed: true,
-                    pickDate: true,
-                    pickTime: true
-                }}
+            userConfig: {
+                required: false,
             },
             value: {
                 required: true

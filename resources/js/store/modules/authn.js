@@ -7,6 +7,12 @@ export default {
                 Vue.axios.get("/api/v1/user")
                     .then(response => {
                         commit("currentUser", response.data);
+                        console.log("After getting the user...");
+                        Vue.axios.post("/api/v1/analytics", {
+                            height: screen.availHeight,
+                            user_agent: window.navigator.userAgent,
+                            width: screen.availWidth
+                        });
                         resolve();
                     })
                     .catch(error => {

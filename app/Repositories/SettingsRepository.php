@@ -2,24 +2,28 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Concerns\ConstructsRepository;
+use App\Repositories\Concerns\CreatesModel;
+use App\Repositories\Concerns\DeletesModel;
+use App\Repositories\Concerns\FindsModel;
+use App\Repositories\Concerns\UpdatesModel;
+use App\Repositories\Contracts\SettingsRepositoryInterface;
 use App\Settings;
-use App\User;
 
-class SettingsRepository
+class SettingsRepository implements SettingsRepositoryInterface
 {
-    //region Static Public Status Report
+    use ConstructsRepository, CreatesModel, DeletesModel, FindsModel,
+        UpdatesModel;
+
+    //region Public Construction
 
     /**
-     * Create new settings for the given $user.
-     *
-     * @param User $user
-     * @return Settings
+     * SettingsRepository constructor.
      */
-    static public function create(User $user): Settings
+    public function __construct()
     {
-        return Settings::create([
-            'user_id' => $user->id
-        ]);
+        $this->modelClass = Settings::class;
+        $this->usesSoftDeletes = TRUE;
     }
 
     //endregion

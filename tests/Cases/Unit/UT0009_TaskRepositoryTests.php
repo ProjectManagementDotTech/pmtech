@@ -12,13 +12,19 @@ use Tests\Shared\TestCase;
 
 class UT0009_TaskRepositoryTests extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->taskRepository = new TaskRepository();
+    }
+
     /** @test */
     public function createTask()
     {
         Log::info(__METHOD__);
 
         $project = Project::where('name', 'UT0007-0001')->first();
-        TaskRepository::create([
+        $this->taskRepository->create([
             'project_id' => $project->id,
             'name' => 'UT0009-0001'
         ]);
@@ -36,7 +42,7 @@ class UT0009_TaskRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $task = Task::where('name', 'UT0009-0001')->first();
-        TaskRepository::update($task, [
+        $this->taskRepository->update($task, [
             'name' => 'UT0009-0002'
         ]);
 
@@ -57,7 +63,7 @@ class UT0009_TaskRepositoryTests extends TestCase
 
         $task = Task::where('name', 'UT0009-0002')->first();
         $newProjectId = Uuid::uuid4()->toString();
-        TaskRepository::update($task, [
+        $this->taskRepository->update($task, [
             'project_id' => $newProjectId
         ]);
 
@@ -80,7 +86,7 @@ class UT0009_TaskRepositoryTests extends TestCase
 
         $task = Task::where('name', 'UT0009-0002')->first();
         $newId = Uuid::uuid4()->toString();
-        TaskRepository::update($task, [
+        $this->taskRepository->update($task, [
             'id' => $newId
         ]);
 
@@ -103,7 +109,7 @@ class UT0009_TaskRepositoryTests extends TestCase
 
         $temp = Task::where('name', 'UT0009-0002')->first();
 
-        $task = TaskRepository::find($temp->id);
+        $task = $this->taskRepository->find($temp->id);
 
         $this->assertNotNull($task);
         $this->assertEquals($temp->id, $task->id);
@@ -122,7 +128,7 @@ class UT0009_TaskRepositoryTests extends TestCase
 
         $task = Task::where('name', 'UT0009-0002')->first();
 
-        TaskRepository::archive($task);
+        $this->taskRepository->archive($task);
 
         $this->assertSoftDeleted('tasks', [
             'id' => $task->id
@@ -141,12 +147,12 @@ class UT0009_TaskRepositoryTests extends TestCase
             ->where('name', 'UT0009-0002')
             ->first();
 
-        TaskRepository::restore($task);
+        $this->taskRepository->restore($task);
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id
         ]);
 
-        $task = TaskRepository::find($task->id);
+        $task = $this->taskRepository->find($task->id);
         $this->assertEquals(NULL, $task->deleted_at);
         $this->assertEquals('UT0009-0002', $task->name);
     }
@@ -157,20 +163,21 @@ class UT0009_TaskRepositoryTests extends TestCase
         Log::info(__METHOD__);
 
         $project = Project::where('name', 'UT0007-0001')->first();
-        $task = TaskRepository::create([
+        $task = $this->taskRepository->create([
             'project_id' => $project->id,
             'name' => 'UT0009-0001'
         ]);
 
-        TaskRepository::archive($task);
+        $this->taskRepository->archive($task);
 
         $task = Task::withTrashed()
             ->where('name', 'UT0009-0001')
             ->first();
         $this->assertNotNull($task->deleted_at);
 
-        $restoredTask = TaskRepository::restoreById($task->id);
-        $this->assertNull($restoredTask->deleted_at);
+        $this->taskRepository->restore($task);
+        $task->refresh();
+        $this->assertNull($task->deleted_at);
 
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
@@ -191,7 +198,7 @@ class UT0009_TaskRepositoryTests extends TestCase
                     'project_id' => $project->id,
                     'name' => $task->name
                 ]);
-                TaskRepository::delete($task);
+                $this->taskRepository->delete($task);
                 $this->assertDatabaseMissing('tasks', [
                     'id' => $task->id,
                     'project_id' => $project->id,
@@ -205,4 +212,6 @@ class UT0009_TaskRepositoryTests extends TestCase
             'name' => 'UT0009-0001'
         ]);
     }
+
+    protected $taskRepository;
 }

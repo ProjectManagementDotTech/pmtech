@@ -21,6 +21,7 @@ import Echo from "laravel-echo";
 import { eventBus } from "./modules";
 import { moment } from "./modules";
 import store from "./store";
+import SubMenu from "./components/shared/navgiation/SubMenu";
 import { utils } from "./modules";
 import { ValidationObserver, ValidationProvider } from
     "vee-validate/dist/vee-validate.full";
@@ -35,6 +36,7 @@ Vue.use(utils);
 Vue.use(VueI18n);
 Vue.use(VueRouter);
 
+Vue.component("sub-menu", SubMenu);
 Vue.component("validation-observer", ValidationObserver);
 Vue.component("validation-provider", ValidationProvider);
 
@@ -87,6 +89,35 @@ const i18n = new VueI18n({
     silentFallbackWarn: true
 });
 
+let previousHtml = null;
+Vue.axios.get("/check-for-upgrade")
+    .then(response => {
+        previousHtml = response.data;
+    });
+function checkForNewVersion() {
+    Vue.axios.get("/check-for-upgrade")
+        .then(response => {
+            let currentHtml = response.data;
+            if(previousHtml !== null) {
+                if(currentHtml !== previousHtml) {
+                    store.commit("newVersionAvailable");
+                }
+            } else {
+                previousHtml = currentHtml;
+            }
+        });
+}
+let timeoutSeconds = 0;
+if(process.env.NODE_ENV == "development") {
+    timeoutSeconds = 3;
+} else if(process.env.NODE_ENV == "preprod") {
+    timeoutSeconds = 60;
+} else {
+    timeoutSeconds = 3600;
+}
+
+window.versionCheckerInterval = window.setInterval(checkForNewVersion, timeoutSeconds * 1000);
+
 import App from "./views/App";
 
 const app = new Vue({
@@ -95,4 +126,3 @@ const app = new Vue({
     store,
     render: h => h(App)
 }).$mount('#app');
-

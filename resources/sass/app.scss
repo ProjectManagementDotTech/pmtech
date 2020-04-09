@@ -56,6 +56,19 @@ button[disabled="disabled"] {
 }
 
 /*******************************************************************************
+ * Vue Router
+ ******************************************************************************/
+.router-link-exact-active {
+    @apply bg-gray-800;
+}
+@media (min-width: 640px) {
+    .router-link-exact-active, .router-link-exact-active:focus,
+    .router-link-exact-active:hover {
+        @apply bg-indigo-400 text-white;
+    }
+}
+
+/*******************************************************************************
  * Vuetable
  ******************************************************************************/
 .vuetable {
