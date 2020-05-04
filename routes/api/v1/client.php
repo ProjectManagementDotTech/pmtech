@@ -1,6 +1,6 @@
 <?php
 
-Route::middleware(['verified', 'auth:airlock'])->group(function () {
+Route::middleware(['verified', 'auth:sanctum'])->group(function () {
     Route::get('clients/{client}', 'v1\ClientController@show')
         ->name('clients.show');
     Route::get('/workspaces/{workspace}/clients',

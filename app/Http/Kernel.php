@@ -5,7 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\CollectionResponseEtags;
 use App\Http\Middleware\VerifyEtag;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Laravel\Airlock\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class Kernel extends HttpKernel
 {

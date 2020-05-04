@@ -35,7 +35,7 @@ class TestCase extends BaseTestCase
 	 */
 	public function login(string $email, string $password)
 	{
-	    $cookieResponse = $this->get('/airlock/csrf-cookie');
+	    $cookieResponse = $this->get('/sanctum/csrf-cookie');
         $cookieResponse->assertCookie('XSRF-TOKEN');
 
 		$response = $this->post('/api/v1/login', [
@@ -43,7 +43,8 @@ class TestCase extends BaseTestCase
 			'password' => $password,
             '_token' => $cookieResponse->headers->getCookies()[0]->getValue()
 		]);
-		$response->assertStatus(302);
+
+		$response->assertStatus(204);
 	}
 
     /**

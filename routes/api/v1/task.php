@@ -1,6 +1,6 @@
 <?php
 
-Route::middleware(['verified', 'auth:airlock'])->group(function () {
+Route::middleware(['verified', 'auth:sanctum'])->group(function () {
     Route::get('tasks/{task}', 'v1\TaskController@show')
         ->name('tasks.show')
         ->middleware(

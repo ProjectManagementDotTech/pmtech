@@ -22,7 +22,7 @@ class UT0002_UserApiTests extends TestCase
             'email' => $user->email,
             'password' => 'Welcome123'
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(204);
     }
 
     /** @test */
@@ -136,7 +136,7 @@ class UT0002_UserApiTests extends TestCase
             'email' => $user->email,
             'password' => 'Welcome123'
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(204);
         $response = $this->get('/api/v1/user');
         $response->assertStatus(200)
             ->assertJson([

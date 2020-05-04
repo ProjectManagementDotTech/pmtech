@@ -5,7 +5,7 @@ Route::post('verification/resend', 'Auth\VerificationController@resend')
 Route::get('email/verify', 'Auth\VerificationController@show')
     ->name('verification.notice');
 
-Route::middleware(['verified', 'auth:airlock'])->group(function () {
+Route::middleware(['verified', 'auth:sanctum'])->group(function () {
     Route::get('user', 'v1\UserController@self')
         ->middleware('cache.headers:etag')
         ->name('user.self');

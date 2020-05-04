@@ -1,6 +1,6 @@
 <?php
 
-Route::middleware(['verified', 'auth:airlock'])->group(function () {
+Route::middleware(['verified', 'auth:sanctum'])->group(function () {
     Route::get('projects/{project}', 'v1\ProjectController@show')
         ->name('projects.show');
     Route::put('projects/{project}', 'v1\ProjectController@update')

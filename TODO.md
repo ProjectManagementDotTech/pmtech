@@ -15,8 +15,27 @@
 * OK color: green-500
 
 #To do (v2020.2)
+###Authn
+1. Allow user to request another activiation link
+1. Allow user to set for which events an email should be sent.
+1. Remove an account completely with an option to download all data and files
+for all projects etc. that would have been stored in the any of the owned
+workspaces.
+1. Complement User tests with the Settings stuff
+1. Delete settings when User model is deleted
 ###Clients
 ###Core
+1. Break-up Project-Management.tech into several packages:
+   + Authn: Deal with authentication, authorization and security
+   + Clients: Deal with all client related stuff
+   + Core: Interface definitions, global configuration, mix / webpack, standards etc.
+   + ISO: ISO (and ITU) related information, services and tables
+   + Projects: Deal with all project related stuff
+   + Public-Web: Have the public facing parts of the website
+   + Tasks: Deal with all task related stuff
+   + Timesheets: Deal with all timesheet related stuff
+   + UI-UX: Deal with general UI things
+   + Workspaces: Deal with all workspace related stuff
 1. Repository `findBy` methods need to distinguish between find first and find
 all.
 1. Intercept 412 responses and fetch the desired object first rejecting the
@@ -24,19 +43,7 @@ original alteration request with a generic message: "Object was externally
 modified, so your changes could not be applied. The modifications were loaded
 from the API, and should be visible."
 1. Support setting moment locale based on Laravel / browser locale.
-###DateTimePicker
-###FilteringDropdownControl
-###General
-1. Upgrade to Laravel 7.
-1. Break-up Project-Management.tech into several packages:
-   + Core: Have the basic interface definitions, and things like tailwind
-   + i12: Iso related information, services and tables.
-   + Project: Deal with all project related stuff
-   + Public-Web: Have the public facing parts of the website
-   + Task: Deal with all task related stuff
-   + Timesheet: Deal with all timesheet related stuff
-   + UI: Deal with general UI things
-   + Workspace: Deal with all workspace related stuff
+###i12
 ###Projects
 1. Write tests around ProjectRepository
 1. Delete Project in SPA
@@ -46,22 +53,15 @@ from the API, and should be visible."
 1. Close project. This stops timesheet entries being created against those
 projects (even historic timesheet entries cannot be started against closed
 projects).
+###Public-Web
 ###Tasks
 ###Timesheets
 1. Make timesheet report graphs responsive (including ticks on X axis)
-###UI/UX
+###UI-UX
 1. Make `PmtechInput` a global component
 1. Add FlashMessage component of some variety to show info, warning, success and
 global error messages.
 1. Update window title with `title` from routes in the afterEach guard
-###Users
-1. Allow user to request another activiation link
-1. Allow user to set for which events an email should be sent.
-1. Remove an account completely with an option to download all data and files
-for all projects etc. that would have been stored in the any of the owned
-workspaces.
-1. Complement User tests with the Settings stuff
-1. Delete settings when User model is deleted
 ###Workspaces
 1. Add full member profile in order to understand email domain and country
 information for each user / subscriber. This can be used to determine the amount
@@ -365,6 +365,9 @@ selections are possible through use of Shift-Click and Ctrl-Click
 1. `WorkspaceRepository::get` should be allowed to return NULL
 1. Project and Workspace `id` cannot be updated through their respective
 repositories
+1. v2020.2
+   1. Core
+      1. Upgrade to Laravel 7.
 
 #Details
 ##BR000001
