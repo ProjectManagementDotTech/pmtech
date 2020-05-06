@@ -190,7 +190,8 @@ class WorkspaceController extends Controller
      */
     public function indexMembers(Workspace $workspace)
     {
-        $invitations = $this->invitationRepository->findByWorkspace($workspace);
+        $invitations = $this->invitationRepository->findAllByWorkspace(
+            $workspace, FALSE);
         $result = [];
         foreach($invitations as $invitation) {
             $result[] = [
@@ -260,7 +261,7 @@ class WorkspaceController extends Controller
      */
     public function invite(InvitationRequest $request, Workspace $workspace)
     {
-        $user = $this->userRepository->findByEmail($request->email);
+        $user = $this->userRepository->findFirstByEmail($request->email);
         if(!$user) {
             /*
              * This is a completely new user, and thus, we have to go through

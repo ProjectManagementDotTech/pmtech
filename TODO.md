@@ -25,19 +25,6 @@ workspaces.
 1. Delete settings when User model is deleted
 ###Clients
 ###Core
-1. Break-up Project-Management.tech into several packages:
-   + Authn: Deal with authentication, authorization and security
-   + Clients: Deal with all client related stuff
-   + Core: Interface definitions, global configuration, mix / webpack, standards etc.
-   + ISO: ISO (and ITU) related information, services and tables
-   + Projects: Deal with all project related stuff
-   + Public-Web: Have the public facing parts of the website
-   + Tasks: Deal with all task related stuff
-   + Timesheets: Deal with all timesheet related stuff
-   + UI-UX: Deal with general UI things
-   + Workspaces: Deal with all workspace related stuff
-1. Repository `findBy` methods need to distinguish between find first and find
-all.
 1. Intercept 412 responses and fetch the desired object first rejecting the
 original alteration request with a generic message: "Object was externally
 modified, so your changes could not be applied. The modifications were loaded
@@ -170,6 +157,7 @@ messages are shown.
 #In Progress
 1. Rewrite repositories to implement a common interface and derive from a
 common parent class
+1. v2020.2 - Core - 
 
 #Done
 1. **BR000001** - Setup a "Default" workspace when a user registers
@@ -368,6 +356,8 @@ repositories
 1. v2020.2
    1. Core
       1. Upgrade to Laravel 7.
+      1. Repository `findBy` methods need to distinguish between find first and
+         find all.
 
 #Details
 ##BR000001

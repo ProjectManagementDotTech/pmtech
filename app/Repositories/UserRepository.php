@@ -10,6 +10,7 @@ use App\Repositories\Concerns\UpdatesModel;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -31,7 +32,19 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findByEmail(string $email): ?User
+    public function findAllByEmail(string $email, bool $paginate = TRUE)
+    {
+        if($paginate) {
+            return User::where('email', $email)->paginate();
+        } else {
+            return User::where('email', $email)->get();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findFirstByEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
     }

@@ -30,10 +30,49 @@ class InvitationRepository implements InvitationRepositoryInterface
 
     //endregion
 
+    //region Public Status Report
+
     /**
      * @inheritDoc
      */
-    public function findByEmail(string $emailAddress): ?Invitation
+    public function findAllByEmail(string $emailAddress, bool $paginate = TRUE)
+    {
+        if($paginate) {
+            return Invitation::where('email', $emailAddress)->paginate();
+        } else {
+            return Invitation::where('email', $emailAddress)->get();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllByNonce(string $nonce, bool $paginate = TRUE)
+    {
+        if($paginate) {
+            return Invitation::where('nonce', $nonce)->paginate();
+        } else {
+            return Invitation::where('nonce', $nonce)->get();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAllByWorkspace(Workspace $workspace,
+        bool $paginate = TRUE)
+    {
+        if($paginate) {
+            return Invitation::where('workspace_id', $workspace->id)->paginate();
+        } else {
+            return Invitation::where('workspace_id', $workspace->id)->get();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findFirstByEmail(string $emailAddress): ?Invitation
     {
         return Invitation::where('email', $emailAddress)->first();
     }
@@ -41,7 +80,7 @@ class InvitationRepository implements InvitationRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findByNonce(string $nonce): ?Invitation
+    public function findFirstByNonce(string $nonce): ?Invitation
     {
         return Invitation::where('nonce', $nonce)->first();
     }
@@ -49,8 +88,10 @@ class InvitationRepository implements InvitationRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findByWorkspace(Workspace $workspace): Collection
+    public function findFirstByWorkspace(Workspace $workspace): ?Invitation
     {
-        return Invitation::where('workspace_id', $workspace->id)->get();
+        return Invitation::where('workspace_id', $workspace->id)->first();
     }
+
+    //endregion
 }

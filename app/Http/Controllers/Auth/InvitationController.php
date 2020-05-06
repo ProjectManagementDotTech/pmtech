@@ -64,7 +64,7 @@ class InvitationController extends Controller
         $valid = $this->validateNonces($invitationNonce, $cacheNonce);
         if($valid === TRUE) {
             $invitation = $this->invitationRepository
-                ->findByNonce($invitationNonce);
+                ->findFirstByNonce($invitationNonce);
             $user = $this->userRepository->create([
                 'email' => $invitation->email,
                 'email_verified_at' => Carbon::now(),
@@ -112,7 +112,7 @@ class InvitationController extends Controller
     protected function validateNonces(string $invitationNonce,
         string $cacheNonce)
     {
-        $invitation = $this->invitationRepository->findByNonce($invitationNonce);
+        $invitation = $this->invitationRepository->findFirstByNonce($invitationNonce);
         if($invitation) {
             $cacheValue = Cache::store('database')->pull($invitation->email);
             if($cacheValue == $cacheNonce) {

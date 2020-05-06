@@ -42,9 +42,7 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0003-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('UT0003-0001');
         $this->workspaceRepository->update($workspace, [
             'name' => 'UT0003-0002'
         ]);
@@ -62,9 +60,7 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0003-0002'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('UT0003-0002');
 
         $this->assertNotNull($workspace);
     }
@@ -74,9 +70,7 @@ class UT0003_WorkspaceRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0003-0002'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('UT0003-0002');
 
         $this->workspaceRepository->archive($workspace);
 

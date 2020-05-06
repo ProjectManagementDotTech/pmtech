@@ -22,10 +22,10 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
-        $newOwner = $this->userRepository->findByEmail('user0004@test.com');
+        $newOwner = $this->userRepository->findFirstByEmail('user0004@test.com');
         $this->login('user0001@test.com', 'Welcome123');
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
@@ -48,10 +48,10 @@ class FT0003_TransferWorkspaceOwnershipToMemberTest extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
-        $newOwner = $this->userRepository->findByEmail('user0005@test.com');
+        $newOwner = $this->userRepository->findFirstByEmail('user0005@test.com');
         $this->login('user0001@test.com', 'Welcome123');
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .

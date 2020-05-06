@@ -21,7 +21,7 @@ class BR000007_TimesheetEntryCreationForAuthorizedWorkspaceUsersTest extends
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces[0];
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
@@ -43,7 +43,7 @@ class BR000007_TimesheetEntryCreationForAuthorizedWorkspaceUsersTest extends
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
         $workspace = $user->ownedWorkspaces[0];
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [

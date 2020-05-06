@@ -80,7 +80,8 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findByName(string $name, $projectOrWorkspace): Collection
+    public function findAllByName(string $name, $projectOrWorkspace,
+        bool $paginate = TRUE)
     {
         $builder = Task::query();
 
@@ -90,7 +91,27 @@ class TaskRepository implements TaskRepositoryInterface
             $builder->where('project.workspace_id', $projectOrWorkspace->id);
         }
 
-        return $builder->get();
+        if($paginate) {
+            return $builder->paginate();
+        } else {
+            return $builder->get();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findFirstByName(string $name, $projectOrWorkspace): ?Task
+    {
+        $builder = Task::query();
+
+        if($projectOrWorkspace instanceof Project) {
+            $builder->where('project_id', $projectOrWorkspace->id);
+        } else {
+            $builder->where('project.workspace_id', $projectOrWorkspace->id);
+        }
+
+        return $builder->first();
     }
 
     //endregion

@@ -37,7 +37,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $user = $this->userRepository
-            ->findByEmail($request->input('email', NULL));
+            ->findFirstByEmail($request->input('email', NULL));
         if($user) {
             if($user->hasVerifiedEmail()) {
                 return $this->parentLogin($request);

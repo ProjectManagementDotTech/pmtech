@@ -33,8 +33,8 @@ class UniqueClientNameWithinWorkspace implements Rule
      */
     public function passes($attribute, $value)
     {
-        $existingClient = $this->clientRepository->byNameInsideWorkspace(
-            $value, request()->route('workspace')
+        $existingClient = $this->clientRepository->findFirstByNameInsideWorkspace(
+            $value, request()->route('workspace'), TRUE
         );
         return $existingClient == NULL;
     }

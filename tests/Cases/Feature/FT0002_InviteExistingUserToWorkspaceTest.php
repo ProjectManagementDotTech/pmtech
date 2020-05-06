@@ -23,9 +23,7 @@ class FT0002_InviteExistingUserToWorkspaceTest extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0004-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('UT0004-0001');
         $this->assertEquals(2, count($workspace->users));
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .

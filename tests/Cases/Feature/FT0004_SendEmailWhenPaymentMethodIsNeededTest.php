@@ -49,9 +49,7 @@ class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
             'password' => Hash::make('Welcome123')
         ]);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'FT0004-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('FT0004-0001');
         $this->login('user0001@test.com', 'Welcome123');
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
@@ -103,9 +101,7 @@ class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
             'password' => Hash::make('Welcome123')
         ]);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'FT0004-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('FT0004-0001');
         $this->login('user0001@test.com', 'Welcome123');
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
@@ -133,9 +129,7 @@ class FT0004_SendEmailWhenPaymentMethodIsNeededTest extends TestCase
         $currencyFormatter = new \NumberFormatter('en_IE',
             \NumberFormatter::CURRENCY);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'FT0004-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('FT0004-0001');
         $this->assertEquals(6, $workspace->users()->count());
         $ownerUser = $workspace->ownerUser;
         $ownerUser

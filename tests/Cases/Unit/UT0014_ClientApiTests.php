@@ -21,7 +21,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
 
@@ -41,7 +41,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
 
@@ -64,7 +64,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'Test0001')
             ->first();
 
@@ -86,7 +86,7 @@ class UT0014_ClientApiTests extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = $user->ownedWorkspaces()->where('name', 'UT0004-0001')
             ->first();
 

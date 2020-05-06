@@ -47,7 +47,7 @@ class UniqueWorkspaceNameForOwnerUser implements Rule
         $workspace = request()->route('workspace');
         if($workspace) {
             $otherOwnedWorkspaces = $this->workspaceRepository
-                ->allFromSameOwnerExcept($workspace);
+                ->findAllOtherWorkspacesFromSameOwner($workspace);
             foreach($otherOwnedWorkspaces as $ownedWorkspace) {
                 if($ownedWorkspace->name == $value) {
                     return FALSE;
@@ -59,10 +59,8 @@ class UniqueWorkspaceNameForOwnerUser implements Rule
 
         $user = Auth::user();
         if($user) {
-            $existingWorkspaces = $this->workspaceRepository->all([
-                'owner_user_id' => $user->id,
-                'name' => $value
-            ]);
+            $existingWorkspaces = $this->workspaceRepository
+                ->findAllByNameAndUser($value, $user);
             return count($existingWorkspaces) == 0;
         }
 

@@ -30,9 +30,7 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
 
         $this->login('user0001@test.com', 'Welcome123');
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0004-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('UT0004-0001');
         $this->assertEquals(1, count($workspace->users));
 
         $response = $this->post('/api/v1/workspaces/' . $workspace->id .
@@ -55,7 +53,7 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
         Log::info(__METHOD__);
 
         $invitationRepository = new InvitationRepository();
-        $invitation = $invitationRepository->findByEmail('user0002@test.com');
+        $invitation = $invitationRepository->findFirstByEmail('user0002@test.com');
         $cacheValue = Cache::store('database')->get('user0002@test.com');
         $response = $this->get('/invitation/accept/' . $invitation->nonce .
             '/' . $cacheValue);
@@ -78,9 +76,7 @@ class FT0001_InviteNewUserToWorkspaceTest extends TestCase
         Log::info(__METHOD__);
 
         $this->login('user0001@test.com', 'Welcome123');
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0004-0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('UT0004-0001');
         $this->assertEquals(2, count($workspace->users));
         $this->assertEquals(1, $workspace
             ->users()

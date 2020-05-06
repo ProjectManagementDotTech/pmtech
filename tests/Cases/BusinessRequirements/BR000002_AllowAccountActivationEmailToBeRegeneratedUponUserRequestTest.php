@@ -41,7 +41,7 @@ class BR000002_AllowAccountActivationEmailToBeRegeneratedUponUserRequestTest
 
         $response->assertStatus(201);
         $secondCacheValue = Cache::store('database')->get('br000002@test.com');
-        $user = $this->userRepository->findByEmail('br000002@test.com');
+        $user = $this->userRepository->findFirstByEmail('br000002@test.com');
         $this->assertNotEquals($secondCacheValue, $firstCacheValue);
         Mail::assertSent(AccountActivation::class,
             function ($mail) use ($user) {

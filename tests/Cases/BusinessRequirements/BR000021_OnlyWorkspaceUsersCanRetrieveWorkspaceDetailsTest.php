@@ -25,9 +25,7 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
 
         $this->login('user0001@test.com', 'Welcome123');
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'Test0001'
-        ]);
+        $workspace = $this->workspaceRepository->findFirstByName('Test0001');
         $response = $this->get('/api/v1/workspaces/' . $workspace->id);
         $response->assertStatus(200)->assertJsonFragment([
             'name' => 'Test0001'
@@ -41,7 +39,7 @@ class BR000021_OnlyWorkspaceUsersCanRetrieveWorkspaceDetailsTest extends TestCas
 
         $this->login('user0001@test.com', 'Welcome123');
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
         $workspace = $user->ownedWorkspaces[0];
         $response = $this->get('/api/v1/workspaces/' . $workspace->id);
         $response->assertStatus(403);

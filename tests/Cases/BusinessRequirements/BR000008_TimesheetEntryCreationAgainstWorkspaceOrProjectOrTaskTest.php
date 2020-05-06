@@ -25,10 +25,8 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         Log::info(__METHOD__);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'Test0001'
-        ]);
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('Test0001');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
             'workspace_id' => $workspace->id,
@@ -49,10 +47,8 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0001@test.com');
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'Test0001'
-        ]);
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('Test0001');
         $project = ProjectRepository::byName('UT0008-0001', $workspace);
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
@@ -76,13 +72,11 @@ class BR000008_TimesheetEntryCreationAgainstWorkspaceOrProjectOrTaskTest extends
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0001@test.com');
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'Test0001'
-        ]);
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('Test0001');
         $project = ProjectRepository::byName('UT0008-0001', $workspace);
         $taskRepository = new TaskRepository();
-        $task = $taskRepository->findByName('UT0010-0001', $project)[0];
+        $task = $taskRepository->findAllByName('UT0010-0001', $project)[0];
         $this->login('user0001@test.com', 'Welcome123');
         $response = $this->post('/api/v1/timesheet_entries', [
             'task_id' => $task->id,

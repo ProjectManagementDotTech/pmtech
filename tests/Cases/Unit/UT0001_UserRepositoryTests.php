@@ -37,7 +37,7 @@ class UT0001_UserRepositoryTests extends TestCase
     /** @test */
     public function findUserByEmail()
     {
-        $user = $this->userRepository->findByEmail('UT0001-0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('UT0001-0001@test.com');
         $this->assertNotNull($user);
         $this->assertEquals('UT0001-0001', $user->name);
     }
@@ -45,7 +45,7 @@ class UT0001_UserRepositoryTests extends TestCase
     /** @test */
     public function cannotFindUserByEmail()
     {
-        $user = $this->userRepository->findByEmail('some@email.com');
+        $user = $this->userRepository->findFirstByEmail('some@email.com');
         $this->assertNull($user);
     }
 

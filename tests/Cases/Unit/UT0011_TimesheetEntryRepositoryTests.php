@@ -28,10 +28,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0004-0001'
-        ]);
-        $user = $this->userRepository->findByEmail('user0004@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('UT0004-0001');
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
@@ -62,10 +60,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0004-0001'
-        ]);
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('UT0004-0001');
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
@@ -94,10 +90,8 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
-        $workspace = $this->workspaceRepository->first([
-            'name' => 'UT0004-0001'
-        ]);
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('UT0004-0001');
         TimesheetEntryRepository::create([
             'user_id' => $user->id,
             'workspace_id' => $workspace->id,
@@ -124,7 +118,7 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0001@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
         $workspace = Workspace::where('name', 'Test0001')->first();
         $project = $workspace->projects[0];
         TimesheetEntryRepository::create([
@@ -200,7 +194,7 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
         $timesheetEntry = TimesheetEntry::query()
             ->where('user_id', $user->id)
             ->where('description', '')
@@ -219,7 +213,7 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
         $timesheetEntry = TimesheetEntry::query()
             ->where('user_id', $user->id)
             ->where('description', 'UT0011-0005')
@@ -243,7 +237,7 @@ class UT0011_TimesheetEntryRepositoryTests extends TestCase
     {
         Log::info(__METHOD__);
 
-        $user = $this->userRepository->findByEmail('user0004@test.com');
+        $user = $this->userRepository->findFirstByEmail('user0004@test.com');
         $timesheetEntry = TimesheetEntry::query()
             ->where('user_id', $user->id)
             ->where('description', 'UT0011-0005')

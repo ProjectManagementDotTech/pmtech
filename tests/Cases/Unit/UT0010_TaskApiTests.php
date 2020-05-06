@@ -75,7 +75,7 @@ class UT0010_TaskApiTests extends TestCase
         $workspace = Workspace::where('name', 'Test0001')->first();
         $project = ProjectRepository::byName('UT0008-0001',
             $workspace);
-        $task = $this->taskRepository->findByName('UT0010-0001', $project)[0];
+        $task = $this->taskRepository->findAllByName('UT0010-0001', $project)[0];
         $token = $this->login('user0001@test.com', 'Welcome123');
         $response = $this->put('/api/v1/tasks/' . $task->id, [
             'name' => 'UT0010-0001-0001',

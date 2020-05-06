@@ -9,6 +9,7 @@ use App\Repositories\Concerns\FindsModel;
 use App\Repositories\Concerns\UpdatesModel;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\WorkspaceRepositoryInterface;
+use App\User;
 use App\Workspace;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -38,33 +39,6 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface
 
     /**
      * @inheritDoc
-     */
-    public function all(array $criteria = []): Collection
-    {
-        $result = Workspace::query();
-        foreach($criteria as $key => $value) {
-            $result = $result->where($key, $value);
-        }
-
-        return $result->get();
-    }
-
-    /**
-     * All the workspaces owned by the same owner as the given $workspace,
-     * except for the given $workspace.
-     *
-     * @param Workspace $workspace
-     * @return mixed
-     */
-    public function allFromSameOwnerExcept(Workspace $workspace)
-    {
-        return $workspace->ownerUser->ownedWorkspaces()
-            ->where('id', '<>', $workspace->id)
-            ->get();
-    }
-
-    /**
-     * @inheritDoc
      * @throws \Exception
      */
     public function create(array $attributes = []): Model
@@ -83,14 +57,63 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function first(array $criteria = []): ?Model
+    public function findAllByName(string $name, bool $paginated = TRUE)
     {
-        $result = Workspace::query();
-        foreach($criteria as $key => $value) {
-            $result = $result->where($key, $value);
+        $result = Workspace::where('name', $name);
+        if($paginated) {
+            return $result->paginate();
+        } else {
+            return $result->get();
         }
+    }
 
-        return $result->first();
+    /**
+     * @inheritDoc
+     */
+    public function findAllByNameAndUser(string $name, User $user,
+        bool $paginated = TRUE)
+    {
+        $result = Workspace::where('owner_user_id', $user->id)
+            ->where('name', $name);
+        if($paginated) {
+            return $result->paginate();
+        } else {
+            return $result->get();
+        }
+    }
+
+    /**
+     * All the workspaces owned by the same owner as the given $workspace,
+     * except for the given $workspace.
+     *
+     * @param Workspace $workspace
+     * @return Collection
+     */
+    public function findAllOtherWorkspacesFromSameOwner(Workspace $workspace):
+        Collection
+    {
+        return $workspace->ownerUser->ownedWorkspaces()
+            ->where('id', '<>', $workspace->id)
+            ->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findFirstByName(string $name): ?Workspace
+    {
+        return Workspace::where('name', $name)->first();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findFirstByNameAndUser(string $name, User $user):
+        ?Workspace
+    {
+        return Workspace::where('owner_user_id', $user->id)
+            ->where('name', $name)
+            ->first();
     }
 
     //endregion

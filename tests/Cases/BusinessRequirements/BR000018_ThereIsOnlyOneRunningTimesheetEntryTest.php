@@ -11,17 +11,21 @@ use Tests\Shared\TestCase;
 
 class BR000018_ThereIsOnlyOneRunningTimesheetEntryTest extends TestCase
 {
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->userRepository = new UserRepository();
+        $this->workspaceRepository =
+            new WorkspaceRepository($this->userRepository);
+    }
+
     /** @test */
     public function makeSureThereIsOnlyOneRunningTimesheetEntry()
     {
         Log::info(__METHOD__);
 
-        $userRepository = new UserRepository();
-        $workspaceRepository = new WorkspaceRepository($userRepository);
-        $user = $userRepository->findByEmail('user0001@test.com');
-        $workspace = $workspaceRepository->first([
-            'name' => 'Test0001'
-        ]);
+        $user = $this->userRepository->findFirstByEmail('user0001@test.com');
+        $workspace = $this->workspaceRepository->findFirstByName('Test0001');
         $this->login('user0001@test.com', 'Welcome123');
 
         $response = $this->post('/api/v1/timesheet_entries', [
@@ -36,4 +40,7 @@ class BR000018_ThereIsOnlyOneRunningTimesheetEntryTest extends TestCase
         ]);
         $this->assertEquals(1, count($timesheetEntries));
     }
+
+    protected $userRepository;
+    protected $workspaceRepository;
 }

@@ -45,7 +45,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $registeredUser = $this->userRepository->findByEmail($request->email);
+        $registeredUser = $this->userRepository->findFirstByEmail($request->email);
         if($registeredUser) {
             if($registeredUser->hasVerifiedEmail()) {
                 return response([
